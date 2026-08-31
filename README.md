@@ -3,7 +3,7 @@
 > 一个专注于 Skill 开发、学习与实践的开源知识库。  
 > 收录优质 Skill 实例、系统学习笔记，以及原创 Skill 作品。
 
-[![GitHub stars](https://img.shields.io/github/stars/你的用户名/你的仓库名?style=social)](https://github.com/你的用户名/你的仓库名)
+[![GitHub stars](https://img.shields.io/github/stars/xiaoRuMiLi/skills-study?style=social)](https://github.com/xiaoRuMiLi/skills-study)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
@@ -35,7 +35,7 @@ skill-lab/
 │   │   └── assets/           # 截图、示意图
 │   └── example-02-xxx/
 │
-├── 📁 my-skills/             # 原创 Skill
+├── 📁 skills/             # 原创 Skill
 │   ├── skill-a/              # Skill 名称
 │   │   ├── skill.md
 │   │   └── README.md
