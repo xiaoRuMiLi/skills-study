@@ -7,7 +7,7 @@ description_zh: 以简报→骨架→拼装→校验四步流水线生成行程�
 description_en: Four-step pipeline (brief → skeleton → slot assembly → risk check) producing a full trip package with pace curve, flexibility score, standard/light dual outputs, anchor-based cost forecast and risk card.
 category: travel
 version: 1.0.0
-author: <your-handle>
+author: king
 ---
 
 # 路书 · 行程设计引擎
