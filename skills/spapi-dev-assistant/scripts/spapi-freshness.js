@@ -14,15 +14,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function resolveBase() {
-  const candidates = [
-    process.env.SPAPI_MCP_PATH,
-    'D:/node/node_cache/node_modules/@amazon-sp-api-release/sp-api-dev-mcp',
-    path.join(process.env.APPDATA || '', 'npm', 'node_modules', '@amazon-sp-api-release', 'sp-api-dev-mcp'),
-  ].filter(Boolean);
-  for (const c of candidates) if (fs.existsSync(c)) return c;
-  return candidates[0] || '';
-}
+const { resolveBase } = require('./_base');
 const BASE = resolveBase();
 const META = path.join(BASE, 'bundled-servers', 'sp-api-dev-assistant-data', 'data', 'metadata.json');
 
