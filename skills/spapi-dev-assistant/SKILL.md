@@ -93,8 +93,16 @@ node scripts/sp-api-client.js get /orders/v0/orders --region fe --query "Marketp
 SP_API_CLIENT_ID=你的client_id
 SP_API_CLIENT_SECRET=你的client_secret
 SP_API_REFRESH_TOKEN=你的refresh_token
-SP_API_REGION=fe   # na/eu/fe
+SP_API_REGION=fe           # na/eu/fe
+SP_API_SANDBOX=true        # 沙盒/生产开关：true=沙盒(测试)；false=生产(真实数据)；缺省=生产
+SP_API_MARKETPLACE_IDS=A1VC38T7YXB528   # 可选，marketplace ids，逗号分隔（见 references/.env.example 注释）
 ```
+
+> **沙盒/生产适配**：`sp-api-client.js` 根据 `SP_API_SANDBOX` 自动选择 host：
+> `true` → `sandbox.sellingpartnerapi-<region>.amazon.com`（沙盒）；`false`/未设 → `sellingpartnerapi-<region>.amazon.com`（生产）。
+> ⚠️ **沙盒凭证必须配 `SP_API_SANDBOX=true`**，否则持沙盒凭证打生产会 **403 Unauthorized**。
+> 开发/测试用沙盒（`true`），**自测通过后再切 `false` 进生产**；生产注意 IP 关联风控与限流。
+> `node scripts/sp-api-client.js --env-check` 会显示当前**环境（沙盒/生产）+ 目标 host + 凭证 ✅/❌**。
 
 ## 环境与依赖（前置条件）
 本 skill 的脚本需要以下环境，缺失会报错。

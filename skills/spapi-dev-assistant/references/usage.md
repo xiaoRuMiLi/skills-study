@@ -58,6 +58,12 @@ node scripts/sp-api-client.js get /orders/v0/orders --region fe --query "Marketp
 Reads creds from env or a local `.env` (never chat). Handles LWA refresh-token → access token,
 AWS SigV4 signing (`service=execute-api`), regional endpoint. Use for real store operations.
 
+**沙盒/生产适配**：`SP_API_SANDBOX` 决定 host——
+- `true` → `sandbox.sellingpartnerapi-<region>.amazon.com`（沙盒测试）
+- `false`/未设 → `sellingpartnerapi-<region>.amazon.com`（生产）
+⚠️ 沙盒凭证需配 `SP_API_SANDBOX=true`，否则打生产会 403。`--env-check` 会显示环境+host+凭证 ✅/❌。
+
+
 ### `spapi-workflow.js` — multi-step workflow + approval (persistent daemon)
 ```bash
 node scripts/spapi-workflow.js --daemon        # keep alive; send JSON commands on stdin

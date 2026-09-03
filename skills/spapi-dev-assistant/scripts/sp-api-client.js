@@ -36,12 +36,16 @@ function loadDotEnvAny() {
 function getCreds() {
   loadDotEnvAny();
   const region = (process.env.SP_API_REGION || 'na').toLowerCase();
+  const sandbox = process.env.SP_API_SANDBOX === 'true' || process.env.SP_API_SANDBOX === '1' || process.env.SP_API_SANDBOX === 'yes';
+  const prodHost = { na: 'sellingpartnerapi-na.amazon.com', eu: 'sellingpartnerapi-eu.amazon.com', fe: 'sellingpartnerapi-fe.amazon.com' }[region] || 'sellingpartnerapi-na.amazon.com';
+  const sandboxHost = { na: 'sandbox.sellingpartnerapi-na.amazon.com', eu: 'sandbox.sellingpartnerapi-eu.amazon.com', fe: 'sandbox.sellingpartnerapi-fe.amazon.com' }[region] || 'sandbox.sellingpartnerapi-na.amazon.com';
   return {
     client_id: process.env.SP_API_CLIENT_ID,
     client_secret: process.env.SP_API_CLIENT_SECRET,
     refresh_token: process.env.SP_API_REFRESH_TOKEN,
     region,
-    host: { na: 'sellingpartnerapi-na.amazon.com', eu: 'sellingpartnerapi-eu.amazon.com', fe: 'sellingpartnerapi-fe.amazon.com' }[region] || 'sellingpartnerapi-na.amazon.com',
+    sandbox,
+    host: process.env.SP_API_HOST || (sandbox ? sandboxHost : prodHost),
   };
 }
 
@@ -115,11 +119,14 @@ if (require.main === module) {
     const keys = ['SP_API_CLIENT_ID', 'SP_API_CLIENT_SECRET', 'SP_API_REFRESH_TOKEN', 'SP_API_REGION', 'SP_API_MARKETPLACE_IDS'];
     console.log('SP-API 凭证检查：');
     console.log('  region             = ' + (c.region || '(空)'));
+    console.log('  环境               = ' + (c.sandbox ? 'SANDBOX 沙盒 (测试)' : 'PRODUCTION 生产 (真实数据)'));
+    console.log('  目标 host          = ' + c.host);
     for (const k of keys) {
       const v = process.env[k];
       const target = k === 'SP_API_REGION' ? c.region : v;
       console.log('  ' + k.padEnd(24) + ' = ' + (target ? '✅ 已填' : '❌ 缺失'));
     }
+    console.log('  SP_API_SANDBOX     = ' + (process.env.SP_API_SANDBOX || '(未设置，默认生产)'));
     process.exit(0);
   }
   const method = (args[0] || 'get').toUpperCase();
