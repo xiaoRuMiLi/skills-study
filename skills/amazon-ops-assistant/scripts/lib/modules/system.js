@@ -5,6 +5,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 module.exports = function createSystemModule(ctx) {
   const { env, spec, client, format } = ctx;
@@ -67,6 +68,25 @@ module.exports = function createSystemModule(ctx) {
     console.log('\n共 ' + spec.listAllOps().length + ' 个 operationId。');
   }
 
+  // 依赖漏洞自检（npm audit）——用于「发布前扫描代码漏洞」，让问卷声称可落地
+  async function audit(opts) {
+    hr('依赖漏洞扫描 (npm audit)');
+    const dir = opts.dir || process.cwd();
+    if (!fs.existsSync(path.join(dir, 'package.json'))) {
+      console.log('当前目录无 package.json，无法直接 npm audit：' + dir);
+      console.log('请在含 Node 依赖的项目根目录运行：');
+      console.log('  node scripts/ops.js system audit --dir <项目路径>');
+      return;
+    }
+    try {
+      const out = execFileSync('npm', ['audit', '--audit-level=high'], { cwd: dir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+      console.log(out);
+    } catch (e) {
+      if (e.stdout) console.log(e.stdout);   // npm audit 有漏洞时返回非0，stdout 仍是报告
+      else console.log('npm audit 执行失败：' + (e.message || e));
+    }
+  }
+
   return {
     name: 'system',
     title: '系统',
@@ -76,6 +96,7 @@ module.exports = function createSystemModule(ctx) {
       'init-env': { usage: '', run: initEnv },
       spec: { usage: '<opId或家族> --list', run: specCmd },
       'list-ops': { usage: '', run: listOps },
+      audit: { usage: '[--dir <项目路径>]', run: audit },
     },
   };
 };
