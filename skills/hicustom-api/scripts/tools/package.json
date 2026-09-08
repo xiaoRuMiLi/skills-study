@@ -1,0 +1,9 @@
+{
+  "name": "hicustom-image-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "hicustom-api 图像处理工具（sharp）：把客户图处理成符合印刷区尺寸的图片",
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}

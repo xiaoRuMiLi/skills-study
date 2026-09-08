@@ -14,6 +14,7 @@
     "productTypeRemove": "/api/v1/product-type-remove/list",
     "customProducts": "/api/v1/products",
     "customProductDetail": "/api/v1/product/{code}",
+    "productComposite": "/api/v1/product",
     "productPreview": "/api/v1/product-preview",
     "createOrder": "/api/v1/order",
     "orderList": "/api/v1/orders",
@@ -25,5 +26,9 @@
   "paths": {
     "input": "./input",
     "output": "./output"
+  },
+  "merchant": {
+    "productEdit": "https://www.hicustom.com/merchant/productType/edit?type=0&cat_id=&id={id}",
+    "customerProductList": "https://www.hicustom.com/merchant/customerProduct/index"
   }
 }

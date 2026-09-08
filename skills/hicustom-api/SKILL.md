@@ -17,6 +17,22 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 - **命令总线**（`core/Router.js` + `app/Console/Commands/*`）：artisan 式命令路由；新增命令 = 加一个文件 + 注册。
 - **配置分离**：`config/hicustom.json` 放端点；`.env` 放密钥（app_key/app_secret/refresh_token）。
 
+## References（何时引用 / 加载）
+当任务命中下表场景时，**先读对应 references 文档**再动手：
+
+| 场景 | 加载 |
+|------|------|
+| 用户给商品链接/ID，要抓详情、处理客户图、自动合成、出上架素材/报表/HTML | `references/workflow.md` |
+| 要理解/扩展 `product.json` 的 `profile` 结构 | `references/product-profile-schema.md` |
+| 要核对 CSV 列含义 / 改列 | `references/csv-schema.md` |
+| 要改/扩展产品浏览 HTML 模板（加 section） | `references/html-template.md` |
+| 要在前端嵌 hicustom 设计器（iframe + 事件） | `references/designer-sdk.md` |
+| 要管理/增删改查商品、看管理后台、扩数据库字段 | `references/database.md` |
+| 给商品图加"定制区"文字标记（独立流程） | `references/design-area.md` |
+
+> 核心命令：`listing:generate --product-id <id> --images "图.jpg[:面]" [--dry-run]`
+> 图像步骤需 **sharp**（`scripts/tools/`，已装）；其余零第三方依赖。
+
 ## 快速开始
 ```bash
 # 0. 看全部命令
@@ -50,6 +66,10 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 | `design:list` | 定制产品列表(分页) | `GET /api/v1/products` |
 | `design:detail` | 定制产品详情(颜色/尺码/效果图/SKU) | `GET /api/v1/product/{code}` |
 | `design:preview` | 定制产品自动合成 效果图预览 | `GET /api/v1/product-preview` |
+| `design:composite` | 定制产品**自动合成**（出完整展示图：颜色多场景） | `POST /api/v1/product` |
+| `listing:generate` | **一条龙**：抓详情→处理图→上传→合成→缓存 CSV+HTML | 见 `references/workflow.md` |
+| `design-area:generate` | **独立**：给商品图加"定制区"文字标记（YOUR DESIGN HERE 虚线框），存 edited/<id>/ | 见 `references/design-area.md` |
+| `db` | CSV**类数据库**增删改查 + 管理后台 | `list/get/add/update/delete/admin` |
 | `order:create` | 创建订单 | `POST /api/v1/order` |
 | `order:list` | 订单列表(近180天) | `GET /api/v1/orders` |
 | `order:detail` | 订单详情(含物流/地址) | `GET /api/v1/order/{order_id}` |
@@ -89,8 +109,11 @@ scripts/
     ├── Auth/TokenManager.js
     ├── Services/            # Gallery/Product/Design/Order/Trade
     ├── Sdk/DesignerCallback.js  # 设计器 SDK 回调（取图源/原图+签名）
-    └── Console/Commands/    # 20 个命令
+    ├── Support/             # ProductProfile/CsvReport/ListingRenderer
+    └── Console/Commands/    # 20+ 命令（含 design:composite / listing:generate）
+scripts/tools/               # 图像处理（sharp，见 package.json）→ image.js
 config/hicustom.json         # baseUrl + endpoints 映射
+references/                  # workflow / schema / csv / html / designer-sdk 说明
 .env.example                 # 密钥模板
 ```
 

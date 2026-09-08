@@ -28,6 +28,10 @@ function loadConfig() {
     inputDir: process.env.HICUSTOM_INPUT_DIR || cfg.paths.input,
     outputDir: process.env.HICUSTOM_OUTPUT_DIR || cfg.paths.output,
     tokenCachePath: process.env.HICUSTOM_TOKEN_CACHE || path.join(ROOT, '.hicustom', 'token.json'),
+    merchant: cfg.merchant || {},
+    databasePath: process.env.HICUSTOM_DATABASE || path.join(ROOT, 'database', 'products.csv'),
+    editedDir: process.env.HICUSTOM_EDITED_DIR || path.join(ROOT, 'edited'),
+    zhipuApiKey: process.env.ZHIPU_API_KEY || '',
   };
 }
 

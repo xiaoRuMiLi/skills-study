@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>商品详情</title>
+<style>
+body{font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;background:#f2f3f5;margin:0;padding:24px;color:#0f1111}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+.sub{color:#565959;font-size:13px;margin-bottom:16px}
+a.back{color:#007185;text-decoration:none;font-size:13px}
+section.card{background:#fff;border:1px solid #e3e6e6;border-radius:12px;padding:18px;margin-bottom:16px}
+.sec-title{font-size:15px;margin:0 0 12px;border-bottom:2px solid #f0f0f0;padding-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;border:1px solid #eee;padding:6px 8px;vertical-align:top}
+th{background:#fafafa}
+td.k{width:130px;color:#565959}
+.kv{font-size:13px;color:#333;line-height:1.8;margin:4px 0}
+.desc{background:#fafafa;border-left:3px solid #f0c14b;padding:10px 12px;border-radius:0 8px 8px 0;font-size:13px;line-height:1.7;margin-top:8px}
+.imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.thumb{width:150px;height:150px;object-fit:contain;background:#fff;border:1px solid #eee;border-radius:8px;cursor:zoom-in}
+@media(max-width:700px){.thumb{width:110px;height:110px}}
+.thumbwrap{position:relative;display:inline-block;text-align:center}
+.folderbtn{display:inline-block;background:#eee;color:#333;text-decoration:none;font-size:12px;padding:3px 8px;border-radius:6px;margin-top:4px}
+.folderbtn:hover{background:#ddd}
+.linkbtn{display:inline-block;background:#e8590c;color:#fff;text-decoration:none;font-weight:600;padding:10px 16px;border-radius:22px;font-size:13px;margin-right:8px;transition:background .15s}
+.linkbtn:hover{background:#d94f08}
+.linkbtn.alt{background:#007185}.linkbtn.alt:hover{background:#005f6b}
+.pricing{width:100%}
+.pricing td, .pricing th{text-align:center}
+.pricing td.tk{text-align:left;font-weight:700;background:#fffdf9}
+.pname{display:block;font-size:14px;font-weight:700;color:#B12704}
+.qty{font-size:11px;color:#565959}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.show{display:flex}
+#lb img{max-width:88vw;max-height:88vh;border-radius:8px;background:#fff;object-fit:contain}
+#lbcap{position:fixed;bottom:20px;left:0;right:0;text-align:center;color:#fff;font-size:14px;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.lbnav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;font-size:34px;padding:8px 18px;cursor:pointer;border-radius:10px}
+.lbnav:hover{background:rgba(255,255,255,.3)}
+#lbprev{left:20px}#lbnext{right:20px}
+#lbopen{position:fixed;top:16px;right:20px;color:#fff;background:rgba(255,255,255,.2);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px}
+#lbopen:hover{background:rgba(255,255,255,.35)}
+.loading{text-align:center;color:#888;padding:40px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="manage.html">&larr; 返回商品列表</a>
+  <div id="app"><div class="loading">加载中…</div></div>
+</div>
+<div id="lb" onclick="closelb()">
+  <button id="lbprev" class="lbnav" onclick="event.stopPropagation();prevGal()">‹</button>
+  <img id="lbimg" src="" alt="">
+  <button id="lbnext" class="lbnav" onclick="event.stopPropagation();nextGal()">›</button>
+  <a id="lbopen" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ 打开原图</a>
+  <div id="lbcap"></div>
+</div>
+<script>
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// 图片画廊：收集所有图片，支持上一张/下一张/计数/原图
+const GALLERY = [];
+const addImg = (u, f) => { const i = GALLERY.length; GALLERY.push({ src: u, folder: f || '' }); return '<div class="thumbwrap"><img class="thumb" src="'+esc(u)+'" onclick="openGal('+i+')" title="点击放大预览">'+(f?' <a class="folderbtn" href="'+esc(f)+'" target="_blank" rel="noopener">📂</a>':'')+'</div>'; };
+function openGal(i){ GALLERY.cur=i; showImg(); document.getElementById('lb').classList.add('show'); }
+function showImg(){ const g=GALLERY[GALLERY.cur]; document.getElementById('lbimg').src=g.src; document.getElementById('lbcap').textContent=(GALLERY.cur+1)+' / '+GALLERY.length+(g.folder?' · '+g.folder:''); document.getElementById('lbopen').href=g.src; }
+function prevGal(){ if(GALLERY.cur>0){ GALLERY.cur--; showImg(); } }
+function nextGal(){ if(GALLERY.cur<GALLERY.length-1){ GALLERY.cur++; showImg(); } }
+function closelb(){ document.getElementById('lb').classList.remove('show'); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closelb(); if(e.key==='ArrowLeft')prevGal(); if(e.key==='ArrowRight')nextGal(); });
+const cell = (lv,label) => lv ? '<span class="pname">¥'+esc(lv.price)+'</span><br><span class="qty">'+esc(label)+' · qty '+esc(lv.qty_from||1)+'-'+esc(lv.qty_to||'∞')+'</span>' : '<span class="qty">—</span>';
+const dimsStr = (d) => { if(!d) return '—'; const w=d.width!=null?d.width:'—', h=d.height!=null?d.height:'—'; return (w==='—'&&h==='—')?'—':(w+'×'+h+'cm'); };
+function specTable(specs){
+  if(!specs||!specs.length) return '<div class="qty">无规格数据</div>';
+  let r='<tr><th>规格</th><th>尺寸(cm)</th><th>包装(cm)</th><th>体积(cm³)</th><th>重量(g)</th><th>零售价</th><th>黄金</th><th>铂金</th><th>钻石</th><th>黑钻</th><th>星钻</th></tr>';
+  for(const s of specs){ const pk=s.package||{};
+    r+='<tr><td class="tk">'+esc([s.colorName,s.sizeName].filter(Boolean).join(' · ')||('规格'+s.variantId))+'</td>'
+      +'<td>'+esc(dimsStr(s.dims))+'</td>'
+      +'<td>'+esc(pk.L!=null?pk.L+'×'+pk.W+'×'+pk.H:'—')+'</td>'
+      +'<td>'+esc(pk.volume!=null?pk.volume:'—')+'</td>'
+      +'<td>'+esc(s.weight!=null?s.weight:'—')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.retail,'零售')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.gold,'黄金')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.platinum,'铂金')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.diamond,'钻石')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.blackDiamond,'黑钻')+'</td>'
+      +'<td>'+cell(s.prices&&s.prices.starDiamond,'星钻')+'</td></tr>';
+  }
+  return '<table class="pricing">'+r+'</table>';
+}
+const thumb = (u,f) => addImg(u, f);
+function identity(p){ const i=p.identity; const rows=[['商品ID',i.id],['SPU',i.spuCode],['中文名',i.cnName],['英文名',i.enName],['别名',i.alias],['工厂',i.factory],['发布时间',i.releaseTime]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('');
+  return '<section class="card"><h2 class="sec-title">商品身份</h2><table>'+rows+'</table></section>'; }
+function attributes(p){ const a=p.attributes; let s='<section class="card"><h2 class="sec-title">商品属性</h2><table>'+[['生产工艺',a.technology],['材质',(a.materialCn||'')+(a.materialEn?' / '+a.materialEn:'')],['推荐风格',a.designStyle&&a.designStyle.recommendStyle],['主题元素',a.designStyle&&a.designStyle.themeElement]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table>';
+  if(a.description) s+='<div class="desc"><b>产品描述</b><br>'+esc(a.description).replace(/\n/g,'<br>')+'</div>'; return s+'</section>'; }
+function renderDetail(p, c, id){
+  const links = [{label:'✏️ 编辑当前空白商品', url:'https://www.hicustom.com/merchant/productType/edit?type=0&cat_id=&id='+id, kind:'product'},{label:'📦 我的定制商品列表', url:'https://www.hicustom.com/merchant/customerProduct/index', kind:'list'}];
+  const fix = (s)=>String(s).replace('./images/','./'+id+'/images/');
+  let h='<h1>📋 '+esc(p.identity.cnName)+' — 产品信息</h1><div class="sub">'+(p.meta&&p.meta.parsedAt?'解析 '+esc(p.meta.parsedAt):'')+'</div>';
+  h+='<div style="margin-bottom:14px">'+links.map(l=>'<a class="linkbtn'+(l.kind==='list'?' alt':'')+'" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.label)+'</a>').join('')+'</div>';
+  h+=identity(p)+attributes(p);
+  const faces=p.designFaces||[];
+  if(faces.length){ h+='<section class="card"><h2 class="sec-title">可设计面（印刷区尺寸）</h2><table><tr><th>面</th><th>名称</th><th>宽(px)</th><th>高(px)</th></tr>'+faces.map(f=>'<tr><td>'+esc(f.id)+'</td><td>'+esc(f.name)+'</td><td>'+esc(f.width)+'</td><td>'+esc(f.height)+'</td></tr>').join('')+'</table></section>'; }
+  // 商品尺寸（尺码长宽高）
+  const szs=p.sizes||[];
+  if(szs.length){ h+='<section class="card"><h2 class="sec-title">商品尺寸（尺码）</h2><table><tr><th>尺码</th><th>宽度(cm)</th><th>高度(cm)</th></tr>'+szs.map(sz=>'<tr><td>'+esc(sz.name)+'</td><td>'+esc(sz.width!=null?sz.width:'—')+'</td><td>'+esc(sz.height!=null?sz.height:'—')+'</td></tr>').join('')+'</table></section>'; }
+  const pr=p.pricing||{}, specs=p.specs||[];
+  if(pr.minPrice!=null){ h+='<section class="card"><h2 class="sec-title">售价</h2><table>'+[['最低价(1件)',pr.minPrice],['默认颜色',pr.defaultColorName],['默认尺码',pr.defaultSizeName],['季度累级',pr.accumulatedQuarter],['会员级',pr.membership]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table></section>'; }
+  if(specs.length){ h+='<section class="card"><h2 class="sec-title">规格（颜色·尺码 | 包装 | 重量 | 各档售价）</h2>'+specTable(specs)+'</section>'; }
+  if(p.images && (p.images.renderings&&p.images.renderings.length || (p.images.detailImg&&p.images.detailImg.length))){ h+='<section class="card"><h2 class="sec-title">产品图片</h2>'; (p.images.renderings||[]).slice(0,3).forEach(r=>{ const u=(r.renderings||[]).slice(0,6); if(u.length) h+='<div class="kv">颜色['+esc(r.colorName)+']</div><div class="imgs">'+u.map(x=>thumb(x)).join('')+'</div>'; }); if(p.images.detailImg&&p.images.detailImg.length) h+='<div class="kv">细节图 '+p.images.detailImg.length+' 张</div>'; h+='</section>'; }
+  // 定制化信息
+  const codes=Object.entries(c.galleryCodes||{}).map(([v,code])=>esc('面'+v+'='+code)).join(' | ');
+  h+='<section class="card"><h2 class="sec-title">定制化信息</h2><table>'+[['上传图库编码',codes||'—'],['合成定制产品码',c.compositeProductCode||'—'],['效果图数',c.effectImageCount||0]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table>';
+  h+='<div class="kv"><a class="folderbtn" href="/open?path='+encodeURIComponent(id)+'" target="_blank" rel="noopener">📂 打开产品文件夹</a></div>';
+  const groups=c.effectImageLocalGroups||[];
+  if(groups.length){ groups.forEach(g=>{ g.files=(g.files||[]).map(fix); h+='<div class="kv">📁 '+esc(g.name)+'（'+g.files.length+' 张）</div><div class="imgs">'+g.files.map(f=>thumb(f)).join('')+'</div>'; }); }
+  else { const eff=c.effectImages||[]; if(eff.length) h+='<div class="imgs">'+eff.slice(0,12).map(u=>thumb(u)).join('')+'</div>'; }
+  h+='</section>';
+  return h;
+}
+async function load(){
+  const id = new URLSearchParams(location.search).get('id');
+  if(!id){ document.getElementById('app').innerHTML='<div class="loading">缺少 ?id= 参数</div>'; return; }
+  try{
+    const r = await fetch('api/products.json'); const j = await r.json();
+    const p = (j.products||[]).find(x=>x.id===id);
+    if(!p || !p.detail){ document.getElementById('app').innerHTML='<div class="loading">未找到商品 '+esc(id)+'</div>'; return; }
+    document.title = p.detail.profile.identity.cnName + ' — 商品详情';
+    document.getElementById('app').innerHTML = renderDetail(p.detail.profile, p.detail.customization||{}, id);
+  }catch(e){ document.getElementById('app').innerHTML='<div class="loading">加载失败: '+esc(e.message)+'</div>'; }
+}
+load();
+</script>
+</body>
+</html>

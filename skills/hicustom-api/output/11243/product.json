@@ -1,0 +1,1045 @@
+{
+  "raw": {
+    "id": 11243,
+    "cn_name": "多码超柔法兰绒毛毯（竖款）",
+    "en_name": "Ultra-Soft Micro Fleece Blanket",
+    "cn_desc": "",
+    "en_desc": "",
+    "default_values": {
+      "color": 29,
+      "view": 1
+    },
+    "colors": [
+      {
+        "id": 29,
+        "name": "黑色",
+        "cn_name": "黑色",
+        "en_name": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 314,
+        "name": "40\"x30\""
+      },
+      {
+        "id": 244,
+        "name": "50\"x40\""
+      },
+      {
+        "id": 245,
+        "name": "60\"x50\""
+      },
+      {
+        "id": 246,
+        "name": "80\"x60\""
+      }
+    ],
+    "stock_info": [
+      {
+        "id": 7037,
+        "code": "NB4G5Q",
+        "color_id": 29,
+        "size_id": 244,
+        "length": 25.5,
+        "width": 21.8,
+        "height": 3.4,
+        "volume": 1890.06,
+        "weight": 441
+      },
+      {
+        "id": 7038,
+        "code": "8FWEO9",
+        "color_id": 29,
+        "size_id": 245,
+        "length": 32.1,
+        "width": 25.6,
+        "height": 4,
+        "volume": 3287.04,
+        "weight": 618
+      },
+      {
+        "id": 7039,
+        "code": "27K45Y",
+        "color_id": 29,
+        "size_id": 246,
+        "length": 35,
+        "width": 25,
+        "height": 4,
+        "volume": 3500,
+        "weight": 965
+      },
+      {
+        "id": 13926,
+        "code": "OHTD9N",
+        "color_id": 29,
+        "size_id": 314,
+        "length": 27,
+        "width": 27,
+        "height": 1.4,
+        "volume": 1020.6,
+        "weight": 305
+      }
+    ],
+    "hot_stars": 3.5,
+    "factory_name": "谦之合",
+    "spu_code": "MT002-",
+    "alias_name": "空调毯，空调被",
+    "release_time": "2021-01-08 16:07:51",
+    "size_attr_map": [
+      {
+        "id": 26,
+        "name": "高度",
+        "cn_name": "高度",
+        "en_name": "Height",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 25,
+        "name": "宽度",
+        "cn_name": "宽度",
+        "en_name": "Width",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      }
+    ],
+    "size_attr_info": [
+      {
+        "size_id": 244,
+        "attr_id": 26,
+        "attr_value": "125cm"
+      },
+      {
+        "size_id": 244,
+        "attr_id": 25,
+        "attr_value": "100cm"
+      },
+      {
+        "size_id": 245,
+        "attr_id": 26,
+        "attr_value": "150cm"
+      },
+      {
+        "size_id": 245,
+        "attr_id": 25,
+        "attr_value": "125cm"
+      },
+      {
+        "size_id": 246,
+        "attr_id": 26,
+        "attr_value": "200cm"
+      },
+      {
+        "size_id": 246,
+        "attr_id": 25,
+        "attr_value": "150cm"
+      },
+      {
+        "size_id": 314,
+        "attr_id": 26,
+        "attr_value": "102cm"
+      },
+      {
+        "size_id": 314,
+        "attr_id": 25,
+        "attr_value": "76cm"
+      }
+    ],
+    "product_attr": [],
+    "product_timeliness": {
+      "eighty_percent_avg_time": 56,
+      "seven_days_avg_time": 63,
+      "estimated_shipment_time": 96
+    },
+    "product_description": {
+      "detail_info_desc": "【设计说明】全幅印花，单面印花\n【价格说明】该商品由入驻生产商提供正式发票,如需进一步了解发票开具及税务相关信息，请随时联系我们的客服团队获取详细咨询。\n【材质说明】采用防起球法兰绒制成，更加舒适温暖。\n【产品性能】重量轻，经久耐用，可以紧凑折叠。超柔软，手感极佳。完全抵抗收缩和起皱。我们的毯子具有天鹅绒般的模糊感，触感柔软，具有抗起球，抗皱，防过敏，不脱落的特点。非常适合那些容易过敏和哮喘的人！\n【适用场景】外面都有超柔软优质面料，内部为白色。 适合床，沙发，露营，寒冷的电影院或旅行！给您的家人和朋友一个完美的礼物。\n【洗涤说明】机洗手洗，快干，易于护理，经久耐用，不要使用漂白剂。\t\t\n【尺寸说明】有4种尺寸可以选择，40\"x30\"=76*102cm\n,50\"x40\"=125*100cm，60\"x50\"=150*125cm，80\"x60\"=200*150cm。\n【特别说明】此尺码数据因测量方法不同，误差在2-4cm内的属于正常现象。\n【重量说明】含包装重量范围：40\"x30\"：240-315g,50\"x40\"：388-451g，60\"x50\"：558-628g，80\"x60\"：876-975g。",
+      "product_material": {
+        "cn_name": "防起球法兰绒",
+        "en_name": "Anti-pilling flannel"
+      },
+      "print_areas": [
+        {
+          "id": 1,
+          "name": "A面",
+          "width": 4111,
+          "height": 5134,
+          "code": "VCC7YN"
+        }
+      ],
+      "product_technology": "转移印花",
+      "design_style": {
+        "recommend_style": "ins风、非洲风、中东风",
+        "theme_element": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "material_explain": [
+        {
+          "title": "柔软指数",
+          "value": "柔软"
+        },
+        {
+          "title": "厚度指数",
+          "value": "厚"
+        }
+      ],
+      "product_features": [
+        {
+          "title": "【产品性能】",
+          "value": "优质法兰绒，亲肤透气，防皱，抗起球"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "居家休憩，办公室午休，户外野营"
+        }
+      ]
+    },
+    "prices": {
+      "price": 12.65,
+      "default_color_id": 29,
+      "default_size_id": 314,
+      "default_color_name": "黑色",
+      "default_size_name": "40\"x30\"",
+      "accumulated_quarter_price": "gold",
+      "membership_price": "normal",
+      "wholesale_price": [
+        {
+          "stock_info": [
+            {
+              "id": 7037,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 244,
+              "size_name": "50\"x40\""
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "17.14"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "16.55"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "15.95"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "15.36"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "14.77"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "14.04"
+          }
+        },
+        {
+          "stock_info": [
+            {
+              "id": 7038,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 245,
+              "size_name": "60\"x50\""
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "23.99"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "23.40"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "22.81"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "22.21"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "21.04"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "20.45"
+          }
+        },
+        {
+          "stock_info": [
+            {
+              "id": 7039,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 246,
+              "size_name": "80\"x60\""
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "35.10"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "34.51"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "33.91"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "33.33"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "32.74"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "32.15"
+          }
+        },
+        {
+          "stock_info": [
+            {
+              "id": 13926,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 314,
+              "size_name": "40\"x30\""
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "13.24"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "12.65"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "12.05"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "11.46"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "10.87"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "10.29"
+          }
+        }
+      ]
+    },
+    "renderings_info": [
+      {
+        "colors": {
+          "id": 29,
+          "color_name": "黑色"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-85-29-1-500-f6b0c96895277c0e20cd43aa9b034803-b427adba29c88790298a7778b46e8857.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-2-29-1-500-692914de54439cddad346981f7132e80-e51afac80b13cb53187111c441a21c0e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-9-29-1-500-f7245ee138f57e53f6026ba4551e0806-37c38a3a19ad5357b33106cc3d839ae5.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-3-29-1-500-21fec777dbc9451331822955ecc7b32d-5443904c7c1996a867ee59d8a88894d3.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-4-29-1-500-d5fe717109d07b68755f6db8452acc96-faefdb00268848382255ae0e40b8e852.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-10-29-1-500-7f1704eee7fe7127a0a770e1e8129be4-def709cd8ae43ef814223200bff66522.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-6-29-1-500-a12766c620bd12c4191d241fbba7b2c9-9302e95473ec8866a36b8b8192c98bd2.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-7-29-1-500-6e46494a4c1616069891f331b1c69625-48071dd39023628f700121923c70cc3a.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-11-29-1-500-9f38b01517e04d7e9f43a291c317afff-15663b1f6dbfdc63c8b47a5e6c78effd.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-14-29-1-500-1c89fc141801b20a1273559ed1079079-4cd75582b78a6c790ddd7e5530dfb3d5.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-16-29-1-500-4d9baf0a2f0f5d843e8e7172aab94930-e5890a44b48596ccd7e978179f097e64.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-17-29-1-500-b22f67d8df3a350a184b262b4ce65987-636bfd5f30c5d718487ee38956aa5717.jpg",
+          "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-12-29-1-500-3e3d25933606b706d340a65061776493-930db845d1c58010b963b340207ea5d0.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-79-29-1-500-cd8d963883b03a34b7843424d19ee43c-97661992af4f29acd6d275674b12835a.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-1-29-1-500-fd4443eb5e1ec1b2d5dc0c7c85ee03e6-85857e5b0e7cd90f81a1e4b0801e7f11.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-123-29-1-500-b9f22701a0128fb7d8b63554d50936ff-607e6922106bcea898561f667a12b118.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-124-29-1-500-044400c8f8b29eb9f6d272429c8a9f00-dea97d0c2ceae64ad9ec3f53044fdd2c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-125-29-1-500-56151b9eb23db3c9a272b21b39396a5c-fbb5dea716263dfeb2ee088f03560c84.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-126-29-1-500-3d1d2e1d2cb6f222dcc15d0cc9daf96e-190855efd9ecc1bcb5b420e9365f3e7e.jpg"
+        ]
+      }
+    ],
+    "detail_img": []
+  },
+  "profile": {
+    "meta": {
+      "parsedAt": "2026-09-08T08:45:08.389Z",
+      "hotStars": 3.5,
+      "timeliness": {
+        "eighty_percent_avg_time": 56,
+        "seven_days_avg_time": 63,
+        "estimated_shipment_time": 96
+      }
+    },
+    "identity": {
+      "id": 11243,
+      "spuCode": "MT002-",
+      "cnName": "多码超柔法兰绒毛毯（竖款）",
+      "enName": "Ultra-Soft Micro Fleece Blanket",
+      "alias": "空调毯，空调被",
+      "factory": "谦之合",
+      "releaseTime": "2021-01-08 16:07:51"
+    },
+    "attributes": {
+      "materialCn": "防起球法兰绒",
+      "materialEn": "Anti-pilling flannel",
+      "description": "【设计说明】全幅印花，单面印花\n【价格说明】该商品由入驻生产商提供正式发票,如需进一步了解发票开具及税务相关信息，请随时联系我们的客服团队获取详细咨询。\n【材质说明】采用防起球法兰绒制成，更加舒适温暖。\n【产品性能】重量轻，经久耐用，可以紧凑折叠。超柔软，手感极佳。完全抵抗收缩和起皱。我们的毯子具有天鹅绒般的模糊感，触感柔软，具有抗起球，抗皱，防过敏，不脱落的特点。非常适合那些容易过敏和哮喘的人！\n【适用场景】外面都有超柔软优质面料，内部为白色。 适合床，沙发，露营，寒冷的电影院或旅行！给您的家人和朋友一个完美的礼物。\n【洗涤说明】机洗手洗，快干，易于护理，经久耐用，不要使用漂白剂。\t\t\n【尺寸说明】有4种尺寸可以选择，40\"x30\"=76*102cm\n,50\"x40\"=125*100cm，60\"x50\"=150*125cm，80\"x60\"=200*150cm。\n【特别说明】此尺码数据因测量方法不同，误差在2-4cm内的属于正常现象。\n【重量说明】含包装重量范围：40\"x30\"：240-315g,50\"x40\"：388-451g，60\"x50\"：558-628g，80\"x60\"：876-975g。",
+      "designStyle": {
+        "recommendStyle": "ins风、非洲风、中东风",
+        "themeElement": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "materialExplain": [
+        {
+          "title": "柔软指数",
+          "value": "柔软"
+        },
+        {
+          "title": "厚度指数",
+          "value": "厚"
+        }
+      ],
+      "productFeatures": [
+        {
+          "title": "【产品性能】",
+          "value": "优质法兰绒，亲肤透气，防皱，抗起球"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "居家休憩，办公室午休，户外野营"
+        }
+      ]
+    },
+    "designFaces": [
+      {
+        "id": 1,
+        "name": "A面",
+        "width": 4111,
+        "height": 5134
+      }
+    ],
+    "colors": [
+      {
+        "id": 29,
+        "cnName": "黑色",
+        "enName": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 314,
+        "name": "40\"x30\"",
+        "width": 76,
+        "height": 102
+      },
+      {
+        "id": 244,
+        "name": "50\"x40\"",
+        "width": 100,
+        "height": 125
+      },
+      {
+        "id": 245,
+        "name": "60\"x50\"",
+        "width": 125,
+        "height": 150
+      },
+      {
+        "id": 246,
+        "name": "80\"x60\"",
+        "width": 150,
+        "height": 200
+      }
+    ],
+    "variants": [
+      {
+        "id": 7037,
+        "code": "NB4G5Q",
+        "colorId": 29,
+        "sizeId": 244,
+        "length": 25.5,
+        "width": 21.8,
+        "height": 3.4,
+        "volume": 1890.06,
+        "weight": 441
+      },
+      {
+        "id": 7038,
+        "code": "8FWEO9",
+        "colorId": 29,
+        "sizeId": 245,
+        "length": 32.1,
+        "width": 25.6,
+        "height": 4,
+        "volume": 3287.04,
+        "weight": 618
+      },
+      {
+        "id": 7039,
+        "code": "27K45Y",
+        "colorId": 29,
+        "sizeId": 246,
+        "length": 35,
+        "width": 25,
+        "height": 4,
+        "volume": 3500,
+        "weight": 965
+      },
+      {
+        "id": 13926,
+        "code": "OHTD9N",
+        "colorId": 29,
+        "sizeId": 314,
+        "length": 27,
+        "width": 27,
+        "height": 1.4,
+        "volume": 1020.6,
+        "weight": 305
+      }
+    ],
+    "pricing": {
+      "minPrice": 12.65,
+      "defaultColorId": 29,
+      "defaultColorName": "黑色",
+      "defaultSizeId": 314,
+      "defaultSizeName": "40\"x30\"",
+      "accumulatedQuarter": "gold",
+      "membership": "normal",
+      "tiers": [
+        {
+          "stockInfo": [
+            {
+              "id": 7037,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 244,
+              "sizeName": "50\"x40\""
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "17.14"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "16.55"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "15.95"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "15.36"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "14.77"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "14.04"
+          }
+        },
+        {
+          "stockInfo": [
+            {
+              "id": 7038,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 245,
+              "sizeName": "60\"x50\""
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "23.99"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "23.40"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "22.81"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "22.21"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "21.04"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "20.45"
+          }
+        },
+        {
+          "stockInfo": [
+            {
+              "id": 7039,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 246,
+              "sizeName": "80\"x60\""
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "35.10"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "34.51"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "33.91"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "33.33"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "32.74"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "32.15"
+          }
+        },
+        {
+          "stockInfo": [
+            {
+              "id": 13926,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 314,
+              "sizeName": "40\"x30\""
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "13.24"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "12.65"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "12.05"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "11.46"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "10.87"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "10.29"
+          }
+        }
+      ]
+    },
+    "images": {
+      "renderings": [
+        {
+          "colorId": 29,
+          "colorName": "黑色",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-85-29-1-500-f6b0c96895277c0e20cd43aa9b034803-b427adba29c88790298a7778b46e8857.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-2-29-1-500-692914de54439cddad346981f7132e80-e51afac80b13cb53187111c441a21c0e.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-9-29-1-500-f7245ee138f57e53f6026ba4551e0806-37c38a3a19ad5357b33106cc3d839ae5.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-3-29-1-500-21fec777dbc9451331822955ecc7b32d-5443904c7c1996a867ee59d8a88894d3.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-4-29-1-500-d5fe717109d07b68755f6db8452acc96-faefdb00268848382255ae0e40b8e852.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-10-29-1-500-7f1704eee7fe7127a0a770e1e8129be4-def709cd8ae43ef814223200bff66522.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-6-29-1-500-a12766c620bd12c4191d241fbba7b2c9-9302e95473ec8866a36b8b8192c98bd2.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-7-29-1-500-6e46494a4c1616069891f331b1c69625-48071dd39023628f700121923c70cc3a.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-11-29-1-500-9f38b01517e04d7e9f43a291c317afff-15663b1f6dbfdc63c8b47a5e6c78effd.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-14-29-1-500-1c89fc141801b20a1273559ed1079079-4cd75582b78a6c790ddd7e5530dfb3d5.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-16-29-1-500-4d9baf0a2f0f5d843e8e7172aab94930-e5890a44b48596ccd7e978179f097e64.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-17-29-1-500-b22f67d8df3a350a184b262b4ce65987-636bfd5f30c5d718487ee38956aa5717.jpg",
+            "https://nimg5.hicustom.com/static/productDet/TI7YIOHF-12-29-1-500-3e3d25933606b706d340a65061776493-930db845d1c58010b963b340207ea5d0.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-79-29-1-500-cd8d963883b03a34b7843424d19ee43c-97661992af4f29acd6d275674b12835a.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-1-29-1-500-fd4443eb5e1ec1b2d5dc0c7c85ee03e6-85857e5b0e7cd90f81a1e4b0801e7f11.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-123-29-1-500-b9f22701a0128fb7d8b63554d50936ff-607e6922106bcea898561f667a12b118.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-124-29-1-500-044400c8f8b29eb9f6d272429c8a9f00-dea97d0c2ceae64ad9ec3f53044fdd2c.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-125-29-1-500-56151b9eb23db3c9a272b21b39396a5c-fbb5dea716263dfeb2ee088f03560c84.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/TI7YIOHF-126-29-1-500-3d1d2e1d2cb6f222dcc15d0cc9daf96e-190855efd9ecc1bcb5b420e9365f3e7e.jpg"
+          ]
+        }
+      ],
+      "detailImg": []
+    },
+    "specs": [
+      {
+        "variantId": 7037,
+        "code": "NB4G5Q",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 244,
+        "sizeName": "50\"x40\"",
+        "dims": {
+          "width": 100,
+          "height": 125
+        },
+        "package": {
+          "L": 25.5,
+          "W": 21.8,
+          "H": 3.4,
+          "volume": 1890.06
+        },
+        "weight": 441,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "17.14"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "16.55"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "15.95"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "15.36"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "14.77"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "14.04"
+          }
+        }
+      },
+      {
+        "variantId": 7038,
+        "code": "8FWEO9",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 245,
+        "sizeName": "60\"x50\"",
+        "dims": {
+          "width": 125,
+          "height": 150
+        },
+        "package": {
+          "L": 32.1,
+          "W": 25.6,
+          "H": 4,
+          "volume": 3287.04
+        },
+        "weight": 618,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "23.99"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "23.40"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "22.81"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "22.21"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "21.04"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "20.45"
+          }
+        }
+      },
+      {
+        "variantId": 7039,
+        "code": "27K45Y",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 246,
+        "sizeName": "80\"x60\"",
+        "dims": {
+          "width": 150,
+          "height": 200
+        },
+        "package": {
+          "L": 35,
+          "W": 25,
+          "H": 4,
+          "volume": 3500
+        },
+        "weight": 965,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "35.10"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "34.51"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "33.91"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "33.33"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "32.74"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "32.15"
+          }
+        }
+      },
+      {
+        "variantId": 13926,
+        "code": "OHTD9N",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 314,
+        "sizeName": "40\"x30\"",
+        "dims": {
+          "width": 76,
+          "height": 102
+        },
+        "package": {
+          "L": 27,
+          "W": 27,
+          "H": 1.4,
+          "volume": 1020.6
+        },
+        "weight": 305,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "13.24"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "12.65"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "12.05"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "11.46"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "10.87"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "10.29"
+          }
+        }
+      }
+    ]
+  },
+  "customization": {
+    "galleryCodes": {
+      "all": "RIDYOW"
+    },
+    "compositeProductCode": "VI6NHTTM",
+    "effectImages": [
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-85-29-1-1600-f6b0c96895277c0e20cd43aa9b034803-cdf82e70c7deebd7b6957e5997cf23bd.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-2-29-1-1600-692914de54439cddad346981f7132e80-c0eefd3e91173738ef9bc2345eef3c24.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-9-29-1-1600-f7245ee138f57e53f6026ba4551e0806-4115233d6702a48426aa484019a57c19.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-3-29-1-1600-21fec777dbc9451331822955ecc7b32d-f86c446e6bed98345b046b84b5f1f2bf.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-4-29-1-1600-d5fe717109d07b68755f6db8452acc96-538bae52562abc62aae6f11c3a52cef5.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-10-29-1-1600-7f1704eee7fe7127a0a770e1e8129be4-f00ecf0830c34d0fb7951a89b0678583.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-6-29-1-1600-a12766c620bd12c4191d241fbba7b2c9-45c3d48fe2a0d0c0e48d9b4bd16deb62.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-7-29-1-1600-6e46494a4c1616069891f331b1c69625-9ebf4d7a7e45bf41211c27c382154272.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-11-29-1-1600-9f38b01517e04d7e9f43a291c317afff-9937104e2c4d9913b94ebea182b71bb6.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-14-29-1-1600-1c89fc141801b20a1273559ed1079079-28f8b0d3c8b28a5d0504268399f59e0d.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-16-29-1-1600-4d9baf0a2f0f5d843e8e7172aab94930-32da2e0c14fbfb4207f27aad570b27e5.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-17-29-1-1600-b22f67d8df3a350a184b262b4ce65987-fdf76a969b978ce2711803ebd2e7e00b.jpg",
+      "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-12-29-1-1600-3e3d25933606b706d340a65061776493-3b97f619d9cb07ed22c3f57ecd4b8226.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-79-29-1-1600-cd8d963883b03a34b7843424d19ee43c-bd8152409aebfa3dcb9467388cce6205.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-1-29-1-1600-fd4443eb5e1ec1b2d5dc0c7c85ee03e6-11042462d3117b77dc19f97b1527f8c8.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-123-29-1-1600-b9f22701a0128fb7d8b63554d50936ff-0a930847869955c774ce537c04989eec.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-124-29-1-1600-044400c8f8b29eb9f6d272429c8a9f00-0d9d9ad574b8593cb9b6a659ce70895a.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-125-29-1-1600-56151b9eb23db3c9a272b21b39396a5c-4ab4a2ec467d7acd9b55f183215b2c68.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-126-29-1-1600-3d1d2e1d2cb6f222dcc15d0cc9daf96e-21fcc5d4b790de9a171d1b3496546466.jpg"
+    ],
+    "effectImageCount": 19,
+    "dry": false,
+    "effectImageLocal": [
+      "./images/黑色/effect-1.jpg",
+      "./images/黑色/effect-2.jpg",
+      "./images/黑色/effect-3.jpg",
+      "./images/黑色/effect-4.jpg",
+      "./images/黑色/effect-5.jpg",
+      "./images/黑色/effect-6.jpg",
+      "./images/黑色/effect-7.jpg",
+      "./images/黑色/effect-8.jpg",
+      "./images/黑色/effect-9.jpg",
+      "./images/黑色/effect-10.jpg",
+      "./images/黑色/effect-11.jpg",
+      "./images/黑色/effect-12.jpg",
+      "./images/黑色/effect-13.jpg",
+      "./images/黑色/effect-14.jpg",
+      "./images/黑色/effect-15.jpg",
+      "./images/黑色/effect-16.jpg",
+      "./images/黑色/effect-17.jpg",
+      "./images/黑色/effect-18.jpg",
+      "./images/黑色/effect-19.jpg"
+    ],
+    "effectGroups": [
+      {
+        "name": "黑色",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-85-29-1-1600-f6b0c96895277c0e20cd43aa9b034803-cdf82e70c7deebd7b6957e5997cf23bd.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-2-29-1-1600-692914de54439cddad346981f7132e80-c0eefd3e91173738ef9bc2345eef3c24.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-9-29-1-1600-f7245ee138f57e53f6026ba4551e0806-4115233d6702a48426aa484019a57c19.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-3-29-1-1600-21fec777dbc9451331822955ecc7b32d-f86c446e6bed98345b046b84b5f1f2bf.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-4-29-1-1600-d5fe717109d07b68755f6db8452acc96-538bae52562abc62aae6f11c3a52cef5.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-10-29-1-1600-7f1704eee7fe7127a0a770e1e8129be4-f00ecf0830c34d0fb7951a89b0678583.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-6-29-1-1600-a12766c620bd12c4191d241fbba7b2c9-45c3d48fe2a0d0c0e48d9b4bd16deb62.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-7-29-1-1600-6e46494a4c1616069891f331b1c69625-9ebf4d7a7e45bf41211c27c382154272.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-11-29-1-1600-9f38b01517e04d7e9f43a291c317afff-9937104e2c4d9913b94ebea182b71bb6.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-14-29-1-1600-1c89fc141801b20a1273559ed1079079-28f8b0d3c8b28a5d0504268399f59e0d.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-16-29-1-1600-4d9baf0a2f0f5d843e8e7172aab94930-32da2e0c14fbfb4207f27aad570b27e5.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-17-29-1-1600-b22f67d8df3a350a184b262b4ce65987-fdf76a969b978ce2711803ebd2e7e00b.jpg",
+          "https://nimg5.hicustom.com/static/productDet/VI6NHTTM-12-29-1-1600-3e3d25933606b706d340a65061776493-3b97f619d9cb07ed22c3f57ecd4b8226.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-79-29-1-1600-cd8d963883b03a34b7843424d19ee43c-bd8152409aebfa3dcb9467388cce6205.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-1-29-1-1600-fd4443eb5e1ec1b2d5dc0c7c85ee03e6-11042462d3117b77dc19f97b1527f8c8.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-123-29-1-1600-b9f22701a0128fb7d8b63554d50936ff-0a930847869955c774ce537c04989eec.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-124-29-1-1600-044400c8f8b29eb9f6d272429c8a9f00-0d9d9ad574b8593cb9b6a659ce70895a.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-125-29-1-1600-56151b9eb23db3c9a272b21b39396a5c-4ab4a2ec467d7acd9b55f183215b2c68.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/VI6NHTTM-126-29-1-1600-3d1d2e1d2cb6f222dcc15d0cc9daf96e-21fcc5d4b790de9a171d1b3496546466.jpg"
+        ]
+      }
+    ],
+    "effectImageLocalGroups": [
+      {
+        "name": "黑色",
+        "dir": "./images/黑色",
+        "files": [
+          "./images/黑色/effect-1.jpg",
+          "./images/黑色/effect-2.jpg",
+          "./images/黑色/effect-3.jpg",
+          "./images/黑色/effect-4.jpg",
+          "./images/黑色/effect-5.jpg",
+          "./images/黑色/effect-6.jpg",
+          "./images/黑色/effect-7.jpg",
+          "./images/黑色/effect-8.jpg",
+          "./images/黑色/effect-9.jpg",
+          "./images/黑色/effect-10.jpg",
+          "./images/黑色/effect-11.jpg",
+          "./images/黑色/effect-12.jpg",
+          "./images/黑色/effect-13.jpg",
+          "./images/黑色/effect-14.jpg",
+          "./images/黑色/effect-15.jpg",
+          "./images/黑色/effect-16.jpg",
+          "./images/黑色/effect-17.jpg",
+          "./images/黑色/effect-18.jpg",
+          "./images/黑色/effect-19.jpg"
+        ]
+      }
+    ],
+    "dir": "11243"
+  }
+}

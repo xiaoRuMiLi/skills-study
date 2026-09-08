@@ -33,5 +33,22 @@ class DesignService {
       },
     });
   }
+
+  // 定制产品自动合成（POST /api/v1/product，x-www-form-urlencoded）
+  // 传入 cfgs: [{view_id,gallery_code,width,height,top_x,top_y}]，返回定制产品 + colors[].renderings[]（完整展示图）
+  async composite({ productTypeId, defaultColorId, defaultViewId, externalId, externalCustomerId, cfgs } = {}) {
+    if (!productTypeId) throw new Error('缺少 product_type_id');
+    if (!Array.isArray(cfgs) || cfgs.length === 0) throw new Error('缺少 cfgs（图片元素参数）');
+    return this.http.post(this.http.config.endpoints.productComposite, {
+      urlencoded: {
+        product_type_id: productTypeId,
+        default_color_id: defaultColorId,
+        default_view_id: defaultViewId,
+        external_id: externalId,
+        external_customer_id: externalCustomerId,
+        cfgs, // HttpClient 会 JSON.stringify 数组
+      },
+    });
+  }
 }
 module.exports = { DesignService };

@@ -1,0 +1,1083 @@
+{
+  "raw": {
+    "id": 11991,
+    "cn_name": "皮革杯垫6片装",
+    "en_name": "Leather Coasters Set",
+    "cn_desc": "",
+    "en_desc": "",
+    "default_values": {
+      "color": 204,
+      "view": 1
+    },
+    "colors": [
+      {
+        "id": 204,
+        "name": "圆形",
+        "cn_name": "圆形",
+        "en_name": "Round Shape",
+        "tone1": "#faf7af",
+        "tone2": ""
+      },
+      {
+        "id": 255,
+        "name": "八边形",
+        "cn_name": "八边形",
+        "en_name": "Octagon",
+        "tone1": "#ba002b",
+        "tone2": ""
+      },
+      {
+        "id": 254,
+        "name": "六边形",
+        "cn_name": "六边形",
+        "en_name": "Hexagon",
+        "tone1": "#0bb546",
+        "tone2": ""
+      },
+      {
+        "id": 134,
+        "name": "方形",
+        "cn_name": "方形",
+        "en_name": "Square",
+        "tone1": "#b8b8b8",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size"
+      }
+    ],
+    "stock_info": [
+      {
+        "id": 13956,
+        "code": "N4CJSL",
+        "color_id": 134,
+        "size_id": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 90
+      },
+      {
+        "id": 13953,
+        "code": "N5I85F",
+        "color_id": 204,
+        "size_id": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 76
+      },
+      {
+        "id": 13955,
+        "code": "WE3D9K",
+        "color_id": 254,
+        "size_id": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 75
+      },
+      {
+        "id": 13954,
+        "code": "53DKWQ",
+        "color_id": 255,
+        "size_id": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 79
+      }
+    ],
+    "hot_stars": 3.5,
+    "factory_name": "聚禾",
+    "spu_code": "HCC1073",
+    "alias_name": "皮革装饰杯垫6片装",
+    "release_time": "2023-01-04 15:25:46",
+    "size_attr_map": [
+      {
+        "id": 25,
+        "name": "宽度",
+        "cn_name": "宽度",
+        "en_name": "Width",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 24,
+        "name": "厚度",
+        "cn_name": "厚度",
+        "en_name": "Thickness",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 30,
+        "name": "长度",
+        "cn_name": "长度",
+        "en_name": "L",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      }
+    ],
+    "size_attr_info": [
+      {
+        "size_id": 48,
+        "attr_id": 25,
+        "attr_value": "10cm"
+      },
+      {
+        "size_id": 48,
+        "attr_id": 24,
+        "attr_value": "1.7mm"
+      },
+      {
+        "size_id": 48,
+        "attr_id": 30,
+        "attr_value": "10cm"
+      }
+    ],
+    "product_attr": [],
+    "product_timeliness": {
+      "eighty_percent_avg_time": 24,
+      "seven_days_avg_time": 24,
+      "estimated_shipment_time": 96
+    },
+    "product_description": {
+      "detail_info_desc": "【设计说明】全幅单面印花\n【材质说明】双面皮革(PVC)\n【产品性能】这款杯垫是采用优质皮革制成的，表面细腻柔软，易于清洁，有防污防烫的效果。质量轻，收纳不占用地方，性价比高，它是居家必备好物之一。\n【适用场景】这款皮革杯垫适合用于餐厅，厨房，办公室等。\n【配件构造】包含6片10*10cm杯垫，有4种形状可以选择。\n【洗涤说明】易于清洁,只需用水清洗或用湿布擦拭。请勿用含有酒精的洗涤液。\n【特别说明】此尺码数据因测量方法不同，误差在1cm内的属于正常现象。",
+      "product_material": {
+        "cn_name": "聚氯乙烯",
+        "en_name": "PVC"
+      },
+      "print_areas": [
+        {
+          "id": 1,
+          "name": "A面",
+          "width": 1371,
+          "height": 1300,
+          "code": "5YCHPF"
+        },
+        {
+          "id": 2,
+          "name": "B面",
+          "width": 1371,
+          "height": 1300,
+          "code": "T34DV7"
+        },
+        {
+          "id": 3,
+          "name": "C面",
+          "width": 1371,
+          "height": 1300,
+          "code": "4JOU83"
+        },
+        {
+          "id": 4,
+          "name": "D面",
+          "width": 1371,
+          "height": 1300,
+          "code": "62TPDW"
+        },
+        {
+          "id": 5,
+          "name": "E面",
+          "width": 1371,
+          "height": 1300,
+          "code": "2EQI3C"
+        },
+        {
+          "id": 6,
+          "name": "F面",
+          "width": 1371,
+          "height": 1300,
+          "code": "5Z52K8"
+        }
+      ],
+      "product_technology": "UV印花",
+      "design_style": {
+        "recommend_style": "现代、复古、欧美风、ins风、可爱风",
+        "theme_element": "植物、动物、全球节日、文字符号、建筑景观"
+      },
+      "material_explain": [
+        {
+          "title": "柔软指数",
+          "value": "适中"
+        },
+        {
+          "title": "厚度指数",
+          "value": "中"
+        }
+      ],
+      "product_features": [
+        {
+          "title": "【产品性能】",
+          "value": "防污防烫，易于清洁"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适合用于餐厅，厨房，办公室等"
+        }
+      ]
+    },
+    "prices": {
+      "price": 7.28,
+      "default_color_id": 134,
+      "default_size_id": 48,
+      "default_color_name": "方形",
+      "default_size_name": "One Size",
+      "accumulated_quarter_price": "gold",
+      "membership_price": "normal",
+      "wholesale_price": [
+        {
+          "stock_info": [
+            {
+              "id": 13956,
+              "color_id": 134,
+              "color_name": "方形",
+              "size_id": 48,
+              "size_name": "One Size"
+            },
+            {
+              "id": 13953,
+              "color_id": 204,
+              "color_name": "圆形",
+              "size_id": 48,
+              "size_name": "One Size"
+            },
+            {
+              "id": 13955,
+              "color_id": 254,
+              "color_name": "六边形",
+              "size_id": 48,
+              "size_name": "One Size"
+            },
+            {
+              "id": 13954,
+              "color_id": 255,
+              "color_name": "八边形",
+              "size_id": 48,
+              "size_name": "One Size"
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      ]
+    },
+    "renderings_info": [
+      {
+        "colors": {
+          "id": 204,
+          "color_name": "圆形"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-204-1-500-09a6b8ec41cce2fa8f045916bae04813-a2452ee11a5c00c2213e9e39b52b1326.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-204-1-500-5a798016e185b09953ee15f17b110468-eb90eab19f1a867228f7b7619211968f.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-204-1-500-4539b128a40dc11206ac0811b1d288d5-860c14b43686f47691c3c5c0563cf94e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-204-1-500-cfc3ddcf42e70ff7738677fabd757d7e-da1556e3471da58a1751ff765d21d537.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-204-1-500-5e884ceb9d61fc4ebfe9e6562640c936-139965aa17e8ac5dd6ff1316b3bae630.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-204-1-500-cd1c247602eaa9eacf8266ec49895f49-910ba2baa878c78bfebe169a93dc54ee.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-204-1-500-a5c57f8bf0932d13c7c5ef07d3599dd1-a5291c30b6643f4dc37b54fe8b20f112.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-204-1-500-2f02438662dbc046d3b865592dcc1b87-ca771cbdc78a1e267bdc47d8095440cb.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-204-1-500-ee7982aeb758c6f21a95d4424d3d6411-86420f4081bd5f1e9f676fbe5d92f005.jpg"
+        ]
+      },
+      {
+        "colors": {
+          "id": 255,
+          "color_name": "八边形"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-255-1-500-38320537ed495f6e852b5c3d5affb4bb-3d8f70639013833631b2f579c6ffafc9.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-255-1-500-e1ef1345fb22f4e57a873cb82832f086-f8f887ab36b431fd144f4b398315839e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-255-1-500-09d4b0d3f3dc54015062dc60c08f3e03-3e67d1a5d7d4d0455e54f4cf5bae5d2d.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-255-1-500-5ec987249af0143cac0cc019270f9829-925f18163edd74b946868d20f31595fa.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-255-1-500-88b0c31f1b63c41675aa5953d81ee7b2-bd00cd28d0da92b282311f66d6544dd8.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-255-1-500-2b0ca0bddaae7ab50024108ab9698827-b3e202adbe45a1b06123f935d3879ef7.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-255-1-500-e7fd0b552e8dda6e18f73f922dc56183-54046f46921e2d41a10fe43e04d870a2.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-255-1-500-1241e85aed6a03a7f4381635fd55fe90-df55356dc4498f9d197193b97fbe121d.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-255-1-500-f2f81e938fab00618c6b71c358caeee1-fef0e3679098499bc5bab24b240a4ddd.jpg"
+        ]
+      },
+      {
+        "colors": {
+          "id": 254,
+          "color_name": "六边形"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-254-1-500-16f67de052526a0a7ab400a5d11e2598-8a45e84551ed5c341f4d188a2f2bc2d7.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-254-1-500-1e05da438fffe8a445909f8d9caaa8b9-b0df73601de355ae329900398f2b612c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-254-1-500-aa2d49bdbe33ed984b703eb797ad0dc4-9082f48edd624551ce8eafc370426605.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-254-1-500-f60b0cf051b4a899175c26f534b87290-41b83e3eedd94d38d8e67ffc7e85c64f.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-254-1-500-f133b6e93519a904fce636af3c440e8f-ac6b10aea55d8783bf9cc8800d02f524.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-254-1-500-d5d3170b73d369f8803f7a990f6e0581-27b73358e242bb71ff4fc2f339be86fe.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-254-1-500-d5991eaf428519735a1e36c97c227187-1a98d0e0bdc6966dada5533977192205.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-254-1-500-5d786a2e28002db6eef45f6910f86e7d-ee6d7dac052e61037eaf816adf9da326.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-254-1-500-00b06de03aa790cfdcf10a7cdd165387-ddce5e4b422dec3ebb2ec4c1f8126f49.jpg"
+        ]
+      },
+      {
+        "colors": {
+          "id": 134,
+          "color_name": "方形"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-134-1-500-273ccd9b5fb55dfca269447473cee288-ece6a68e72b37dabfef2cc71368ed123.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-134-1-500-efa13f9295ac24bf6a63fe28b7c709e6-e3e54dbfd09cebbd8a78fb15df901312.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-134-1-500-f5cd9bcbf17651cbc16f11b323cbcec3-9d3989febea17fd2c8e9a6a2432362b9.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-134-1-500-3e3a646dd7930fd62a1347f8e6df4b75-aeac77dea8f577ea157fb2615b2fae6c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-134-1-500-e31628fe3f024746334406cb9ffe3b9f-096e225306482895078194c75125d96b.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-134-1-500-40bf41f92c319477e8bcb0566a072d3a-34f0d285921219fdf6be055c14139c6c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-134-1-500-d4d4c31dc4cbd5155664d7a9caed444a-ccef1d3b497c8d01e87043e9f4191a33.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-134-1-500-c9aab0a9e4901f8852848b71321db0c4-a75a623bff3b3cb4ae5669352e9f2b96.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-134-1-500-bd60f286c19664f178547ec4b3b26c63-8aebe29ad970ff30d33edf52ae24cb9b.jpg"
+        ]
+      }
+    ],
+    "detail_img": []
+  },
+  "profile": {
+    "meta": {
+      "parsedAt": "2026-09-08T08:45:22.497Z",
+      "hotStars": 3.5,
+      "timeliness": {
+        "eighty_percent_avg_time": 24,
+        "seven_days_avg_time": 24,
+        "estimated_shipment_time": 96
+      }
+    },
+    "identity": {
+      "id": 11991,
+      "spuCode": "HCC1073",
+      "cnName": "皮革杯垫6片装",
+      "enName": "Leather Coasters Set",
+      "alias": "皮革装饰杯垫6片装",
+      "factory": "聚禾",
+      "releaseTime": "2023-01-04 15:25:46"
+    },
+    "attributes": {
+      "materialCn": "聚氯乙烯",
+      "materialEn": "PVC",
+      "description": "【设计说明】全幅单面印花\n【材质说明】双面皮革(PVC)\n【产品性能】这款杯垫是采用优质皮革制成的，表面细腻柔软，易于清洁，有防污防烫的效果。质量轻，收纳不占用地方，性价比高，它是居家必备好物之一。\n【适用场景】这款皮革杯垫适合用于餐厅，厨房，办公室等。\n【配件构造】包含6片10*10cm杯垫，有4种形状可以选择。\n【洗涤说明】易于清洁,只需用水清洗或用湿布擦拭。请勿用含有酒精的洗涤液。\n【特别说明】此尺码数据因测量方法不同，误差在1cm内的属于正常现象。",
+      "designStyle": {
+        "recommendStyle": "现代、复古、欧美风、ins风、可爱风",
+        "themeElement": "植物、动物、全球节日、文字符号、建筑景观"
+      },
+      "materialExplain": [
+        {
+          "title": "柔软指数",
+          "value": "适中"
+        },
+        {
+          "title": "厚度指数",
+          "value": "中"
+        }
+      ],
+      "productFeatures": [
+        {
+          "title": "【产品性能】",
+          "value": "防污防烫，易于清洁"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适合用于餐厅，厨房，办公室等"
+        }
+      ]
+    },
+    "designFaces": [
+      {
+        "id": 1,
+        "name": "A面",
+        "width": 1371,
+        "height": 1300
+      },
+      {
+        "id": 2,
+        "name": "B面",
+        "width": 1371,
+        "height": 1300
+      },
+      {
+        "id": 3,
+        "name": "C面",
+        "width": 1371,
+        "height": 1300
+      },
+      {
+        "id": 4,
+        "name": "D面",
+        "width": 1371,
+        "height": 1300
+      },
+      {
+        "id": 5,
+        "name": "E面",
+        "width": 1371,
+        "height": 1300
+      },
+      {
+        "id": 6,
+        "name": "F面",
+        "width": 1371,
+        "height": 1300
+      }
+    ],
+    "colors": [
+      {
+        "id": 204,
+        "cnName": "圆形",
+        "enName": "Round Shape",
+        "tone1": "#faf7af",
+        "tone2": ""
+      },
+      {
+        "id": 255,
+        "cnName": "八边形",
+        "enName": "Octagon",
+        "tone1": "#ba002b",
+        "tone2": ""
+      },
+      {
+        "id": 254,
+        "cnName": "六边形",
+        "enName": "Hexagon",
+        "tone1": "#0bb546",
+        "tone2": ""
+      },
+      {
+        "id": 134,
+        "cnName": "方形",
+        "enName": "Square",
+        "tone1": "#b8b8b8",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size",
+        "width": 10,
+        "height": null
+      }
+    ],
+    "variants": [
+      {
+        "id": 13956,
+        "code": "N4CJSL",
+        "colorId": 134,
+        "sizeId": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 90
+      },
+      {
+        "id": 13953,
+        "code": "N5I85F",
+        "colorId": 204,
+        "sizeId": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 76
+      },
+      {
+        "id": 13955,
+        "code": "WE3D9K",
+        "colorId": 254,
+        "sizeId": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 75
+      },
+      {
+        "id": 13954,
+        "code": "53DKWQ",
+        "colorId": 255,
+        "sizeId": 48,
+        "length": 10.5,
+        "width": 10.5,
+        "height": 1.2,
+        "volume": 132.3,
+        "weight": 79
+      }
+    ],
+    "pricing": {
+      "minPrice": 7.28,
+      "defaultColorId": 134,
+      "defaultColorName": "方形",
+      "defaultSizeId": 48,
+      "defaultSizeName": "One Size",
+      "accumulatedQuarter": "gold",
+      "membership": "normal",
+      "tiers": [
+        {
+          "stockInfo": [
+            {
+              "id": 13956,
+              "colorId": 134,
+              "colorName": "方形",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            },
+            {
+              "id": 13953,
+              "colorId": 204,
+              "colorName": "圆形",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            },
+            {
+              "id": 13955,
+              "colorId": 254,
+              "colorName": "六边形",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            },
+            {
+              "id": 13954,
+              "colorId": 255,
+              "colorName": "八边形",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      ]
+    },
+    "images": {
+      "renderings": [
+        {
+          "colorId": 204,
+          "colorName": "圆形",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-204-1-500-09a6b8ec41cce2fa8f045916bae04813-a2452ee11a5c00c2213e9e39b52b1326.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-204-1-500-5a798016e185b09953ee15f17b110468-eb90eab19f1a867228f7b7619211968f.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-204-1-500-4539b128a40dc11206ac0811b1d288d5-860c14b43686f47691c3c5c0563cf94e.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-204-1-500-cfc3ddcf42e70ff7738677fabd757d7e-da1556e3471da58a1751ff765d21d537.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-204-1-500-5e884ceb9d61fc4ebfe9e6562640c936-139965aa17e8ac5dd6ff1316b3bae630.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-204-1-500-cd1c247602eaa9eacf8266ec49895f49-910ba2baa878c78bfebe169a93dc54ee.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-204-1-500-a5c57f8bf0932d13c7c5ef07d3599dd1-a5291c30b6643f4dc37b54fe8b20f112.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-204-1-500-2f02438662dbc046d3b865592dcc1b87-ca771cbdc78a1e267bdc47d8095440cb.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-204-1-500-ee7982aeb758c6f21a95d4424d3d6411-86420f4081bd5f1e9f676fbe5d92f005.jpg"
+          ]
+        },
+        {
+          "colorId": 255,
+          "colorName": "八边形",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-255-1-500-38320537ed495f6e852b5c3d5affb4bb-3d8f70639013833631b2f579c6ffafc9.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-255-1-500-e1ef1345fb22f4e57a873cb82832f086-f8f887ab36b431fd144f4b398315839e.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-255-1-500-09d4b0d3f3dc54015062dc60c08f3e03-3e67d1a5d7d4d0455e54f4cf5bae5d2d.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-255-1-500-5ec987249af0143cac0cc019270f9829-925f18163edd74b946868d20f31595fa.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-255-1-500-88b0c31f1b63c41675aa5953d81ee7b2-bd00cd28d0da92b282311f66d6544dd8.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-255-1-500-2b0ca0bddaae7ab50024108ab9698827-b3e202adbe45a1b06123f935d3879ef7.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-255-1-500-e7fd0b552e8dda6e18f73f922dc56183-54046f46921e2d41a10fe43e04d870a2.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-255-1-500-1241e85aed6a03a7f4381635fd55fe90-df55356dc4498f9d197193b97fbe121d.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-255-1-500-f2f81e938fab00618c6b71c358caeee1-fef0e3679098499bc5bab24b240a4ddd.jpg"
+          ]
+        },
+        {
+          "colorId": 254,
+          "colorName": "六边形",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-254-1-500-16f67de052526a0a7ab400a5d11e2598-8a45e84551ed5c341f4d188a2f2bc2d7.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-254-1-500-1e05da438fffe8a445909f8d9caaa8b9-b0df73601de355ae329900398f2b612c.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-254-1-500-aa2d49bdbe33ed984b703eb797ad0dc4-9082f48edd624551ce8eafc370426605.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-254-1-500-f60b0cf051b4a899175c26f534b87290-41b83e3eedd94d38d8e67ffc7e85c64f.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-254-1-500-f133b6e93519a904fce636af3c440e8f-ac6b10aea55d8783bf9cc8800d02f524.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-254-1-500-d5d3170b73d369f8803f7a990f6e0581-27b73358e242bb71ff4fc2f339be86fe.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-254-1-500-d5991eaf428519735a1e36c97c227187-1a98d0e0bdc6966dada5533977192205.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-254-1-500-5d786a2e28002db6eef45f6910f86e7d-ee6d7dac052e61037eaf816adf9da326.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-254-1-500-00b06de03aa790cfdcf10a7cdd165387-ddce5e4b422dec3ebb2ec4c1f8126f49.jpg"
+          ]
+        },
+        {
+          "colorId": 134,
+          "colorName": "方形",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-1-134-1-500-273ccd9b5fb55dfca269447473cee288-ece6a68e72b37dabfef2cc71368ed123.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-7-134-1-500-efa13f9295ac24bf6a63fe28b7c709e6-e3e54dbfd09cebbd8a78fb15df901312.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-8-134-1-500-f5cd9bcbf17651cbc16f11b323cbcec3-9d3989febea17fd2c8e9a6a2432362b9.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-9-134-1-500-3e3a646dd7930fd62a1347f8e6df4b75-aeac77dea8f577ea157fb2615b2fae6c.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-2-134-1-500-e31628fe3f024746334406cb9ffe3b9f-096e225306482895078194c75125d96b.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-3-134-1-500-40bf41f92c319477e8bcb0566a072d3a-34f0d285921219fdf6be055c14139c6c.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-4-134-1-500-d4d4c31dc4cbd5155664d7a9caed444a-ccef1d3b497c8d01e87043e9f4191a33.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-5-134-1-500-c9aab0a9e4901f8852848b71321db0c4-a75a623bff3b3cb4ae5669352e9f2b96.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/OTNV5W3J-10-134-1-500-bd60f286c19664f178547ec4b3b26c63-8aebe29ad970ff30d33edf52ae24cb9b.jpg"
+          ]
+        }
+      ],
+      "detailImg": []
+    },
+    "specs": [
+      {
+        "variantId": 13956,
+        "code": "N4CJSL",
+        "colorId": 134,
+        "colorName": "方形",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 10,
+          "height": null
+        },
+        "package": {
+          "L": 10.5,
+          "W": 10.5,
+          "H": 1.2,
+          "volume": 132.3
+        },
+        "weight": 90,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      },
+      {
+        "variantId": 13953,
+        "code": "N5I85F",
+        "colorId": 204,
+        "colorName": "圆形",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 10,
+          "height": null
+        },
+        "package": {
+          "L": 10.5,
+          "W": 10.5,
+          "H": 1.2,
+          "volume": 132.3
+        },
+        "weight": 76,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      },
+      {
+        "variantId": 13955,
+        "code": "WE3D9K",
+        "colorId": 254,
+        "colorName": "六边形",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 10,
+          "height": null
+        },
+        "package": {
+          "L": 10.5,
+          "W": 10.5,
+          "H": 1.2,
+          "volume": 132.3
+        },
+        "weight": 75,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      },
+      {
+        "variantId": 13954,
+        "code": "53DKWQ",
+        "colorId": 255,
+        "colorName": "八边形",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 10,
+          "height": null
+        },
+        "package": {
+          "L": 10.5,
+          "W": 10.5,
+          "H": 1.2,
+          "volume": 132.3
+        },
+        "weight": 79,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.66"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "7.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "6.58"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "6.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "5.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "5.78"
+          }
+        }
+      }
+    ]
+  },
+  "customization": {
+    "compositeProductCode": "56R3S3XY",
+    "effectGroups": [
+      {
+        "name": "圆形",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-204-1-1600-09a6b8ec41cce2fa8f045916bae04813-b5562e6ce115962540e32355e6814fd1.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-204-1-1600-5a798016e185b09953ee15f17b110468-d7e637acfa4695e4b43346fd4c25a3fb.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-204-1-1600-4539b128a40dc11206ac0811b1d288d5-2c97b46283e29441a6132ee575d91a4c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-204-1-1600-cfc3ddcf42e70ff7738677fabd757d7e-e9e7d3e46c0a331ec1de6631a05981f1.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-204-1-1600-5e884ceb9d61fc4ebfe9e6562640c936-b146e7b89aadb475bb95ad799e424a85.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-204-1-1600-cd1c247602eaa9eacf8266ec49895f49-f0cbbbe8432e01080e653dfe9a380353.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-204-1-1600-a5c57f8bf0932d13c7c5ef07d3599dd1-2b9d4fb75044717021e2aa6aaa8fcf9e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-204-1-1600-2f02438662dbc046d3b865592dcc1b87-a187e07ff6d5abf16b0a87623be2a75d.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-204-1-1600-ee7982aeb758c6f21a95d4424d3d6411-0d55e1c5f0b927e484e3e9005154747d.jpg"
+        ]
+      },
+      {
+        "name": "八边形",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-255-1-1600-38320537ed495f6e852b5c3d5affb4bb-a0576b7215f858a557cea816fab7d4f4.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-255-1-1600-e1ef1345fb22f4e57a873cb82832f086-c82de84c8ae11bb2890d44e2c61fc514.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-255-1-1600-09d4b0d3f3dc54015062dc60c08f3e03-d810c71ba294ed483be0f958cb227f2e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-255-1-1600-5ec987249af0143cac0cc019270f9829-8b9fb874da46a4ff9677c8780fad8b8a.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-255-1-1600-88b0c31f1b63c41675aa5953d81ee7b2-bb77d110627895a45f24458dac5efd13.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-255-1-1600-2b0ca0bddaae7ab50024108ab9698827-f9300458cde10c1b25198f7183c692c7.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-255-1-1600-e7fd0b552e8dda6e18f73f922dc56183-7c2b5b90cac693ab444fbc7c43a4ca00.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-255-1-1600-1241e85aed6a03a7f4381635fd55fe90-a77ddab6df2a3172aefb5eecb0549a4e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-255-1-1600-f2f81e938fab00618c6b71c358caeee1-2649f5fbb96a648c63e02014884e18ef.jpg"
+        ]
+      },
+      {
+        "name": "六边形",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-254-1-1600-16f67de052526a0a7ab400a5d11e2598-468f72a09608586b45a5f21b44b79317.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-254-1-1600-1e05da438fffe8a445909f8d9caaa8b9-69e647848ba578c820182b5a64836ec0.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-254-1-1600-aa2d49bdbe33ed984b703eb797ad0dc4-5b09ed93da71171cb3ecfba459c6da56.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-254-1-1600-f60b0cf051b4a899175c26f534b87290-cc7119afa3511a026ba23fd6e8a7335d.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-254-1-1600-f133b6e93519a904fce636af3c440e8f-13fb7916ecdf6d2d2fe9fe4df02047df.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-254-1-1600-d5d3170b73d369f8803f7a990f6e0581-6b6ddf4d143a9fd4ef76e35cc56009e5.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-254-1-1600-d5991eaf428519735a1e36c97c227187-35ba65e4c3daf88a4f42da5b7d19202c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-254-1-1600-5d786a2e28002db6eef45f6910f86e7d-66987ae4f7504551df04663625aa0cb4.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-254-1-1600-00b06de03aa790cfdcf10a7cdd165387-a29aeac3f67ba32f9083ddb8bd1ab509.jpg"
+        ]
+      },
+      {
+        "name": "方形",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-134-1-1600-273ccd9b5fb55dfca269447473cee288-75f85327350ea05353920dbb14459d7d.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-134-1-1600-efa13f9295ac24bf6a63fe28b7c709e6-931fada12c1b1900a65572548238e2ac.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-134-1-1600-f5cd9bcbf17651cbc16f11b323cbcec3-5bf2e188c0b273cb177bdd7fbde85a53.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-134-1-1600-3e3a646dd7930fd62a1347f8e6df4b75-b04582be064a100c225ba242fc281423.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-134-1-1600-e31628fe3f024746334406cb9ffe3b9f-5bd80ac97520c28ab58e79cb9efe4137.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-134-1-1600-40bf41f92c319477e8bcb0566a072d3a-8b7ee37abfd0c66aab660bf9d5e32236.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-134-1-1600-d4d4c31dc4cbd5155664d7a9caed444a-ed0519c472efa8cd55189b68f7b8182c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-134-1-1600-c9aab0a9e4901f8852848b71321db0c4-b3ea4431d3ca8685473233108567ad3c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-134-1-1600-bd60f286c19664f178547ec4b3b26c63-06d177a2321c6d358cb315660f4de1ea.jpg"
+        ]
+      }
+    ],
+    "effectImages": [
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-204-1-1600-09a6b8ec41cce2fa8f045916bae04813-b5562e6ce115962540e32355e6814fd1.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-204-1-1600-5a798016e185b09953ee15f17b110468-d7e637acfa4695e4b43346fd4c25a3fb.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-204-1-1600-4539b128a40dc11206ac0811b1d288d5-2c97b46283e29441a6132ee575d91a4c.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-204-1-1600-cfc3ddcf42e70ff7738677fabd757d7e-e9e7d3e46c0a331ec1de6631a05981f1.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-204-1-1600-5e884ceb9d61fc4ebfe9e6562640c936-b146e7b89aadb475bb95ad799e424a85.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-204-1-1600-cd1c247602eaa9eacf8266ec49895f49-f0cbbbe8432e01080e653dfe9a380353.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-204-1-1600-a5c57f8bf0932d13c7c5ef07d3599dd1-2b9d4fb75044717021e2aa6aaa8fcf9e.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-204-1-1600-2f02438662dbc046d3b865592dcc1b87-a187e07ff6d5abf16b0a87623be2a75d.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-204-1-1600-ee7982aeb758c6f21a95d4424d3d6411-0d55e1c5f0b927e484e3e9005154747d.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-255-1-1600-38320537ed495f6e852b5c3d5affb4bb-a0576b7215f858a557cea816fab7d4f4.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-255-1-1600-e1ef1345fb22f4e57a873cb82832f086-c82de84c8ae11bb2890d44e2c61fc514.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-255-1-1600-09d4b0d3f3dc54015062dc60c08f3e03-d810c71ba294ed483be0f958cb227f2e.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-255-1-1600-5ec987249af0143cac0cc019270f9829-8b9fb874da46a4ff9677c8780fad8b8a.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-255-1-1600-88b0c31f1b63c41675aa5953d81ee7b2-bb77d110627895a45f24458dac5efd13.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-255-1-1600-2b0ca0bddaae7ab50024108ab9698827-f9300458cde10c1b25198f7183c692c7.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-255-1-1600-e7fd0b552e8dda6e18f73f922dc56183-7c2b5b90cac693ab444fbc7c43a4ca00.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-255-1-1600-1241e85aed6a03a7f4381635fd55fe90-a77ddab6df2a3172aefb5eecb0549a4e.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-255-1-1600-f2f81e938fab00618c6b71c358caeee1-2649f5fbb96a648c63e02014884e18ef.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-254-1-1600-16f67de052526a0a7ab400a5d11e2598-468f72a09608586b45a5f21b44b79317.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-254-1-1600-1e05da438fffe8a445909f8d9caaa8b9-69e647848ba578c820182b5a64836ec0.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-254-1-1600-aa2d49bdbe33ed984b703eb797ad0dc4-5b09ed93da71171cb3ecfba459c6da56.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-254-1-1600-f60b0cf051b4a899175c26f534b87290-cc7119afa3511a026ba23fd6e8a7335d.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-254-1-1600-f133b6e93519a904fce636af3c440e8f-13fb7916ecdf6d2d2fe9fe4df02047df.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-254-1-1600-d5d3170b73d369f8803f7a990f6e0581-6b6ddf4d143a9fd4ef76e35cc56009e5.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-254-1-1600-d5991eaf428519735a1e36c97c227187-35ba65e4c3daf88a4f42da5b7d19202c.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-254-1-1600-5d786a2e28002db6eef45f6910f86e7d-66987ae4f7504551df04663625aa0cb4.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-254-1-1600-00b06de03aa790cfdcf10a7cdd165387-a29aeac3f67ba32f9083ddb8bd1ab509.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-1-134-1-1600-273ccd9b5fb55dfca269447473cee288-75f85327350ea05353920dbb14459d7d.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-7-134-1-1600-efa13f9295ac24bf6a63fe28b7c709e6-931fada12c1b1900a65572548238e2ac.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-8-134-1-1600-f5cd9bcbf17651cbc16f11b323cbcec3-5bf2e188c0b273cb177bdd7fbde85a53.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-9-134-1-1600-3e3a646dd7930fd62a1347f8e6df4b75-b04582be064a100c225ba242fc281423.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-2-134-1-1600-e31628fe3f024746334406cb9ffe3b9f-5bd80ac97520c28ab58e79cb9efe4137.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-3-134-1-1600-40bf41f92c319477e8bcb0566a072d3a-8b7ee37abfd0c66aab660bf9d5e32236.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-4-134-1-1600-d4d4c31dc4cbd5155664d7a9caed444a-ed0519c472efa8cd55189b68f7b8182c.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-5-134-1-1600-c9aab0a9e4901f8852848b71321db0c4-b3ea4431d3ca8685473233108567ad3c.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/56R3S3XY-10-134-1-1600-bd60f286c19664f178547ec4b3b26c63-06d177a2321c6d358cb315660f4de1ea.jpg"
+    ],
+    "effectImageCount": 0,
+    "dir": "11991",
+    "effectImageLocal": [
+      "./images/圆形/effect-1.jpg",
+      "./images/圆形/effect-2.jpg",
+      "./images/圆形/effect-3.jpg",
+      "./images/圆形/effect-4.jpg",
+      "./images/圆形/effect-5.jpg",
+      "./images/圆形/effect-6.jpg",
+      "./images/圆形/effect-7.jpg",
+      "./images/圆形/effect-8.jpg",
+      "./images/圆形/effect-9.jpg",
+      "./images/八边形/effect-1.jpg",
+      "./images/八边形/effect-2.jpg",
+      "./images/八边形/effect-3.jpg",
+      "./images/八边形/effect-4.jpg",
+      "./images/八边形/effect-5.jpg",
+      "./images/八边形/effect-6.jpg",
+      "./images/八边形/effect-7.jpg",
+      "./images/八边形/effect-8.jpg",
+      "./images/八边形/effect-9.jpg",
+      "./images/六边形/effect-1.jpg",
+      "./images/六边形/effect-2.jpg",
+      "./images/六边形/effect-3.jpg",
+      "./images/六边形/effect-4.jpg",
+      "./images/六边形/effect-5.jpg",
+      "./images/六边形/effect-6.jpg",
+      "./images/六边形/effect-7.jpg",
+      "./images/六边形/effect-8.jpg",
+      "./images/六边形/effect-9.jpg",
+      "./images/方形/effect-1.jpg",
+      "./images/方形/effect-2.jpg",
+      "./images/方形/effect-3.jpg",
+      "./images/方形/effect-4.jpg",
+      "./images/方形/effect-5.jpg",
+      "./images/方形/effect-6.jpg",
+      "./images/方形/effect-7.jpg",
+      "./images/方形/effect-8.jpg",
+      "./images/方形/effect-9.jpg"
+    ],
+    "effectImageLocalGroups": [
+      {
+        "name": "圆形",
+        "dir": "./images/圆形",
+        "files": [
+          "./images/圆形/effect-1.jpg",
+          "./images/圆形/effect-2.jpg",
+          "./images/圆形/effect-3.jpg",
+          "./images/圆形/effect-4.jpg",
+          "./images/圆形/effect-5.jpg",
+          "./images/圆形/effect-6.jpg",
+          "./images/圆形/effect-7.jpg",
+          "./images/圆形/effect-8.jpg",
+          "./images/圆形/effect-9.jpg"
+        ]
+      },
+      {
+        "name": "八边形",
+        "dir": "./images/八边形",
+        "files": [
+          "./images/八边形/effect-1.jpg",
+          "./images/八边形/effect-2.jpg",
+          "./images/八边形/effect-3.jpg",
+          "./images/八边形/effect-4.jpg",
+          "./images/八边形/effect-5.jpg",
+          "./images/八边形/effect-6.jpg",
+          "./images/八边形/effect-7.jpg",
+          "./images/八边形/effect-8.jpg",
+          "./images/八边形/effect-9.jpg"
+        ]
+      },
+      {
+        "name": "六边形",
+        "dir": "./images/六边形",
+        "files": [
+          "./images/六边形/effect-1.jpg",
+          "./images/六边形/effect-2.jpg",
+          "./images/六边形/effect-3.jpg",
+          "./images/六边形/effect-4.jpg",
+          "./images/六边形/effect-5.jpg",
+          "./images/六边形/effect-6.jpg",
+          "./images/六边形/effect-7.jpg",
+          "./images/六边形/effect-8.jpg",
+          "./images/六边形/effect-9.jpg"
+        ]
+      },
+      {
+        "name": "方形",
+        "dir": "./images/方形",
+        "files": [
+          "./images/方形/effect-1.jpg",
+          "./images/方形/effect-2.jpg",
+          "./images/方形/effect-3.jpg",
+          "./images/方形/effect-4.jpg",
+          "./images/方形/effect-5.jpg",
+          "./images/方形/effect-6.jpg",
+          "./images/方形/effect-7.jpg",
+          "./images/方形/effect-8.jpg",
+          "./images/方形/effect-9.jpg"
+        ]
+      }
+    ]
+  }
+}
