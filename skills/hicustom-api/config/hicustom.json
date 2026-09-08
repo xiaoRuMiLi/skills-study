@@ -1,0 +1,29 @@
+{
+  "baseUrl": "https://api.hicustom.com",
+  "endpoints": {
+    "token": "/oauth/token",
+    "refreshToken": "/oauth/refresh-token",
+    "galleryUpload": "/api/v1/gallery",
+    "galleryList": "/api/v1/galleries",
+    "galleryDetail": "/api/v1/gallery/{code}",
+    "galleryEdit": "/api/v1/gallery/{code}",
+    "galleryCategories": "/api/v1/gallery-categories",
+    "productTypes": "/api/v1/product-types",
+    "productTypeCategories": "/api/v1/product-type-categories",
+    "productTypeDetail": "/api/v1/product-type/{id}",
+    "productTypeRemove": "/api/v1/product-type-remove/list",
+    "customProducts": "/api/v1/products",
+    "customProductDetail": "/api/v1/product/{code}",
+    "productPreview": "/api/v1/product-preview",
+    "createOrder": "/api/v1/order",
+    "orderList": "/api/v1/orders",
+    "orderDetail": "/api/v1/order/{order_id}",
+    "orderByOutId": "/api/v1/out-order-id/{out_order_id}",
+    "orderItemProduction": "/api/v1/common/order_item_production_info",
+    "tradeRecord": "/api/v1/common/trade_record"
+  },
+  "paths": {
+    "input": "./input",
+    "output": "./output"
+  }
+}
