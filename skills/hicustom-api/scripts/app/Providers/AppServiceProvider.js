@@ -12,6 +12,7 @@ const { ProductService } = require('../Services/ProductService');
 const { DesignService } = require('../Services/DesignService');
 const { OrderService } = require('../Services/OrderService');
 const { TradeService } = require('../Services/TradeService');
+const { ShippingService } = require('../Services/ShippingService');
 const { ProductRepository } = require('../Support/ProductRepository');
 const { ZhipuService } = require('../Services/ZhipuService');
 
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider {
     app.singleton('design', (a) => new DesignService(a.make('http')));
     app.singleton('order', (a) => new OrderService(a.make('http')));
     app.singleton('trade', (a) => new TradeService(a.make('http')));
+    app.singleton('shipping', (a) => new ShippingService(a.make('config')));
     // CSV 类数据库仓储
     app.singleton('productRepo', (a) => new ProductRepository(a.make('config')));
     // 智谱 AI（文生图 + 图片理解）

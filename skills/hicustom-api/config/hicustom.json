@@ -28,7 +28,9 @@
     "output": "./output"
   },
   "merchant": {
+    "baseUrl": "https://www.hicustom.com",
     "productEdit": "https://www.hicustom.com/merchant/productType/edit?type=0&cat_id=&id={id}",
-    "customerProductList": "https://www.hicustom.com/merchant/customerProduct/index"
+    "customerProductList": "https://www.hicustom.com/merchant/customerProduct/index",
+    "shippingQuote": "/merchant/shippingRule/calculateNew"
   }
 }

@@ -29,6 +29,8 @@ function loadConfig() {
     outputDir: process.env.HICUSTOM_OUTPUT_DIR || cfg.paths.output,
     tokenCachePath: process.env.HICUSTOM_TOKEN_CACHE || path.join(ROOT, '.hicustom', 'token.json'),
     merchant: cfg.merchant || {},
+    merchantBaseUrl: process.env.HICUSTOM_MERCHANT_BASE_URL || (cfg.merchant && cfg.merchant.baseUrl) || 'https://www.hicustom.com',
+    merchantCookie: process.env.HICUSTOM_MERCHANT_COOKIE || '',
     databasePath: process.env.HICUSTOM_DATABASE || path.join(ROOT, 'database', 'products.csv'),
     editedDir: process.env.HICUSTOM_EDITED_DIR || path.join(ROOT, 'edited'),
     zhipuApiKey: process.env.ZHIPU_API_KEY || '',

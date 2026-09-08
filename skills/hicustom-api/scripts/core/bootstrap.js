@@ -34,6 +34,7 @@ const COMMANDS = [
   require('../app/Console/Commands/OrderByOutIdCommand').OrderByOutIdCommand,
   require('../app/Console/Commands/OrderItemProductionCommand').OrderItemProductionCommand,
   require('../app/Console/Commands/TradeListCommand').TradeListCommand,
+  require('../app/Console/Commands/ShippingQuoteCommand').ShippingQuoteCommand,
 ];
 
 function bootstrap() {

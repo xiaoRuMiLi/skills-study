@@ -76,10 +76,12 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 | `order:by-out-id` | 按商户订单号查订单详情 | `GET /api/v1/out-order-id/{out_order_id}` |
 | `order:item-production` | 商户订单项生产信息(单件码) | `POST /api/v1/common/order_item_production_info` |
 | `trade:list` | 交易记录查询 | `GET /api/v1/common/trade_record` |
+| `shipping:quote` | **运费试算**（商家后台 cookie 鉴权）：按国/邮编/重量体积/数量 → 各物流渠道运费 | `www.hicustom.com/merchant/shippingRule/calculateNew`（见 `references/shipping-quote.md`） |
 | （待扩）`design:...` / `order:...` | 定制合成 / 订单 | 见开放平台 API 文档 |
 
 ## 文件夹 / 密钥
 - 密钥：`.env`（`HICUSTOM_APP_KEY`/`HICUSTOM_APP_SECRET`/`HICUSTOM_REFRESH_TOKEN`），只放本机。
+- `HICUSTOM_MERCHANT_COOKIE`：商家后台会话 cookie（运费试算 `shipping:quote` 用）。**注意**：开放平台无运费试算端点，该 endpoint 走 `www.hicustom.com` 商家后台、需 cookie；过期会报「会话过期」，需重新登录商家后台更新。「过期刷新 .env 即可」，秘钥勿明文外泄。
 - 输入图文件夹：`config/paths.input`（或 env `HICUSTOM_INPUT_DIR`，默认 `./input`）。
 - 输出图文件夹：`config/paths.output`（或 env `HICUSTOM_OUTPUT_DIR`，默认 `./output`），`gallery:batch` 的清单写这里。
 - `access_token` 缓存：`.hicustom/token.json`（自动有效期判断+刷新）。

@@ -15,6 +15,7 @@ const SCHEMA = [
   'color_id', 'color_name', 'size_id', 'size_name', 'size_W_cm', 'size_H_cm',
   'variant_id', 'variant_code',
   'package_L_cm', 'package_W_cm', 'package_H_cm', 'volume_cm3', 'weight_g',
+  'shipping_US', 'shipping_UK', 'shipping_CA', 'shipping_DE', 'shipping_MX', 'shipping_FR', 'shipping_ES', 'shipping_IT',
   'retail_price', 'gold_price', 'platinum_price', 'diamond_price', 'black_diamond_price', 'star_diamond_price',
   'qty_from', 'qty_to',
   'design_face_w', 'design_face_h', 'gallery_codes', 'composite_product_code', 'effect_image_count',
@@ -111,6 +112,16 @@ class ProductRepository {
           diamond: r.diamond_price !== '' ? { price: r.diamond_price } : null,
           blackDiamond: r.black_diamond_price !== '' ? { price: r.black_diamond_price } : null,
           starDiamond: r.star_diamond_price !== '' ? { price: r.star_diamond_price } : null,
+        },
+        shipping: {
+          US: r.shipping_US !== '' ? Number(r.shipping_US) : null,
+          UK: r.shipping_UK !== '' ? Number(r.shipping_UK) : null,
+          CA: r.shipping_CA !== '' ? Number(r.shipping_CA) : null,
+          DE: r.shipping_DE !== '' ? Number(r.shipping_DE) : null,
+          MX: r.shipping_MX !== '' ? Number(r.shipping_MX) : null,
+          FR: r.shipping_FR !== '' ? Number(r.shipping_FR) : null,
+          ES: r.shipping_ES !== '' ? Number(r.shipping_ES) : null,
+          IT: r.shipping_IT !== '' ? Number(r.shipping_IT) : null,
         },
       });
     }
