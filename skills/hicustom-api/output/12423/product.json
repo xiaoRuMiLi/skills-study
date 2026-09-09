@@ -433,28 +433,28 @@
       }
     ],
     "effectImageLocal": [
-      "./images/黑色/effect-1.jpg",
-      "./images/黑色/effect-2.jpg",
-      "./images/黑色/effect-3.jpg",
-      "./images/黑色/effect-4.jpg",
-      "./images/黑色/effect-5.jpg",
-      "./images/黑色/effect-6.jpg",
-      "./images/黑色/effect-7.jpg",
-      "./images/黑色/effect-8.jpg"
+      "./images/黑色/main-1.jpg",
+      "./images/黑色/other-2.jpg",
+      "./images/黑色/other-3.jpg",
+      "./images/黑色/other-4.jpg",
+      "./images/黑色/other-5.jpg",
+      "./images/黑色/other-6.jpg",
+      "./images/黑色/other-7.jpg",
+      "./images/黑色/other-8.jpg"
     ],
     "effectImageLocalGroups": [
       {
         "name": "黑色",
         "dir": "./images/黑色",
         "files": [
-          "./images/黑色/effect-1.jpg",
-          "./images/黑色/effect-2.jpg",
-          "./images/黑色/effect-3.jpg",
-          "./images/黑色/effect-4.jpg",
-          "./images/黑色/effect-5.jpg",
-          "./images/黑色/effect-6.jpg",
-          "./images/黑色/effect-7.jpg",
-          "./images/黑色/effect-8.jpg"
+          "./images/黑色/main-1.jpg",
+          "./images/黑色/other-2.jpg",
+          "./images/黑色/other-3.jpg",
+          "./images/黑色/other-4.jpg",
+          "./images/黑色/other-5.jpg",
+          "./images/黑色/other-6.jpg",
+          "./images/黑色/other-7.jpg",
+          "./images/黑色/other-8.jpg"
         ]
       }
     ]

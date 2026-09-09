@@ -140,8 +140,19 @@ class ShippingService {
     };
   }
 
+  // 物流商偏好（用于"各国优选"存档）：云途/递四方全选；燕文/顺丰国际仅保留"专线"
+  _provPref(r) {
+    const n = r.name || '';
+    if (/云途/.test(n)) return true;
+    if (/递四方/.test(n)) return true;
+    if (/燕文/.test(n)) return /专线/.test(n);
+    if (/顺丰国际/.test(n)) return /专线/.test(n);
+    return false;
+  }
+
   // 选前 N 优渠道（按 selectChannel 同一规则排序），返回精简字段数组，最多 n 个。
-  selectTopN(channels, { country, n = 1 } = {}) {
+  // preferProviders=true 时，先按物流商偏好过滤（云途/递四方全选，燕文/顺丰仅专线）。
+  selectTopN(channels, { country, n = 1, preferProviders = false } = {}) {
     const onlyYuntu = String(country).toUpperCase() === 'MX';
     let valid = (channels || []).filter((r) => Number(r.amount) > 0 && Number(r.amount) >= 5 && !/送货上门|蜂鸟发仓默认物流/i.test(r.name || ''));
     if (onlyYuntu) {
@@ -150,6 +161,7 @@ class ShippingService {
       valid = yunSel.length ? yunSel : yun;
       if (!valid.length) return [];
     }
+    if (preferProviders) valid = valid.filter((r) => this._provPref(r));
     const hasPeriod = (r) => (r.shippingDeliveredPeriod || {}).delivered_time_effect_day_begin != null;
     const good = valid.filter((r) => {
       const sp = r.shippingDeliveredPeriod || {};

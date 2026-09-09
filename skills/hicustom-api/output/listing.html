@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>上架预览 · Amazon Listing</title>
+<style>
+body{font-family:"Amazon Ember",Arial,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;background:#fff;color:#0F1111}
+.topbar{background:#131921;color:#fff;padding:12px 24px;font-size:14px;display:flex;align-items:center;gap:12px}
+.topbar .back{color:#fff;text-decoration:none;font-size:13px;margin-right:auto}
+.topbar .brand{font-weight:700}
+.wrap{max-width:1300px;margin:0 auto;padding:24px;display:grid;grid-template-columns:1fr 1.2fr;gap:32px}
+.gal img{width:100%;max-height:520px;object-fit:contain;background:#fff}
+.grid2{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+.grid2 img{width:100%;height:88px;object-fit:contain;background:#fff;border:1px solid #eee;cursor:zoom-in;border-radius:6px}
+.thumbwrap{position:relative}
+.title h1{font-size:24px;font-weight:500;margin:0 0 6px;line-height:1.3}
+.title .brand{color:#565959;font-size:14px}
+.title .price{margin:10px 0;font-size:24px;color:#B12704}
+.title .sub{color:#007185;font-size:13px}
+.bullets{padding-left:20px;line-height:1.7;font-size:14px}
+.bullets li{margin-bottom:4px}
+.attrs{margin-top:12px;font-size:13px;line-height:1.9}
+.desc{grid-column:1/-1;border-top:1px solid #e7e7e7;padding-top:16px}
+.kws{grid-column:1/-1;color:#565959;font-size:12px;padding:10px 0;border-top:1px solid #e7e7e7}
+span.cn{color:#888;font-size:12px}
+.cn-zh{display:none;color:#333;font-size:13px;border-top:1px dashed #ccc;margin-top:4px;padding-top:4px;white-space:pre-wrap;line-height:1.6}
+body.show-cn .cn-zh{display:block}
+.tbtn{cursor:pointer;background:#f0c14b;border:none;padding:7px 14px;border-radius:6px;font-weight:700;color:#111}
+.tbtn:hover{background:#e7b33f}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.show{display:flex}
+#lb img{max-width:88vw;max-height:88vh;border-radius:8px;background:#fff;object-fit:contain}
+.loading{text-align:center;color:#888;padding:60px}
+</style>
+</head>
+<body>
+<div class="topbar"><a class="back" href="manage.html">← 返回管理</a><span class="brand">amazon.co.uk · 上架预览</span><button id="trbtn" class="tbtn" onclick="toggleCN()">🌐 中文</button><a id="todetail" class="tbtn" href="#" style="text-decoration:none">📄 商品详情</a><span class="sub">本地图优先 · 中文为审阅翻译，不改表格</span></div>
+<div id="app"><div class="loading">加载中…</div></div>
+<div id="lb" onclick="this.classList.remove('show')"><img id="lbimg" src="" alt=""/></div>
+<script>
+const esc=(s)=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const $=(i)=>document.getElementById(i);
+let TRANS=null, CUR=null;
+function zoom(u){ $('lbimg').src=u; $('lb').classList.add('show'); }
+const zhtxt=(t)=> (TRANS && TRANS[t]) ? '<div class="cn-zh">'+esc(TRANS[t])+'</div>' : '';
+const zhbullet=(arr,i)=> (TRANS && arr && TRANS.bullet_points_zh && TRANS.bullet_points_zh[i]) ? '<div class="cn-zh">'+esc(TRANS.bullet_points_zh[i])+'</div>' : '';
+function renderNow(){
+  const {rec, imgs, mainImg}=CUR;
+  const title=rec.item_name||'';
+  const price=rec.price!=null?rec.price:(rec.min_price!=null?(Number(rec.min_price)*0.9):'--');
+  const sym={GBP:'£',USD:'$',EUR:'€',CAD:'C$',MXN:'MX$'}[rec.currency]||'';
+  const bp=rec.bullet_point||[];
+  const bullets=bp.map((b,i)=>'<li>'+esc(b)+zhbullet(bp,i)+'</li>').join('');
+  const descHtml=esc(rec.product_description||'').replace(/\n/g,'<br/>').replace(/<\/br>/gi,'<br/>');
+  const kwHtml=esc(rec.generic_keyword||'');
+  $('app').innerHTML='<div class="wrap">'
+    +'<div class="gal"><img src="'+esc(mainImg)+'"/><div class="grid2">'+imgs.slice(0,10).map((u,i)=>'<div class="thumbwrap"><img src="'+esc(u)+'" onclick="zoom(this.src)" alt="img'+(i+1)+'"/></div>').join('')+'</div></div>'
+    +'<div class="title"><h1>'+esc(title)+zhtxt('item_name_zh')+'</h1>'
+    +'<div class="brand">Visit the '+esc(rec.brand||'Generic')+' Store</div>'
+    +'<div class="sub">4.4 ★ · 128 ratings</div>'
+    +'<div class="price">'+sym+(price>0?Number(price).toFixed(2):'--')+' <span class="cn">建议售价 · 汇率'+esc(rec.price_rate||'')+(rec.price_source?' '+esc(rec.price_source):'')+'</span></div>'
+    +'<div class="bullets"><h3>About this item</h3><ul>'+bullets+'</ul>'+zhtxt('bullet_points_zh_title')+'</div>'
+    +'<div class="attrs"><b>材质:</b> '+esc(rec.material||'-')+' &nbsp; <b>尺码:</b> '+esc(rec.size||'-')+' &nbsp; <b>颜色:</b> '+esc(rec.color||'-')+' &nbsp; <b>品牌:</b> '+esc(rec.brand||'Generic')+'</div>'
+    +'</div>'
+    +'<div class="desc"><h3>Product description</h3><p>'+descHtml+'</p>'+zhtxt('product_description_zh')+'</div>'
+    +'<div class="kws"><b>搜索词:</b> '+kwHtml+zhtxt('generic_keyword_zh')+'</div>'
+    +'</div>';
+  document.title=title;
+}
+async function toggleCN(){
+  if(!TRANS){
+    $('trbtn').textContent='翻译中…';
+    try{ const r=await fetch('/api/listing/translate?id='+encodeURIComponent(CUR.id)); const j=await r.json();
+      if(j.ok && j.translation){ TRANS=j.translation; renderNow(); document.body.classList.add('show-cn'); $('trbtn').textContent='🌐 英文'; }
+      else { alert('翻译失败: '+(j.err||'')); $('trbtn').textContent='🌐 中文'; return; }
+    }catch(e){ alert(e.message); $('trbtn').textContent='🌐 中文'; return; }
+  } else { document.body.classList.toggle('show-cn'); $('trbtn').textContent=document.body.classList.contains('show-cn')?'🌐 英文':'🌐 中文'; }
+}
+async function load(){
+  const id=new URLSearchParams(location.search).get('id');
+  if(!id){ $('app').innerHTML='<div class="loading">缺少 ?id= 参数</div>'; return; }
+  try{
+    const j=await (await fetch('/api/listing.json?id='+encodeURIComponent(id))).json();
+    if(!j.ok){ $('app').innerHTML='<div class="loading">'+esc(j.err||'失败')+'</div>'; return; }
+    if(!j.record){ $('app').innerHTML='<div class="loading">该商品还没有上架文案 record（先运行 listing 流程生成）。本地图 '+(j.images||[]).length+' 张。</div>'; return; }
+    // 本地图优先（/api/listing.json 已排序：main-1/other-N，设计稿最后）
+    let imgs=(j.images&&j.images.length)?j.images:((j.record.other_image_urls&&j.record.other_image_urls.length)?[j.record.main_image_url].concat(j.record.other_image_urls):[]);
+    imgs=(imgs||[]).filter(Boolean);
+    const mainImg=j.main||j.record.main_image_url||imgs[0]||'';
+    CUR={id, rec:j.record, imgs, mainImg};
+    const td=document.getElementById('todetail'); if(td) td.href='product.html?id='+encodeURIComponent(id);
+    renderNow();
+  }catch(e){ $('app').innerHTML='<div class="loading">加载失败: '+esc(e.message)+'</div>'; }
+}
+load();
+</script>
+</body>
+</html>

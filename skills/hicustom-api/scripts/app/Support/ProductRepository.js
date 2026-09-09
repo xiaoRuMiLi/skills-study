@@ -19,6 +19,7 @@ const SCHEMA = [
   'retail_price', 'gold_price', 'platinum_price', 'diamond_price', 'black_diamond_price', 'star_diamond_price',
   'qty_from', 'qty_to',
   'design_face_w', 'design_face_h', 'gallery_codes', 'composite_product_code', 'effect_image_count',
+  'is_custom', 'main_image', 'other_images',
   'status', 'notes', 'created_at', 'updated_at', 'detail_json',
 ];
 
@@ -85,6 +86,54 @@ class ProductRepository {
     return changed;
   }
 
+  // 写回运费：按 variant_id 逐个规格行写入 shipping_*（1行=1规格，运费按各规格的包装/重量分别试算）
+  setShipping(id, map) {
+    const C = { US: 'shipping_US', UK: 'shipping_UK', CA: 'shipping_CA', DE: 'shipping_DE', MX: 'shipping_MX', FR: 'shipping_FR', ES: 'shipping_ES', IT: 'shipping_IT' };
+    const rows = this._read();
+    let changed = false;
+    for (const r of rows) if (String(r.id) === String(id)) {
+      const v = map[String(r.variant_id)];
+      if (v) { for (const k of Object.keys(C)) if (v[k] != null && v[k] !== '') r[C[k]] = v[k]; r.updated_at = new Date().toLocaleString(); changed = true; }
+    }
+    if (changed) this._write(rows);
+    return changed;
+  }
+
+  // 写回"运费试算（各国·优选渠道）"rich 对象 → detail_json.profile.shipping（商品级，供详情页 shippingSection 渲染）
+  setDetailShipping(id, shipping) {
+    const rows = this._read();
+    let changed = false;
+    for (const r of rows) if (String(r.id) === String(id) && r.detail_json) {
+      try {
+        const d = JSON.parse(r.detail_json);
+        if (!d.profile) d.profile = {};
+        d.profile.shipping = shipping;
+        r.detail_json = JSON.stringify(d);
+        r.updated_at = new Date().toLocaleString();
+        changed = true;
+      } catch (e) { /* 跳过坏 JSON */ }
+    }
+    if (changed) this._write(rows);
+    return changed;
+  }
+
+  // 写回定价对象 → detail_json.pricing（商品级 { UK:{price,currency,rate,source}, ... }）
+  setDetailPricing(id, pricing) {
+    const rows = this._read();
+    let changed = false;
+    for (const r of rows) if (String(r.id) === String(id) && r.detail_json) {
+      try {
+        const d = JSON.parse(r.detail_json);
+        d.pricing = pricing;
+        r.detail_json = JSON.stringify(d);
+        r.updated_at = new Date().toLocaleString();
+        changed = true;
+      } catch (e) { /* skip */ }
+    }
+    if (changed) this._write(rows);
+    return changed;
+  }
+
   // 按商品分组 → [{ 商品摘要 + specs[] }]，供列表/详情/API 使用
   products() {
     const groups = {};
@@ -95,6 +144,8 @@ class ProductRepository {
           id: r.id, spu: r.spu_code, name: r.cn_name, enName: r.en_name, factory: r.factory, material: r.material,
           minPrice: r.min_price, galleryCodes: r.gallery_codes || '', compositeCode: r.composite_product_code || '',
           effectCount: r.effect_image_count || 0, status: r.status || 'draft',
+          is_custom: r.is_custom || (r.composite_product_code ? '1' : '0'),
+          mainImage: r.main_image || '', otherImages: (r.other_images || '').split('|').filter(Boolean),
           designFaces: { w: r.design_face_w, h: r.design_face_h },
           detail: (() => { try { return r.detail_json ? JSON.parse(r.detail_json) : null; } catch (e) { return null; } })(),
           specs: [],

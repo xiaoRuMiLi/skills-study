@@ -135,6 +135,18 @@ class DesignAreaCommand {
       } catch (e) { console.log('  ❌ ' + base + ': ' + e.message); }
     }
 
+    // ④ 归档原稿：加文字前 + 加文字后 都存 output/<id>/原稿/
+    try {
+      const { archiveOriginal } = require('../../Support/OriginalArchive');
+      const items = [];
+      for (const src of sources) if (src.path && fs.existsSync(src.path)) items.push({ src: src.path, name: '设计原稿' });
+      for (const e of entries) if (e.after && fs.existsSync(e.after)) items.push({ src: e.after, name: '设计原稿', suffix: '_加文字' });
+      if (items.length) {
+        const arch = archiveOriginal({ productId: id, outputDir: config.outputDir, items });
+        console.log('🗂️ 原稿已归档(加文字前+后): ' + arch.dir + (arch.files.length ? ' (' + arch.files.join(', ') + ')' : ''));
+      }
+    } catch (e) { console.log('  ⚠️ 原稿归档异常: ' + e.message); }
+
     // ④ 前后对比
     if (entries.length) {
       const cmp = renderCompare(entries, { productId: id, productName: name, htmlDir: config.outputDir });

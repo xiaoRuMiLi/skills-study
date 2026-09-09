@@ -35,6 +35,10 @@ const COMMANDS = [
   require('../app/Console/Commands/OrderItemProductionCommand').OrderItemProductionCommand,
   require('../app/Console/Commands/TradeListCommand').TradeListCommand,
   require('../app/Console/Commands/ShippingQuoteCommand').ShippingQuoteCommand,
+  require('../app/Console/Commands/ShippingBackfillCommand').ShippingBackfillCommand,
+  require('../app/Console/Commands/PricingCommand').PricingCommand,
+  require('../app/Console/Commands/PricingBackfillCommand').PricingBackfillCommand,
+  require('../app/Console/Commands/ListingTranslateCommand').ListingTranslateCommand,
 ];
 
 function bootstrap() {

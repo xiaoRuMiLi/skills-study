@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: lyq
+ * @Date: 2026-09-08 19:29:48
+ * @LastEditTime: 2026-09-09 12:24:33
+ * @LastEditors: lyq
+-->
 # 工作流：hicustom 定制产品 → 上架素材（listing:generate）
 
 > 本技能核心场景：把「空白产品 + 自定义设计图」一键变成「定制产品 + 上架展示图 + 文案 + 报表」。
@@ -13,10 +20,19 @@
 ```
 ① 抓空白产品详情        GET  /api/v1/product-type/{id}          → product:detail
 ② 解析产品画像          把原始 JSON 解析成结构化画像            → ProductProfile.js
-③ 处理客户图→填充尺寸    sharp fit(cover/contain) 到印刷区尺寸   → tools/image.js
+③ 处理客户图→填充尺寸    从上下文获取图片源，如果客户没有提供，询问客户使用的图片来源，是否需要做定制款（定制款需要加文字，参照design-area.md处理图片来源和加工），sharp fit(cover/contain) 到印刷区尺寸   → tools/image.js
 ④ 上传图库 + 自动合成    gallery:upload → design:composite
 ⑤ 缓存 + CSV + HTML     product.json / product.csv / index.html  → 可扩展模板
 ```
+
+## 原稿归档规范（必做 ✅）
+每个「合成/设计」所用的图案原稿，必须归档到 **`output/<产品id>/原稿/`**，便于客户后续索要图案时直接取用。
+- **加文字前原稿**：始终保存，文件名取源文件/固定名（如 `设计原稿.jpg`）。
+- **加文字后版本**：若在图案上叠加了文字（定制区标记 / 品牌字 / 标语），必须**额外保存一份**，文件名加 `_加文字` 后缀（如 `设计原稿_加文字.jpg`），做到前后两份都在。
+- **触发接口**：
+  - `listing:generate`（自动合成）→ 归档「图案原稿」（加文字前源图）。
+  - `design-area:generate`（定制区加文字）→ 归档「加文字前」+「加文字后」两份。
+- 归档由 `scripts/app/Support/OriginalArchive.js` 自动完成（`archiveOriginal()`），无需手工拷贝。
 
 ## 一条龙命令
 ```bash

@@ -94,6 +94,16 @@ class ListingGenerateCommand {
     }
     if (!processed.length) console.log('  ⚠️ 无图片可处理（仅抓取+报表）。');
 
+    // ②.5 归档图案原稿 → output/<id>/原稿/（规范：加文字前原稿必存；加文字后另存 _加文字）
+    try {
+      const { archiveOriginal } = require('../../Support/OriginalArchive');
+      const srcSet = [...new Set(specs.map((s) => s.src).filter((s) => s && fs.existsSync(s)))];
+      if (srcSet.length) {
+        const arch = archiveOriginal({ productId, outputDir: config.outputDir, items: srcSet.map((s) => ({ src: s })) });
+        console.log('  🗂️ 图案原稿已归档: ' + arch.dir + (arch.files.length ? ' (' + arch.files.join(', ') + ')' : ''));
+      }
+    } catch (e) { console.log('  ⚠️ 原稿归档异常: ' + e.message); }
+
     const customization = { galleryCodes: {}, compositeProductCode: '', effectImages: [], effectImageCount: 0, dry };
 
     // ③ 上传图库（非 dry-run）
@@ -139,6 +149,8 @@ class ListingGenerateCommand {
           customization.effectGroups = (d.colors || []).map((c) => ({ name: c.cn_name || '默认', images: (c.renderings || []).map((rr) => rr.big_img || rr.small_img).filter(Boolean) }));
           customization.effectImages = [].concat(...customization.effectGroups.map((g) => g.images));
           customization.effectImageCount = customization.effectImages.length;
+          customization.mainImage = customization.effectImages[0] || '';
+          customization.otherImages = customization.effectImages.slice(1);
           console.log('✅ 合成成功 定制产品: ' + d.code + ' | 规格数 ' + customization.effectGroups.length + ' | 效果图 ' + customization.effectImageCount + ' 张');
         }
       } catch (e) { console.log('❌ 合成异常: ' + e.message); }
@@ -156,13 +168,15 @@ class ListingGenerateCommand {
         const gdir = path.join(imgDir, folder);
         fs.mkdirSync(gdir, { recursive: true });
         const gfiles = [];
+        customization.mainImageIndex = 0; // 第1张(正面)=主图；其余为 other
         for (let i = 0; i < (g.images || []).length; i++) {
           try {
             const r = await fetch(g.images[i]);
             const buf = Buffer.from(await r.arrayBuffer());
-            const f = path.join(gdir, 'effect-' + (i + 1) + '.jpg');
+            const fname = i === 0 ? 'main-1.jpg' : 'other-' + (i + 1) + '.jpg';
+            const f = path.join(gdir, fname);
             fs.writeFileSync(f, buf);
-            const rel = './images/' + folder + '/effect-' + (i + 1) + '.jpg';
+            const rel = './images/' + folder + '/' + fname;
             gfiles.push(rel); customization.effectImageLocal.push(rel);
           } catch (e) { console.log('  📥 下载失败 ' + g.name + ' ' + (i + 1) + ': ' + e.message); }
         }
@@ -191,6 +205,7 @@ class ListingGenerateCommand {
       design_face_w: defaultFace(profile).width, design_face_h: defaultFace(profile).height,
       gallery_codes: Object.values(customization.galleryCodes || {}).join('|'),
       composite_product_code: customization.compositeProductCode || '', effect_image_count: customization.effectImageCount || 0,
+      is_custom: '1', main_image: customization.mainImage || '', other_images: (customization.otherImages || []).join('|'),
       status: dry ? 'draft' : 'synced', notes: dry ? 'DRY-RUN' : '',
     };
     const nSpec = repo.upsertProduct(String(productId), shared, profile.specs, JSON.stringify({ profile, customization }));

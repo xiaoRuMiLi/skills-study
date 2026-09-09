@@ -1,0 +1,17 @@
+{
+  "policy": {
+    "passed": true,
+    "issues": []
+  },
+  "image": {
+    "main": "https://nimg5.hicustom.com/static/productDet2/UFUXBD6Q-1-29-1-1600-bb639e6e4d5c05eebf557864cc1a4357-ed48c8acd42693c9b18bb732e9466c39.jpg",
+    "conclusion": "OK",
+    "passed": true
+  },
+  "custom_consistency": {
+    "is_custom": "1",
+    "copy_mentions_custom": true,
+    "consistent": true,
+    "note": "定制商品必须包含定制说明(任意颜色/图案 + Customized Now)"
+  }
+}

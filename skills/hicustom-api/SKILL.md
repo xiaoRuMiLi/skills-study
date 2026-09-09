@@ -29,6 +29,9 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 | 要在前端嵌 hicustom 设计器（iframe + 事件） | `references/designer-sdk.md` |
 | 要管理/增删改查商品、看管理后台、扩数据库字段 | `references/database.md` |
 | 给商品图加"定制区"文字标记（独立流程） | `references/design-area.md` |
+| 要算/回填物流运费（含 cookie 抓取、8 国口径、推荐渠道、写回 shipping_* 列） | `references/shipping-quote.md` |
+| 要按规范算运费+存档到 CSV/detail_json、查易错点、看提取范例 | `references/shipping-pricing-flow.md` |
+| 要生成亚马逊上架文案/关键词/填 xlsm/通用预览模板 | `references/listing-flow.md` |
 
 > 核心命令：`listing:generate --product-id <id> --images "图.jpg[:面]" [--dry-run]`
 > 图像步骤需 **sharp**（`scripts/tools/`，已装）；其余零第三方依赖。
@@ -77,7 +80,19 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 | `order:item-production` | 商户订单项生产信息(单件码) | `POST /api/v1/common/order_item_production_info` |
 | `trade:list` | 交易记录查询 | `GET /api/v1/common/trade_record` |
 | `shipping:quote` | **运费试算**（商家后台 cookie 鉴权）：按国/邮编/重量体积/数量 → 各物流渠道运费 | `www.hicustom.com/merchant/shippingRule/calculateNew`（见 `references/shipping-quote.md`） |
-| （待扩）`design:...` / `order:...` | 定制合成 / 订单 | 见开放平台 API 文档 |
+| `pricing:calc` | **定价计算**：(采购+物流)÷汇率÷(1-30%利润率-平台成本)；汇率实时取中间价、取小，非MX留前2位/MX留前3位 | 汇率 ECB(Frankfurter)中间价·open.er-api后备；见 `references/listing-flow.md` |
+| `pricing:backfill` | **多国售价回填**：一次拉ECB汇率→为每商品算8国售价→写 `detail_json.pricing`，`product.html` 显示多国售价 | 同 `pricing:calc` |
+| `listing:translate` | **上架文案→中文**（审阅用，`listing.html` 中文按钮/单独命令），写入 `translation.json`，**不改 record/xlsm** | 智谱 glm-4 翻译 |
+| `shipping:backfill` | **物流费规范·批量回填**：逐规格 × 8 国试算 → 写回 `products.csv` 的 `shipping_*` 列 + 详情页「运费试算（各国优选）」`profile.shipping` + 刷新后台 | 同 `shipping:quote`（见 `references/shipping-quote.md`） |
+
+## 本地 HTTP 服务（serve.js，端口 8098）
+`node scripts/tools/serve.js` 启动，托管 `output/` 并暴露接口（`product.html` 靠它渲染）：
+| 接口 | 说明 |
+|------|------|
+| `GET /api/products.json` | 读 `products.csv` → 商品列表（含 `specs[].shipping` 与 `detail.profile.shipping`），供 manage.html / product.html 前端渲染 |
+| `POST /api/shipping/calc` body `{id, commit}` | 前端「🧮 物流算价」：`commit=false` 试算预览（服务端缓存 PENDING，不写库）；`commit=true` 写入 CSV `shipping_*` + `profile.shipping` + 刷新 manage.html。cookie 只在服务端 |
+| cookie 自动刷新 | 算价时 cookie 失效 → serve 自动从已登录浏览器 CDP 抓新 cookie 写 `.env`（清 `process.env` 缓存）→ 重试一次。脚本：`scripts/app/Support/MerchantCookie.js`；手动：`node scripts/tools/get-merchant-cookie.js` |
+> ⚠️ 改动 serve.js / MerchantCookie / 数据后需**重启 serve.js**（`taskkill /PID <8098进程> /F` 再 `node scripts/tools/serve.js`）。
 
 ## 文件夹 / 密钥
 - 密钥：`.env`（`HICUSTOM_APP_KEY`/`HICUSTOM_APP_SECRET`/`HICUSTOM_REFRESH_TOKEN`），只放本机。

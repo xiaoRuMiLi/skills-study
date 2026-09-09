@@ -1,0 +1,102 @@
+{
+  "seeds": [
+    "silk pajama men",
+    "men pajama set",
+    "satin lounge set men",
+    "men pyjama set",
+    "sleepwear set"
+  ],
+  "sources": {
+    "silk pajama men": [
+      "silk pyjamas men 100% mulberry",
+      "silk pyjamas men bottoms",
+      "silk pyjamas men xxxl",
+      "silk pyjamas men 3xl"
+    ],
+    "silk pyjamas men 100% mulberry": "silk pajama men",
+    "silk pyjamas men bottoms": "silk pajama men",
+    "silk pyjamas men xxxl": "silk pajama men",
+    "silk pyjamas men 3xl": "silk pajama men",
+    "men pajama set": [
+      "men pyjamas set",
+      "men pyjamas set long sleeve",
+      "men pyjamas set cotton",
+      "men pyjamas set 100% cotton",
+      "men pajama set",
+      "men pyjamas set button top",
+      "men pyjamas set funny",
+      "men pyjamas set shorts",
+      "men pyjamas set winter",
+      "men pyjamas set red"
+    ],
+    "men pyjamas set": "men pajama set",
+    "men pyjamas set long sleeve": "men pajama set",
+    "men pyjamas set cotton": "men pajama set",
+    "men pyjamas set 100% cotton": "men pajama set",
+    "men pyjamas set button top": "men pajama set",
+    "men pyjamas set funny": "men pajama set",
+    "men pyjamas set shorts": "men pajama set",
+    "men pyjamas set winter": "men pajama set",
+    "men pyjamas set red": "men pajama set",
+    "satin lounge set men": [],
+    "men pyjama set": [
+      "men pyjamas set",
+      "men pyjamas set long sleeve",
+      "men pyjamas set cotton",
+      "men pyjama set",
+      "men pyjamas set 100% cotton",
+      "men pyjamas set button top",
+      "men pyjamas set funny",
+      "men pyjamas set shorts",
+      "men pyjamas set winter",
+      "men pyjamas set red"
+    ],
+    "sleepwear set": [
+      "sleepwear sets for women",
+      "sleepwear set",
+      "sleepwear sets for women cotton"
+    ],
+    "sleepwear sets for women": "sleepwear set",
+    "sleepwear sets for women cotton": "sleepwear set"
+  },
+  "keywords": [
+    "men pyjamas set",
+    "men pyjamas set long sleeve",
+    "men pyjamas set cotton",
+    "men pyjamas set 100% cotton",
+    "men pyjamas set button top",
+    "men pyjamas set funny",
+    "men pyjamas set shorts",
+    "men pyjamas set winter",
+    "men pyjamas set red",
+    "silk pyjamas men 100% mulberry",
+    "silk pyjamas men bottoms",
+    "silk pyjamas men xxxl",
+    "silk pyjamas men 3xl",
+    "men pajama set",
+    "men pyjama set",
+    "sleepwear sets for women",
+    "sleepwear set",
+    "sleepwear sets for women cotton"
+  ],
+  "freq": {
+    "silk pyjamas men 100% mulberry": 1,
+    "silk pyjamas men bottoms": 1,
+    "silk pyjamas men xxxl": 1,
+    "silk pyjamas men 3xl": 1,
+    "men pyjamas set": 2,
+    "men pyjamas set long sleeve": 2,
+    "men pyjamas set cotton": 2,
+    "men pyjamas set 100% cotton": 2,
+    "men pajama set": 1,
+    "men pyjamas set button top": 2,
+    "men pyjamas set funny": 2,
+    "men pyjamas set shorts": 2,
+    "men pyjamas set winter": 2,
+    "men pyjamas set red": 2,
+    "men pyjama set": 1,
+    "sleepwear sets for women": 1,
+    "sleepwear set": 1,
+    "sleepwear sets for women cotton": 1
+  }
+}

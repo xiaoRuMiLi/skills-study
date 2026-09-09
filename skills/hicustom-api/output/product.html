@@ -99,6 +99,40 @@ function specTable(specs){
   return '<div class="table-scroll"><table class="pricing">'+r+'</table></div>';
 }
 const thumb = (u,f) => addImg(u, f);
+// ==== 物流算价（试算预览 → 确认保存）====
+const shipCt = (cy, arr) => { const a = (arr||[])[0], b = (arr||[])[1];
+  const brief = (x)=> x ? (x.name+' ¥'+x.amount+'（'+(x.day_from!=null?x.day_from+'~'+x.day_to+'天/'+x.rate+'%':'无时效')+'）') : '—';
+  return '<tr><td style="text-align:left">'+esc(cy)+'</td><td style="text-align:left">'+esc(brief(a))+'</td><td style="text-align:left">'+esc(brief(b))+'</td></tr>'; };
+function renderShipPreview(j, box){
+  const pc = j.perCountry||{};
+  const order = ['US','UK','CA','DE','MX','FR','ES','IT'];
+  const keys = order.filter(k=>pc[k]).concat(Object.keys(pc).filter(k=>!order.includes(k)));
+  let h = '<div class="table-scroll"><table class="pricing"><tr><th>国家</th><th>优选渠道</th><th>备用渠道</th></tr>'+keys.map(k=>shipCt(k, pc[k])).join('')+'</table></div>';
+  // 规格金额预览
+  const pv = j.perVariant||{};
+  if(Object.keys(pv).length){ h+='<div class="kv" style="margin-top:8px">规格金额（试算，未保存）：</div><div class="table-scroll"><table class="pricing"><tr><th>规格</th>'+order.map(c=>'<th>'+c+'</th>').join('')+'</tr>'+Object.entries(pv).map(([vid,row])=>'<tr><td class="tk">'+esc(vid)+'</td>'+order.map(c=>'<td style="text-align:center">'+esc(row[c]!=null?row[c]:'—')+'</td>').join('')+'</tr>').join('')+'</table></div>'; }
+  h += '<div class="qty" style="margin-top:8px">✅ '+j.variants+' 个变体 × '+order.length+' 国 试算完成，点「💾 确认保存入库」写入 CSV + 各国优选。</div>';
+  box.innerHTML = h;
+  document.getElementById('shipcalc-commit').style.display = 'block';
+}
+async function shipCalc(commit){
+  const id = new URLSearchParams(location.search).get('id');
+  if(!id) return;
+  const btn = document.getElementById('shipcalc-btn'), box = document.getElementById('shipcalc-box');
+  btn.disabled = true; box.innerHTML = '<div class="loading">算价中…（'+ (commit?'保存':'试算') +'，可能需 30~90 秒）</div>';
+  try{
+    const r = await fetch('/api/shipping/calc', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id: String(id), commit: !!commit }) });
+    const j = await r.json();
+    if(!j.ok){
+      if(j.code==='NO_COOKIE'||j.code==='COOKIE_EXPIRED'){ box.innerHTML='<div class="qty" style="color:#B12704">⚠️ '+(j.cookieRetried?'已尝试自动刷新 cookie 仍失败，':'商家 cookie 已失效，')+'请确认浏览器已登录 hicustom 商家后台后重试（服务端会自动刷新 <b>HICUSTOM_MERCHANT_COOKIE</b>）。</div>'; }
+      else { box.innerHTML='<div class="qty" style="color:#B12704">❌ '+esc(j.err||'计算失败')+'</div>'; }
+      return;
+    }
+    if(commit){ box.innerHTML='<div class="qty">✅ 已保存入库，刷新页面查看…</div>'; setTimeout(()=>location.reload(), 900); return; }
+    renderShipPreview(j, box);
+  }catch(e){ box.innerHTML='<div class="qty" style="color:#B12704">❌ '+esc(e.message)+'</div>'; }
+  finally{ btn.disabled = false; }
+}
 function identity(p){ const i=p.identity; const rows=[['商品ID',i.id],['SPU',i.spuCode],['中文名',i.cnName],['英文名',i.enName],['别名',i.alias],['工厂',i.factory],['发布时间',i.releaseTime]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('');
   return '<section class="card"><h2 class="sec-title">商品身份</h2><table>'+rows+'</table></section>'; }
 function attributes(p){ const a=p.attributes; let s='<section class="card"><h2 class="sec-title">商品属性</h2><table>'+[['生产工艺',a.technology],['材质',(a.materialCn||'')+(a.materialEn?' / '+a.materialEn:'')],['推荐风格',a.designStyle&&a.designStyle.recommendStyle],['主题元素',a.designStyle&&a.designStyle.themeElement]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table>';
@@ -123,18 +157,34 @@ function shippingSection(p){
   }
   return '<section class="card"><h2 class="sec-title">运费试算（各国 · 优选渠道）</h2><div class="table-scroll"><table>'+rows+'</table></div><div class="qty">金额为商家后台试算参考价（元）；仅保留每国优选 1-2 个渠道（id/name/amount/时效/妥投率/货物类型/偏远费/运费公式）。</div></section>';
 }
-function renderDetail(p, c, id){
+const CNp = { US: '美国', UK: '英国', CA: '加拿大', DE: '德国', MX: '墨西哥', FR: '法国', ES: '西班牙', IT: '意大利' };
+function pricingSection(pr){
+  if(!pr || !Object.keys(pr).length) return '';
+  const order=['UK','US','DE','FR','ES','IT','CA','MX'];
+  const keys=order.filter(k=>pr[k]).concat(Object.keys(pr).filter(k=>!order.includes(k)));
+  let rows='<tr><th>国家</th><th>建议售价</th><th>汇率</th><th>来源</th></tr>';
+  for(const k of keys){ const v=pr[k];
+    rows+='<tr><td>'+esc((CNp[k]||k)+' ['+k+']')+'</td><td style="color:#B12704"><b>'+esc(v.symbol||'')+esc(v.price)+'</b></td><td>'+esc(v.rate||'')+'</td><td>'+esc((v.source||'').slice(0,22))+'</td></tr>'; }
+  return '<section class="card"><h2 class="sec-title">💰 各国建议售价（ECB汇率 · 30%利润率 · 平台成本）</h2><div class="table-scroll"><table>'+rows+'</table></div></section>';
+}
+function renderDetail(p, c, id, topSpecs, pricing, localImages){
   const links = [{label:'✏️ 编辑当前空白商品', url:'https://www.hicustom.com/merchant/productType/edit?type=0&cat_id=&id='+id, kind:'product'},{label:'📦 我的定制商品列表', url:'https://www.hicustom.com/merchant/customerProduct/index', kind:'list'}];
   const fix = (s)=>String(s).replace('./images/','./'+id+'/images/');
   let h='<h1>📋 '+esc(p.identity.cnName)+' — 产品信息</h1><div class="sub">'+(p.meta&&p.meta.parsedAt?'解析 '+esc(p.meta.parsedAt):'')+'</div>';
   h+='<div style="margin-bottom:14px">'+links.map(l=>'<a class="linkbtn'+(l.kind==='list'?' alt':'')+'" href="'+esc(l.url)+'" target="_blank" rel="noopener">'+esc(l.label)+'</a>').join('')+'</div>';
-  h+=identity(p)+attributes(p)+shippingSection(p);
+  h+=identity(p)+attributes(p)+shippingSection(p)+pricingSection(pricing);
+  h+='<section class="card"><h2 class="sec-title">🧮 物流算价（试算 → 确认保存）</h2>'
+    +'<div class="kv"><button id="shipcalc-btn" class="linkbtn" onclick="shipCalc(false)">🧮 试算物流费</button> '
+    +'<span class="qty">按全部变体 × 8 国试算；先预览，再确认保存入库。</span></div>'
+    +'<div id="shipcalc-box"></div>'
+    +'<div id="shipcalc-commit" style="display:none;margin-top:10px"><button class="linkbtn alt" onclick="shipCalc(true)">💾 确认保存入库</button> <span class="qty">保存后刷新页面即可看到两处运费。</span></div>'
+    +'</section>';
   const faces=p.designFaces||[];
   if(faces.length){ h+='<section class="card"><h2 class="sec-title">可设计面（印刷区尺寸）</h2><table><tr><th>面</th><th>名称</th><th>宽(px)</th><th>高(px)</th></tr>'+faces.map(f=>'<tr><td>'+esc(f.id)+'</td><td>'+esc(f.name)+'</td><td>'+esc(f.width)+'</td><td>'+esc(f.height)+'</td></tr>').join('')+'</table></section>'; }
   // 商品尺寸（尺码长宽高）
   const szs=p.sizes||[];
   if(szs.length){ h+='<section class="card"><h2 class="sec-title">商品尺寸（尺码）</h2><table><tr><th>尺码</th><th>宽度(cm)</th><th>高度(cm)</th></tr>'+szs.map(sz=>'<tr><td>'+esc(sz.name)+'</td><td>'+esc(sz.width!=null?sz.width:'—')+'</td><td>'+esc(sz.height!=null?sz.height:'—')+'</td></tr>').join('')+'</table></section>'; }
-  const pr=p.pricing||{}, specs=p.specs||[];
+  const pr=p.pricing||{}, specs=(topSpecs&&topSpecs.length?topSpecs:p.specs)||[];
   if(pr.minPrice!=null){ h+='<section class="card"><h2 class="sec-title">售价</h2><table>'+[['最低价(1件)',pr.minPrice],['默认颜色',pr.defaultColorName],['默认尺码',pr.defaultSizeName],['季度累级',pr.accumulatedQuarter],['会员级',pr.membership]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table></section>'; }
   if(specs.length){ h+='<section class="card"><h2 class="sec-title">规格（颜色·尺码 | 包装 | 重量 | 各档售价）</h2>'+specTable(specs)+'</section>'; }
   if(p.images && (p.images.renderings&&p.images.renderings.length || (p.images.detailImg&&p.images.detailImg.length))){ h+='<section class="card"><h2 class="sec-title">产品图片</h2>'; (p.images.renderings||[]).slice(0,3).forEach(r=>{ const u=(r.renderings||[]).slice(0,6); if(u.length) h+='<div class="kv">颜色['+esc(r.colorName)+']</div><div class="imgs">'+u.map(x=>thumb(x)).join('')+'</div>'; }); if(p.images.detailImg&&p.images.detailImg.length) h+='<div class="kv">细节图 '+p.images.detailImg.length+' 张</div>'; h+='</section>'; }
@@ -142,9 +192,8 @@ function renderDetail(p, c, id){
   const codes=Object.entries(c.galleryCodes||{}).map(([v,code])=>esc('面'+v+'='+code)).join(' | ');
   h+='<section class="card"><h2 class="sec-title">定制化信息</h2><table>'+[['上传图库编码',codes||'—'],['合成定制产品码',c.compositeProductCode||'—'],['效果图数',c.effectImageCount||0]].map(([k,v])=>'<tr><td class="k">'+esc(k)+'</td><td>'+esc(v)+'</td></tr>').join('')+'</table>';
   h+='<div class="kv"><a class="folderbtn" href="/open?path='+encodeURIComponent(id)+'" target="_blank" rel="noopener">📂 打开产品文件夹</a></div>';
-  const groups=c.effectImageLocalGroups||[];
-  if(groups.length){ groups.forEach(g=>{ g.files=(g.files||[]).map(fix); h+='<div class="kv">📁 '+esc(g.name)+'（'+g.files.length+' 张）</div><div class="imgs">'+g.files.map(f=>thumb(f)).join('')+'</div>'; }); }
-  else { const eff=c.effectImages||[]; if(eff.length) h+='<div class="imgs">'+eff.slice(0,12).map(u=>thumb(u)).join('')+'</div>'; }
+  const groups = localImages && localImages.length ? { list: localImages } : { list: (c.effectImages || []) };
+  if (groups.list && groups.list.length) { h += '<div class="kv">📁 本地产品图（' + groups.list.length + ' 张）</div><div class="imgs">' + groups.list.slice(0, 12).map((u) => thumb(u)).join('') + '</div>'; }
   h+='</section>';
   return h;
 }
@@ -156,7 +205,9 @@ async function load(){
     const p = (j.products||[]).find(x=>x.id===id);
     if(!p || !p.detail){ document.getElementById('app').innerHTML='<div class="loading">未找到商品 '+esc(id)+'</div>'; return; }
     document.title = p.detail.profile.identity.cnName + ' — 商品详情';
-    document.getElementById('app').innerHTML = renderDetail(p.detail.profile, p.detail.customization||{}, id);
+    let localImages = [];
+    try { const ls = await (await fetch('/api/listing.json?id=' + encodeURIComponent(id))).json(); localImages = ls.images || []; } catch (e) {}
+    document.getElementById('app').innerHTML = renderDetail(p.detail.profile, p.detail.customization||{}, id, p.specs, p.detail.pricing, localImages);
   }catch(e){ document.getElementById('app').innerHTML='<div class="loading">加载失败: '+esc(e.message)+'</div>'; }
 }
 load();

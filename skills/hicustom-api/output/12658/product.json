@@ -1,0 +1,482 @@
+{
+  "raw": {
+    "id": 12658,
+    "cn_name": "洗衣机防尘垫2个装",
+    "en_name": "Washing machine dust cover 2 pcs",
+    "cn_desc": "",
+    "en_desc": "",
+    "default_values": {
+      "color": 29,
+      "view": 1
+    },
+    "colors": [
+      {
+        "id": 29,
+        "name": "黑色",
+        "cn_name": "黑色",
+        "en_name": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size"
+      }
+    ],
+    "stock_info": [
+      {
+        "id": 18687,
+        "code": "3ZF6B8",
+        "color_id": 29,
+        "size_id": 48,
+        "length": 50,
+        "width": 13.5,
+        "height": 8,
+        "volume": 5400,
+        "weight": 1481
+      }
+    ],
+    "hot_stars": 3.5,
+    "factory_name": "质上",
+    "spu_code": "HDD1668",
+    "alias_name": "洗衣机防尘垫2个装",
+    "release_time": "2026-09-03 16:27:28",
+    "size_attr_map": [
+      {
+        "id": 25,
+        "name": "宽度",
+        "cn_name": "宽度",
+        "en_name": "Width",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 24,
+        "name": "厚度",
+        "cn_name": "厚度",
+        "en_name": "Thickness",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 30,
+        "name": "长度",
+        "cn_name": "长度",
+        "en_name": "L",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      }
+    ],
+    "size_attr_info": [
+      {
+        "size_id": 48,
+        "attr_id": 25,
+        "attr_value": "50cm"
+      },
+      {
+        "size_id": 48,
+        "attr_id": 24,
+        "attr_value": "3.5mm"
+      },
+      {
+        "size_id": 48,
+        "attr_id": 30,
+        "attr_value": "60cm"
+      }
+    ],
+    "product_attr": [],
+    "product_timeliness": {
+      "eighty_percent_avg_time": 45,
+      "seven_days_avg_time": 52,
+      "estimated_shipment_time": 96
+    },
+    "product_description": {
+      "detail_info_desc": "【设计说明】全幅印花                                                                                                                                                       \n【材质说明】硅藻泥+橡胶\n【产品性能】洗衣机顶盖垫由多层材料制成，采用优质面布、硅藻泥和防滑橡胶底座，可确保您的电器免受刮擦、凹陷以及日常磨损的侵害。保护垫底部的防滑橡胶，提供极强的抓地力，防止垫子滑动，具有出色的防滑性能，避免了洗衣机运行时洗衣液瓶、装饰品或必需品意外滑落的危险，同时在一定程度上降低了洗衣机运行产生的噪音，为您营造一个舒适且安静的家居环境！\n【适用场景】适用于大多数烘干机、洗衣机、冰箱、小型咖啡桌及其他家用电器。除了作为洗衣机和烘干机顶部的保护垫外，它还可以用作水槽下垫、宠物喂食器垫、猫狗食垫、门垫、隔热垫等。\n【配件构造】2片垫子。\n【洗涤说明】手洗或擦洗，自然晾干，请勿使用漂白剂。\n【特别说明】此尺码数据因测量方法不同，误差在1-3cm内的属于正常现象。",
+      "product_material": {
+        "cn_name": "橡胶",
+        "en_name": "rubber"
+      },
+      "print_areas": [
+        {
+          "id": 1,
+          "name": "A面",
+          "width": 2481,
+          "height": 2087,
+          "code": "6LMNES"
+        },
+        {
+          "id": 2,
+          "name": "B面",
+          "width": 2481,
+          "height": 2087,
+          "code": "M7AYO5"
+        }
+      ],
+      "product_technology": "转移印花",
+      "design_style": {
+        "recommend_style": "ins风、休闲风、现代风",
+        "theme_element": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "material_explain": [
+        {
+          "title": "弹力指数",
+          "value": "无弹"
+        },
+        {
+          "title": "柔软指数",
+          "value": "适中"
+        }
+      ],
+      "product_features": [
+        {
+          "title": "【产品性能】",
+          "value": "柔软、耐磨、防滑、可固定、耐用"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适用于大多数烘干机、洗衣机、冰箱等"
+        }
+      ]
+    },
+    "prices": {
+      "price": 29.28,
+      "default_color_id": 29,
+      "default_size_id": 48,
+      "default_color_name": "黑色",
+      "default_size_name": "One Size",
+      "accumulated_quarter_price": "gold",
+      "membership_price": "normal",
+      "wholesale_price": [
+        {
+          "stock_info": [
+            {
+              "id": 18687,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 48,
+              "size_name": "One Size"
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "30.28"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "29.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "28.28"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "27.28"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "26.28"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "25.28"
+          }
+        }
+      ]
+    },
+    "renderings_info": [
+      {
+        "colors": {
+          "id": 29,
+          "color_name": "黑色"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-1-29-1-500-1749d613e3f9fab7b23499dccbc25d7f-5354ca6dd1c97cbb7eac5ad2a38a171e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-2-29-1-500-20a57ee6e99b7da813e61539b314c48e-0472b25d8fee3bda5376613eabf0b275.jpg",
+          "https://nimg5.hicustom.com/static/productDet/MRQ8HGVD-9-29-1-500-92ee4fe03f38ba9ce6a8a519feba08c4-0a4add60729875497ba7e72be13f3fb1.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-3-29-1-500-70beb61038c64024915ab56ffd5963ec-82c036f13bc3e93b3616740555d30fc0.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-8-29-1-500-743245258bb4871ae049842a459441dd-d544b4c0a4ef8c6fe5885f03020325b9.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-7-29-1-500-9aebde5ad65ddf8fd77c4286bd5a0228-ae6fbfb074aa4fc5991c0bda710c33d0.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-6-29-1-500-e0c757793e2d9c1803ba125f6a348bbe-426ae38d2ef8c0c904b482dd22c44c1d.jpg"
+        ]
+      }
+    ],
+    "detail_img": []
+  },
+  "profile": {
+    "meta": {
+      "parsedAt": "2026-09-09T02:32:31.505Z",
+      "hotStars": 3.5,
+      "timeliness": {
+        "eighty_percent_avg_time": 45,
+        "seven_days_avg_time": 52,
+        "estimated_shipment_time": 96
+      }
+    },
+    "identity": {
+      "id": 12658,
+      "spuCode": "HDD1668",
+      "cnName": "洗衣机防尘垫2个装",
+      "enName": "Washing machine dust cover 2 pcs",
+      "alias": "洗衣机防尘垫2个装",
+      "factory": "质上",
+      "releaseTime": "2026-09-03 16:27:28"
+    },
+    "attributes": {
+      "materialCn": "橡胶",
+      "materialEn": "rubber",
+      "description": "【设计说明】全幅印花                                                                                                                                                       \n【材质说明】硅藻泥+橡胶\n【产品性能】洗衣机顶盖垫由多层材料制成，采用优质面布、硅藻泥和防滑橡胶底座，可确保您的电器免受刮擦、凹陷以及日常磨损的侵害。保护垫底部的防滑橡胶，提供极强的抓地力，防止垫子滑动，具有出色的防滑性能，避免了洗衣机运行时洗衣液瓶、装饰品或必需品意外滑落的危险，同时在一定程度上降低了洗衣机运行产生的噪音，为您营造一个舒适且安静的家居环境！\n【适用场景】适用于大多数烘干机、洗衣机、冰箱、小型咖啡桌及其他家用电器。除了作为洗衣机和烘干机顶部的保护垫外，它还可以用作水槽下垫、宠物喂食器垫、猫狗食垫、门垫、隔热垫等。\n【配件构造】2片垫子。\n【洗涤说明】手洗或擦洗，自然晾干，请勿使用漂白剂。\n【特别说明】此尺码数据因测量方法不同，误差在1-3cm内的属于正常现象。",
+      "designStyle": {
+        "recommendStyle": "ins风、休闲风、现代风",
+        "themeElement": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "materialExplain": [
+        {
+          "title": "弹力指数",
+          "value": "无弹"
+        },
+        {
+          "title": "柔软指数",
+          "value": "适中"
+        }
+      ],
+      "productFeatures": [
+        {
+          "title": "【产品性能】",
+          "value": "柔软、耐磨、防滑、可固定、耐用"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适用于大多数烘干机、洗衣机、冰箱等"
+        }
+      ]
+    },
+    "designFaces": [
+      {
+        "id": 1,
+        "name": "A面",
+        "width": 2481,
+        "height": 2087
+      },
+      {
+        "id": 2,
+        "name": "B面",
+        "width": 2481,
+        "height": 2087
+      }
+    ],
+    "colors": [
+      {
+        "id": 29,
+        "cnName": "黑色",
+        "enName": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size",
+        "width": 50,
+        "height": null
+      }
+    ],
+    "variants": [
+      {
+        "id": 18687,
+        "code": "3ZF6B8",
+        "colorId": 29,
+        "sizeId": 48,
+        "length": 50,
+        "width": 13.5,
+        "height": 8,
+        "volume": 5400,
+        "weight": 1481
+      }
+    ],
+    "pricing": {
+      "minPrice": 29.28,
+      "defaultColorId": 29,
+      "defaultColorName": "黑色",
+      "defaultSizeId": 48,
+      "defaultSizeName": "One Size",
+      "accumulatedQuarter": "gold",
+      "membership": "normal",
+      "tiers": [
+        {
+          "stockInfo": [
+            {
+              "id": 18687,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "30.28"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "29.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "28.28"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "27.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "26.28"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "25.28"
+          }
+        }
+      ]
+    },
+    "images": {
+      "renderings": [
+        {
+          "colorId": 29,
+          "colorName": "黑色",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-1-29-1-500-1749d613e3f9fab7b23499dccbc25d7f-5354ca6dd1c97cbb7eac5ad2a38a171e.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-2-29-1-500-20a57ee6e99b7da813e61539b314c48e-0472b25d8fee3bda5376613eabf0b275.jpg",
+            "https://nimg5.hicustom.com/static/productDet/MRQ8HGVD-9-29-1-500-92ee4fe03f38ba9ce6a8a519feba08c4-0a4add60729875497ba7e72be13f3fb1.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-3-29-1-500-70beb61038c64024915ab56ffd5963ec-82c036f13bc3e93b3616740555d30fc0.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-8-29-1-500-743245258bb4871ae049842a459441dd-d544b4c0a4ef8c6fe5885f03020325b9.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-7-29-1-500-9aebde5ad65ddf8fd77c4286bd5a0228-ae6fbfb074aa4fc5991c0bda710c33d0.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/MRQ8HGVD-6-29-1-500-e0c757793e2d9c1803ba125f6a348bbe-426ae38d2ef8c0c904b482dd22c44c1d.jpg"
+          ]
+        }
+      ],
+      "detailImg": []
+    },
+    "specs": [
+      {
+        "variantId": 18687,
+        "code": "3ZF6B8",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 50,
+          "height": null
+        },
+        "package": {
+          "L": 50,
+          "W": 13.5,
+          "H": 8,
+          "volume": 5400
+        },
+        "weight": 1481,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "30.28"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "29.28"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "28.28"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "27.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "26.28"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "25.28"
+          }
+        }
+      }
+    ]
+  },
+  "customization": {
+    "galleryCodes": {
+      "all": "53LH2S"
+    },
+    "compositeProductCode": "M86G7GKN",
+    "effectImages": [
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-1-29-1-1600-1749d613e3f9fab7b23499dccbc25d7f-bbbecea9983351089e3e9059e66eb3c3.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-2-29-1-1600-20a57ee6e99b7da813e61539b314c48e-b4467e720b69779363243705f9eb6bfa.jpg",
+      "https://nimg5.hicustom.com/static/productDet/M86G7GKN-9-29-1-1600-92ee4fe03f38ba9ce6a8a519feba08c4-2495af8057771707ea6b377dbec70e56.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-3-29-1-1600-70beb61038c64024915ab56ffd5963ec-43dd40ecd0b576b18914bfbbc8dd2be2.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-8-29-1-1600-743245258bb4871ae049842a459441dd-f78830ccf3a1b0c9619c451781daff39.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-7-29-1-1600-9aebde5ad65ddf8fd77c4286bd5a0228-718c5d74d4cb9ca7a7a8e86fb7a1f5ff.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-6-29-1-1600-e0c757793e2d9c1803ba125f6a348bbe-e2ad3ad20ce486c06df959f5fbc37d17.jpg"
+    ],
+    "effectImageCount": 7,
+    "dry": false,
+    "effectGroups": [
+      {
+        "name": "黑色",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-1-29-1-1600-1749d613e3f9fab7b23499dccbc25d7f-bbbecea9983351089e3e9059e66eb3c3.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-2-29-1-1600-20a57ee6e99b7da813e61539b314c48e-b4467e720b69779363243705f9eb6bfa.jpg",
+          "https://nimg5.hicustom.com/static/productDet/M86G7GKN-9-29-1-1600-92ee4fe03f38ba9ce6a8a519feba08c4-2495af8057771707ea6b377dbec70e56.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-3-29-1-1600-70beb61038c64024915ab56ffd5963ec-43dd40ecd0b576b18914bfbbc8dd2be2.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-8-29-1-1600-743245258bb4871ae049842a459441dd-f78830ccf3a1b0c9619c451781daff39.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-7-29-1-1600-9aebde5ad65ddf8fd77c4286bd5a0228-718c5d74d4cb9ca7a7a8e86fb7a1f5ff.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/M86G7GKN-6-29-1-1600-e0c757793e2d9c1803ba125f6a348bbe-e2ad3ad20ce486c06df959f5fbc37d17.jpg"
+        ]
+      }
+    ],
+    "effectImageLocal": [
+      "./images/黑色/main-1.jpg",
+      "./images/黑色/other-2.jpg",
+      "./images/黑色/other-3.jpg",
+      "./images/黑色/other-4.jpg",
+      "./images/黑色/other-5.jpg",
+      "./images/黑色/other-6.jpg",
+      "./images/黑色/other-7.jpg"
+    ],
+    "effectImageLocalGroups": [
+      {
+        "name": "黑色",
+        "dir": "./images/黑色",
+        "files": [
+          "./images/黑色/main-1.jpg",
+          "./images/黑色/other-2.jpg",
+          "./images/黑色/other-3.jpg",
+          "./images/黑色/other-4.jpg",
+          "./images/黑色/other-5.jpg",
+          "./images/黑色/other-6.jpg",
+          "./images/黑色/other-7.jpg"
+        ]
+      }
+    ]
+  }
+}

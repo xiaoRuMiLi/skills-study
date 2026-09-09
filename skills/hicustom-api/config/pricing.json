@@ -1,0 +1,118 @@
+{
+  "profit_rate": 0.3,
+  "rate_source": "ECB(Frankfurter,央行中间价)",
+  "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT",
+  "countries": {
+    "UK": {
+      "currency": "GBP",
+      "symbol": "£",
+      "commission": 0.18,
+      "refund_rate": 0.02,
+      "vat": 0.202,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.4323,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 9,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "DE": {
+      "currency": "EUR",
+      "symbol": "€",
+      "commission": 0.17,
+      "refund_rate": 0.02,
+      "vat": 0.1597,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.3836,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 7.7,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "FR": {
+      "currency": "EUR",
+      "symbol": "€",
+      "commission": 0.18,
+      "refund_rate": 0.02,
+      "vat": 0.1945,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.4236,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 7.7,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "US": {
+      "currency": "USD",
+      "symbol": "$",
+      "commission": 0.15,
+      "refund_rate": 0.02,
+      "vat": 0,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.2,
+      "digital_tax": 0,
+      "precision": 1,
+      "rate": 6.7,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "CA": {
+      "currency": "CAD",
+      "symbol": "C$",
+      "commission": 0.15,
+      "refund_rate": 0.02,
+      "vat": 0.03,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.2345,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 4.8,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "MX": {
+      "currency": "MXN",
+      "symbol": "MX$",
+      "commission": 0.15,
+      "refund_rate": 0.02,
+      "vat": 0,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.2,
+      "digital_tax": 0,
+      "precision": 2,
+      "rate": 0.39,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "ES": {
+      "currency": "EUR",
+      "symbol": "€",
+      "commission": 0.18,
+      "refund_rate": 0.02,
+      "vat": 0.2088,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.4401,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 7.7,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    },
+    "IT": {
+      "currency": "EUR",
+      "symbol": "€",
+      "commission": 0.18,
+      "refund_rate": 0.02,
+      "vat": 0.2088,
+      "exchange_loss": 0.03,
+      "platform_cost": 0.4401,
+      "digital_tax": 0.03,
+      "precision": 1,
+      "rate": 7.7,
+      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+    }
+  },
+  "currency_symbols": {
+    "GBP": "£",
+    "USD": "$",
+    "EUR": "€",
+    "CAD": "C$",
+    "MXN": "MX$"
+  }
+}
