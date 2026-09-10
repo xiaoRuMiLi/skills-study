@@ -31,6 +31,7 @@ function loadConfig() {
     merchant: cfg.merchant || {},
     merchantBaseUrl: process.env.HICUSTOM_MERCHANT_BASE_URL || (cfg.merchant && cfg.merchant.baseUrl) || 'https://www.hicustom.com',
     merchantCookie: process.env.HICUSTOM_MERCHANT_COOKIE || '',
+    listing: cfg.listing || {},   // 上架流程用：templatePath 等
     databasePath: process.env.HICUSTOM_DATABASE || path.join(ROOT, 'database', 'products.csv'),
     editedDir: process.env.HICUSTOM_EDITED_DIR || path.join(ROOT, 'edited'),
     zhipuApiKey: process.env.ZHIPU_API_KEY || '',

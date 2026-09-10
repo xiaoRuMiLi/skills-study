@@ -1,0 +1,429 @@
+{
+  "raw": {
+    "id": 12609,
+    "cn_name": "舒适全包双面眼罩",
+    "en_name": "Comfortable sleep mask",
+    "cn_desc": "",
+    "en_desc": "",
+    "default_values": {
+      "color": 29,
+      "view": 1
+    },
+    "colors": [
+      {
+        "id": 29,
+        "name": "黑色",
+        "cn_name": "黑色",
+        "en_name": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size"
+      }
+    ],
+    "stock_info": [
+      {
+        "id": 18518,
+        "code": "GN854B",
+        "color_id": 29,
+        "size_id": 48,
+        "length": 17.5,
+        "width": 11,
+        "height": 1.8,
+        "volume": 346.5,
+        "weight": 75
+      }
+    ],
+    "hot_stars": 3.5,
+    "factory_name": "鑫铭鸿",
+    "spu_code": "HRC1611",
+    "alias_name": "舒适全包双面眼罩",
+    "release_time": "2026-07-02 14:11:29",
+    "size_attr_map": [
+      {
+        "id": 26,
+        "name": "高度",
+        "cn_name": "高度",
+        "en_name": "Height",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 25,
+        "name": "宽度",
+        "cn_name": "宽度",
+        "en_name": "Width",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      }
+    ],
+    "size_attr_info": [
+      {
+        "size_id": 48,
+        "attr_id": 26,
+        "attr_value": "12.5cm"
+      },
+      {
+        "size_id": 48,
+        "attr_id": 25,
+        "attr_value": "68cm"
+      }
+    ],
+    "product_attr": [],
+    "product_timeliness": {
+      "eighty_percent_avg_time": 50,
+      "seven_days_avg_time": 50,
+      "estimated_shipment_time": 96
+    },
+    "product_description": {
+      "detail_info_desc": "【设计说明】全幅印花\n【材质说明】涤氨布（95%涤纶5%氨纶）\n【产品性能】眼罩采用优质涤纶材料制成，柔软亲肤，透气舒适，给您提供最舒适的佩戴体验，是您安睡一整夜的绝佳伴侣。两侧的魔术贴轻松调节围度，完美适配各种头型大小，适合男性、女性和青少年，不会缠绕头发或感到紧绷。眼罩全包设计，耳部不会被勒，可以提高睡眠质量，确保愉快的睡眠。适用于旅行、飞行、家中、办公室、休息、倒班、小睡、冥想等各种场合。\n【适用场景】非常适合旅行、长途飞行、火车或汽车行程、午睡时间、办公室午睡或任何需要遮光的情况。对于需要舒适和便利的旅人来说，这是一个必备品。\n【配件构造】两面都可用，魔术贴可调节围度。\n【洗涤说明】可手洗或温和机洗，无需熨烫，请勿漂白，自然晾干。\n【特别说明】此尺码数据因测量方法不同，误差在1-3cm内的属于正常现象。",
+      "product_material": {
+        "cn_name": "涤纶",
+        "en_name": "Polyester"
+      },
+      "print_areas": [
+        {
+          "id": 1,
+          "name": "前片",
+          "width": 2776,
+          "height": 586,
+          "code": "4TBIVP"
+        },
+        {
+          "id": 2,
+          "name": "后片",
+          "width": 2776,
+          "height": 586,
+          "code": "WR9HYK"
+        }
+      ],
+      "product_technology": "转移印花",
+      "design_style": {
+        "recommend_style": "ins风、休闲风、现代风",
+        "theme_element": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "material_explain": [
+        {
+          "title": "柔软指数",
+          "value": "软"
+        },
+        {
+          "title": "厚度指数",
+          "value": "厚"
+        }
+      ],
+      "product_features": [
+        {
+          "title": "【产品性能】",
+          "value": "柔软亲肤，透气舒适，提高睡眠质量"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适合旅行、长途飞行、火车或汽车行程、午睡时间等"
+        }
+      ]
+    },
+    "prices": {
+      "price": 8.08,
+      "default_color_id": 29,
+      "default_size_id": 48,
+      "default_color_name": "黑色",
+      "default_size_name": "One Size",
+      "accumulated_quarter_price": "gold",
+      "membership_price": "normal",
+      "wholesale_price": [
+        {
+          "stock_info": [
+            {
+              "id": 18518,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 48,
+              "size_name": "One Size"
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.48"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "8.08"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "7.68"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "7.28"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "6.88"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "6.48"
+          }
+        }
+      ]
+    },
+    "renderings_info": [
+      {
+        "colors": {
+          "id": 29,
+          "color_name": "黑色"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-1-29-1-500-cd306f441b57beec1ae27e57eafcb751-2a13be6e3e8d86bdb6202782ceeaa4e1.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-2-29-1-500-06299cb25a754652c4e861ea04edac4e-43af701417f5975464b6dbf0e18c03c5.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-9-29-1-500-2bcd982fb4a9611d6eb21ff186e9cbbd-b07f7ca969144c9355e52e6dd8240692.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-8-29-1-500-eba002a4219dbc4ada112ecb3e67fb33-b0474ad8ffa48f40d9a7a72e2827de8e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-4-29-1-500-b9f164c5e796867f4cf8b2239e236cfd-02f596a5d7f65f689d4863be41bf42d5.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-5-29-1-500-213cd079d50ef96920cd980160031dcf-708cd76d25b4588e843295d19db00c7c.jpg",
+          "https://nimg5.hicustom.com/static/productDet/67GD3LJW-7-29-1-500-57f72ac895d6d06bc9faee252eed3406-5299fd2ea2f5e629251488430ed65c5f.jpg"
+        ]
+      }
+    ],
+    "detail_img": []
+  },
+  "profile": {
+    "meta": {
+      "parsedAt": "2026-09-09T14:25:39.391Z",
+      "hotStars": 3.5,
+      "timeliness": {
+        "eighty_percent_avg_time": 50,
+        "seven_days_avg_time": 50,
+        "estimated_shipment_time": 96
+      }
+    },
+    "identity": {
+      "id": 12609,
+      "spuCode": "HRC1611",
+      "cnName": "舒适全包双面眼罩",
+      "enName": "Comfortable sleep mask",
+      "alias": "舒适全包双面眼罩",
+      "factory": "鑫铭鸿",
+      "releaseTime": "2026-07-02 14:11:29"
+    },
+    "attributes": {
+      "materialCn": "涤纶",
+      "materialEn": "Polyester",
+      "description": "【设计说明】全幅印花\n【材质说明】涤氨布（95%涤纶5%氨纶）\n【产品性能】眼罩采用优质涤纶材料制成，柔软亲肤，透气舒适，给您提供最舒适的佩戴体验，是您安睡一整夜的绝佳伴侣。两侧的魔术贴轻松调节围度，完美适配各种头型大小，适合男性、女性和青少年，不会缠绕头发或感到紧绷。眼罩全包设计，耳部不会被勒，可以提高睡眠质量，确保愉快的睡眠。适用于旅行、飞行、家中、办公室、休息、倒班、小睡、冥想等各种场合。\n【适用场景】非常适合旅行、长途飞行、火车或汽车行程、午睡时间、办公室午睡或任何需要遮光的情况。对于需要舒适和便利的旅人来说，这是一个必备品。\n【配件构造】两面都可用，魔术贴可调节围度。\n【洗涤说明】可手洗或温和机洗，无需熨烫，请勿漂白，自然晾干。\n【特别说明】此尺码数据因测量方法不同，误差在1-3cm内的属于正常现象。",
+      "designStyle": {
+        "recommendStyle": "ins风、休闲风、现代风",
+        "themeElement": "塔罗盘、自然景观、奇幻蘑菇"
+      },
+      "materialExplain": [
+        {
+          "title": "柔软指数",
+          "value": "软"
+        },
+        {
+          "title": "厚度指数",
+          "value": "厚"
+        }
+      ],
+      "productFeatures": [
+        {
+          "title": "【产品性能】",
+          "value": "柔软亲肤，透气舒适，提高睡眠质量"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "适合旅行、长途飞行、火车或汽车行程、午睡时间等"
+        }
+      ]
+    },
+    "designFaces": [
+      {
+        "id": 1,
+        "name": "前片",
+        "width": 2776,
+        "height": 586
+      },
+      {
+        "id": 2,
+        "name": "后片",
+        "width": 2776,
+        "height": 586
+      }
+    ],
+    "colors": [
+      {
+        "id": 29,
+        "cnName": "黑色",
+        "enName": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 48,
+        "name": "One Size",
+        "width": 68,
+        "height": 12.5
+      }
+    ],
+    "variants": [
+      {
+        "id": 18518,
+        "code": "GN854B",
+        "colorId": 29,
+        "sizeId": 48,
+        "length": 17.5,
+        "width": 11,
+        "height": 1.8,
+        "volume": 346.5,
+        "weight": 75
+      }
+    ],
+    "pricing": {
+      "minPrice": 8.08,
+      "defaultColorId": 29,
+      "defaultColorName": "黑色",
+      "defaultSizeId": 48,
+      "defaultSizeName": "One Size",
+      "accumulatedQuarter": "gold",
+      "membership": "normal",
+      "tiers": [
+        {
+          "stockInfo": [
+            {
+              "id": 18518,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 48,
+              "sizeName": "One Size"
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.48"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "8.08"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "7.68"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "7.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "6.88"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "6.48"
+          }
+        }
+      ]
+    },
+    "images": {
+      "renderings": [
+        {
+          "colorId": 29,
+          "colorName": "黑色",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-1-29-1-500-cd306f441b57beec1ae27e57eafcb751-2a13be6e3e8d86bdb6202782ceeaa4e1.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-2-29-1-500-06299cb25a754652c4e861ea04edac4e-43af701417f5975464b6dbf0e18c03c5.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-9-29-1-500-2bcd982fb4a9611d6eb21ff186e9cbbd-b07f7ca969144c9355e52e6dd8240692.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-8-29-1-500-eba002a4219dbc4ada112ecb3e67fb33-b0474ad8ffa48f40d9a7a72e2827de8e.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-4-29-1-500-b9f164c5e796867f4cf8b2239e236cfd-02f596a5d7f65f689d4863be41bf42d5.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/67GD3LJW-5-29-1-500-213cd079d50ef96920cd980160031dcf-708cd76d25b4588e843295d19db00c7c.jpg",
+            "https://nimg5.hicustom.com/static/productDet/67GD3LJW-7-29-1-500-57f72ac895d6d06bc9faee252eed3406-5299fd2ea2f5e629251488430ed65c5f.jpg"
+          ]
+        }
+      ],
+      "detailImg": []
+    },
+    "specs": [
+      {
+        "variantId": 18518,
+        "code": "GN854B",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 48,
+        "sizeName": "One Size",
+        "dims": {
+          "width": 68,
+          "height": 12.5
+        },
+        "package": {
+          "L": 17.5,
+          "W": 11,
+          "H": 1.8,
+          "volume": 346.5
+        },
+        "weight": 75,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "8.48"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "8.08"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "7.68"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "7.28"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "6.88"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "6.48"
+          }
+        }
+      }
+    ]
+  },
+  "customization": {
+    "galleryCodes": {},
+    "compositeProductCode": "BZGETMBP",
+    "effectImages": [
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-1-29-1-1600-cd306f441b57beec1ae27e57eafcb751-d82b30432d1dfc92e85914462a338f13.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-2-29-1-1600-06299cb25a754652c4e861ea04edac4e-e5a4ac472a6b96aa3279dc28cd23157a.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-9-29-1-1600-2bcd982fb4a9611d6eb21ff186e9cbbd-97baf39d5754fd682f7e1b0af72a5fc6.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-8-29-1-1600-eba002a4219dbc4ada112ecb3e67fb33-631e8e195557c2a38888247febecb39d.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-4-29-1-1600-b9f164c5e796867f4cf8b2239e236cfd-0da7eb7400df8c08e8e63f6db2dedae8.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-5-29-1-1600-213cd079d50ef96920cd980160031dcf-669a3f647391bd5eb72715c79f3ebc27.jpg",
+      "https://nimg5.hicustom.com/static/productDet/BZGETMBP-7-29-1-1600-57f72ac895d6d06bc9faee252eed3406-f806fc51664369e35ef84e51378323cd.jpg"
+    ],
+    "effectImageCount": 7,
+    "dry": false
+  }
+}

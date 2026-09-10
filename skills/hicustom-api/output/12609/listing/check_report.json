@@ -1,0 +1,17 @@
+{
+  "policy": {
+    "passed": true,
+    "issues": []
+  },
+  "image": {
+    "main": "https://nimg5.hicustom.com/static/productDet2/BZGETMBP-1-29-1-1600-cd306f441b57beec1ae27e57eafcb751-d82b30432d1dfc92e85914462a338f13.jpg",
+    "conclusion": "RISK: 图中出现真实人物肖像（人物面部及身体部分）",
+    "passed": false
+  },
+  "custom_consistency": {
+    "is_custom": "1",
+    "copy_mentions_custom": true,
+    "consistent": true,
+    "note": "定制商品必须包含定制说明(任意颜色/图案 + Customized Now)"
+  }
+}

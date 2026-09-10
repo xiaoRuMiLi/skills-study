@@ -1,7 +1,7 @@
 {
   "profit_rate": 0.3,
   "rate_source": "ECB(Frankfurter,央行中间价)",
-  "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT",
+  "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT",
   "countries": {
     "UK": {
       "currency": "GBP",
@@ -14,7 +14,7 @@
       "digital_tax": 0.03,
       "precision": 1,
       "rate": 9,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "DE": {
       "currency": "EUR",
@@ -26,8 +26,8 @@
       "platform_cost": 0.3836,
       "digital_tax": 0.03,
       "precision": 1,
-      "rate": 7.7,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate": 7.8,
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "FR": {
       "currency": "EUR",
@@ -39,8 +39,8 @@
       "platform_cost": 0.4236,
       "digital_tax": 0.03,
       "precision": 1,
-      "rate": 7.7,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate": 7.8,
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "US": {
       "currency": "USD",
@@ -53,7 +53,7 @@
       "digital_tax": 0,
       "precision": 1,
       "rate": 6.7,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "CA": {
       "currency": "CAD",
@@ -66,7 +66,7 @@
       "digital_tax": 0.03,
       "precision": 1,
       "rate": 4.8,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "MX": {
       "currency": "MXN",
@@ -79,7 +79,7 @@
       "digital_tax": 0,
       "precision": 2,
       "rate": 0.39,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "ES": {
       "currency": "EUR",
@@ -91,8 +91,8 @@
       "platform_cost": 0.4401,
       "digital_tax": 0.03,
       "precision": 1,
-      "rate": 7.7,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate": 7.8,
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     },
     "IT": {
       "currency": "EUR",
@@ -104,8 +104,8 @@
       "platform_cost": 0.4401,
       "digital_tax": 0.03,
       "precision": 1,
-      "rate": 7.7,
-      "rate_updated_at": "Wed, 09 Sep 2026 09:21:27 GMT"
+      "rate": 7.8,
+      "rate_updated_at": "Wed, 09 Sep 2026 17:27:41 GMT"
     }
   },
   "currency_symbols": {

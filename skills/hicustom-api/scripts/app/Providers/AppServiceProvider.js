@@ -15,6 +15,7 @@ const { TradeService } = require('../Services/TradeService');
 const { ShippingService } = require('../Services/ShippingService');
 const { ProductRepository } = require('../Support/ProductRepository');
 const { ZhipuService } = require('../Services/ZhipuService');
+const { ZhipuClient } = require('../Services/ZhipuClient');
 
 class AppServiceProvider extends ServiceProvider {
   register(app) {
@@ -37,6 +38,8 @@ class AppServiceProvider extends ServiceProvider {
     app.singleton('productRepo', (a) => new ProductRepository(a.make('config')));
     // 智谱 AI（文生图 + 图片理解）
     app.singleton('zhipu', (a) => new ZhipuService(a.make('config')));
+    // 智谱统一客户端（文本/视觉/图像；模型名统一从 config.zhipu 读）—— 所有 LLM 调用的唯一入口
+    app.singleton('zhipuClient', (a) => new ZhipuClient(a.make('config')));
   }
 }
 

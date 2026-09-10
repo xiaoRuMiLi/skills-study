@@ -35,7 +35,7 @@ body.show-cn .cn-zh{display:block}
 </style>
 </head>
 <body>
-<div class="topbar"><a class="back" href="manage.html">← 返回管理</a><span class="brand">amazon.co.uk · 上架预览</span><button id="trbtn" class="tbtn" onclick="toggleCN()">🌐 中文</button><a id="todetail" class="tbtn" href="#" style="text-decoration:none">📄 商品详情</a><span class="sub">本地图优先 · 中文为审阅翻译，不改表格</span></div>
+<div class="topbar"><a class="back" href="manage.html">← 返回管理</a><span class="brand">amazon.co.uk · 上架预览</span><button id="trbtn" class="tbtn" onclick="toggleCN()">🌐 中文</button><a id="todetail" class="tbtn" href="#" style="text-decoration:none">📄 商品详情</a><span class="sub">数据源 = 上传文件 listing_filled.xlsx（回填原始模板 · 亚马逊只认 xlsx） · 中文为审阅翻译，不改上传数据</span></div>
 <div id="app"><div class="loading">加载中…</div></div>
 <div id="lb" onclick="this.classList.remove('show')"><img id="lbimg" src="" alt=""/></div>
 <script>
@@ -46,25 +46,52 @@ function zoom(u){ $('lbimg').src=u; $('lb').classList.add('show'); }
 const zhtxt=(t)=> (TRANS && TRANS[t]) ? '<div class="cn-zh">'+esc(TRANS[t])+'</div>' : '';
 const zhbullet=(arr,i)=> (TRANS && arr && TRANS.bullet_points_zh && TRANS.bullet_points_zh[i]) ? '<div class="cn-zh">'+esc(TRANS.bullet_points_zh[i])+'</div>' : '';
 function renderNow(){
-  const {rec, imgs, mainImg}=CUR;
-  const title=rec.item_name||'';
-  const price=rec.price!=null?rec.price:(rec.min_price!=null?(Number(rec.min_price)*0.9):'--');
-  const sym={GBP:'£',USD:'$',EUR:'€',CAD:'C$',MXN:'MX$'}[rec.currency]||'';
-  const bp=rec.bullet_point||[];
-  const bullets=bp.map((b,i)=>'<li>'+esc(b)+zhbullet(bp,i)+'</li>').join('');
-  const descHtml=esc(rec.product_description||'').replace(/\n/g,'<br/>').replace(/<\/br>/gi,'<br/>');
-  const kwHtml=esc(rec.generic_keyword||'');
+  const {sheet, rec, imgs, mainImg, source, filled}=CUR;
+  const g=(k)=>sheet[k]||'';
+  // 弹性取值：候选列名第一个非空即为该字段的值（列名来自模板动态导出，不同类目可能不同）
+  const v=(cands)=>{ for(const k of cands){ const x=sheet[k]; if(x!==''&&x!=null) return x; } return ''; };
+  const title=g('Item Name')||v(['item_name']);
+  const price=v(['List Price with Tax','Standard Price','Your Price GBP (Sell on Amazon, UK)','Your Price GBP']);
+  const currency=v(['Currency'])||(rec&&rec.currency)||'GBP';
+  const sym={GBP:'£',USD:'$',EUR:'€',CAD:'C$',MXN:'MX$'}[currency]||'';
+  const bp=(g('Bullet Point 1')||g('Bullet Point'))+
+    (g('Bullet Point 2')?'§'+g('Bullet Point 2'):'')+
+    (g('Bullet Point 3')?'§'+g('Bullet Point 3'):'')+
+    (g('Bullet Point 4')?'§'+g('Bullet Point 4'):'')+
+    (g('Bullet Point 5')?'§'+g('Bullet Point 5'):'')+
+    '';
+  const bullets=bp.split('§').filter(Boolean).map((b,i)=>'<li>'+esc(b)+zhbullet(bp.split('§').filter(Boolean),i)+'</li>').join('');
+  const descHtml=esc(g('Product Description')||v(['product_description'])).replace(/\n/g,'<br/>').replace(/<\/br>/gi,'<br/>');
+  const kwHtml=esc(g('Generic Keywords')||g('Generic Keyword 1')||'');
+  // 上架表格原始数据（只渲染 listing_upload 表格上的列）
+  const skip=new Set(['Product Description','Generic Keywords','Bullet Point 1','Bullet Point 2','Bullet Point 3','Bullet Point 4','Bullet Point 5','Item Name','Generic Keyword 1','Material 1']);
+  const rows=Object.keys(sheet).filter((k)=>!skip.has(k)&&String(sheet[k]||'')!=='').map((k)=>{
+    const val=String(sheet[k]);
+    const cell=/^https?:\/\//.test(val)?'<a href="'+esc(val)+'" target="_blank" rel="noopener" style="word-break:break-all">'+esc(val.length>90?val.slice(0,90)+'…':val)+'</a>':esc(val);
+    return '<tr><td style="white-space:nowrap;color:#565959;padding:3px 10px 3px 0;font-size:12px">'+esc(k)+'</td><td style="padding:3px 0;font-size:12px;word-break:break-all">'+cell+'</td></tr>';
+  }).join('');
+  // 上传数据源说明 + 完整「上传行」逐列展示（所见即所传）
+  const srcLine = source ? ('<span style="color:#007185;font-weight:700">数据源：' + esc(source) + '</span>') : '';
+  const filledRows = (filled && filled.length ? filled : Object.keys(sheet).filter((k)=>String(sheet[k]||'')!=='')).map((f)=>{
+    const k = (f && f.header) ? f.header : f;
+    const attr = (f && f.attribute) ? ' <span class="cn">['+esc(f.attribute)+']</span>' : '';
+    const val = String((f && f.value!=null)?f.value:(sheet[f]));
+    const cellv = /^https?:\/\//.test(val) ? '<a href="'+esc(val)+'" target="_blank" rel="noopener" style="word-break:break-all">'+esc(val.length>90?val.slice(0,90)+'…':val)+'</a>' : esc(val);
+    return '<tr><td style="white-space:nowrap;color:#565959;padding:4px 10px 4px 0;font-size:12px">'+esc(k)+attr+'</td><td style="padding:4px 0;font-size:12px;word-break:break-all">'+cellv+'</td></tr>';
+  }).join('');
   $('app').innerHTML='<div class="wrap">'
     +'<div class="gal"><img src="'+esc(mainImg)+'"/><div class="grid2">'+imgs.slice(0,10).map((u,i)=>'<div class="thumbwrap"><img src="'+esc(u)+'" onclick="zoom(this.src)" alt="img'+(i+1)+'"/></div>').join('')+'</div></div>'
     +'<div class="title"><h1>'+esc(title)+zhtxt('item_name_zh')+'</h1>'
-    +'<div class="brand">Visit the '+esc(rec.brand||'Generic')+' Store</div>'
-    +'<div class="sub">4.4 ★ · 128 ratings</div>'
-    +'<div class="price">'+sym+(price>0?Number(price).toFixed(2):'--')+' <span class="cn">建议售价 · 汇率'+esc(rec.price_rate||'')+(rec.price_source?' '+esc(rec.price_source):'')+'</span></div>'
+    +'<div class="sub">'+srcLine+'</div>'
+    +'<div class="brand">Visit the '+esc(g('Brand Name')||'Generic')+' Store</div>'
+    +'<div class="sub">SKU: '+esc(g('SKU'))+' · '+esc(g('Product Type')||'(类目待补)')+'</div>'
+    +'<div class="price">'+sym+(price?Number(price).toFixed(2):'--')+' <span class="cn">建议售价 ('+esc(currency)+')</span></div>'
     +'<div class="bullets"><h3>About this item</h3><ul>'+bullets+'</ul>'+zhtxt('bullet_points_zh_title')+'</div>'
-    +'<div class="attrs"><b>材质:</b> '+esc(rec.material||'-')+' &nbsp; <b>尺码:</b> '+esc(rec.size||'-')+' &nbsp; <b>颜色:</b> '+esc(rec.color||'-')+' &nbsp; <b>品牌:</b> '+esc(rec.brand||'Generic')+'</div>'
+    +'<div class="attrs"><b>材质:</b> '+esc(g('Material 1')||v(['Material'])||'-')+' &nbsp; <b>面料:</b> '+esc(g('Fabric Type')||'-')+' &nbsp; <b>尺码:</b> '+esc(v(['Apparel Size Value','Size'])||'-')+' &nbsp; <b>颜色:</b> '+esc(v(['Colour','Colour Map'])||'-')+' &nbsp; <b>状态:</b> '+esc(v(['Item Condition'])||'-')+' &nbsp; <b>数量:</b> '+esc(v(['Quantity (UK, DE, IT)','Quantity'])||'-')+' &nbsp; <b>配送:</b> '+esc(v(['Fulfillment Channel Code (UK, DE, IT)','Fulfillment Channel'])||'-')+'</div>'
     +'</div>'
     +'<div class="desc"><h3>Product description</h3><p>'+descHtml+'</p>'+zhtxt('product_description_zh')+'</div>'
     +'<div class="kws"><b>搜索词:</b> '+kwHtml+zhtxt('generic_keyword_zh')+'</div>'
+    +'<div class="kws"><details open><summary style="cursor:pointer"><b>📋 上传数据（listing_filled.xlsx · 回填原始模板 · 逐列）</b> ' + srcLine + '</summary><table style="margin-top:8px">'+filledRows+'</table></details></div>'
     +'</div>';
   document.title=title;
 }
@@ -83,12 +110,12 @@ async function load(){
   try{
     const j=await (await fetch('/api/listing.json?id='+encodeURIComponent(id))).json();
     if(!j.ok){ $('app').innerHTML='<div class="loading">'+esc(j.err||'失败')+'</div>'; return; }
-    if(!j.record){ $('app').innerHTML='<div class="loading">该商品还没有上架文案 record（先运行 listing 流程生成）。本地图 '+(j.images||[]).length+' 张。</div>'; return; }
-    // 本地图优先（/api/listing.json 已排序：main-1/other-N，设计稿最后）
-    let imgs=(j.images&&j.images.length)?j.images:((j.record.other_image_urls&&j.record.other_image_urls.length)?[j.record.main_image_url].concat(j.record.other_image_urls):[]);
-    imgs=(imgs||[]).filter(Boolean);
-    const mainImg=j.main||j.record.main_image_url||imgs[0]||'';
-    CUR={id, rec:j.record, imgs, mainImg};
+    if(!j.sheet){ $('app').innerHTML='<div class="loading">该商品还没有「上架表格」listing_upload.csv（先运行 listing 流程生成；渲染只依赖新表格，不再读旧 record/xlsm）。</div>'; return; }
+    // 图片 = 上架表格中的 URL（设计后效果图；无则提示需合成，绝不用空白商品图）
+    let imgs=(j.images||[]).filter(Boolean);
+    const mainImg=j.main||imgs[0]||'';
+    if(!imgs.length){ $('app').innerHTML='<div class="loading">⚠️ 该商品还没有「设计后效果图」——不能上架空白商品图。请先运行 design:composite 合成设计图，再重新生成 listing_upload。</div>'; return; }
+    CUR={id, sheet:j.sheet, rec:j.record, imgs, mainImg, source:j.source, filled:j.filled};
     const td=document.getElementById('todetail'); if(td) td.href='product.html?id='+encodeURIComponent(id);
     renderNow();
   }catch(e){ $('app').innerHTML='<div class="loading">加载失败: '+esc(e.message)+'</div>'; }

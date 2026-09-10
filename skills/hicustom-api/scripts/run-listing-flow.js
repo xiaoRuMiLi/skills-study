@@ -18,32 +18,15 @@ const LANG = 'en_GB';
 const BRAND = 'Generic'; // 无牌，按用户要求
 const OUTDIR = path.join(config.outputDir, PROD_ID, 'listing');
 const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const { readTemplateProductTypes, matchProductType } = require('./app/Support/TemplateProductTypes');
+const { readTemplateStructure } = require('./app/Support/TemplateFields');
+const { buildListingSheet, findDesignedImages } = require('./app/Support/ListingSheet');
 
-async function zhipuChat(sys, user) {
-  const r = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
-    method: 'POST', headers: { 'Authorization': 'Bearer ' + (process.env.ZHIPU_API_KEY || ''), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'glm-4', temperature: 0.7, messages: [{ role: 'system', content: sys }, { role: 'user', content: user }] }),
-  });
-  const j = await r.json();
-  const c = j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
-  return c || ('ERR ' + JSON.stringify(j).slice(0, 200));
-}
-async function zhipuVision(url, instruction) {
-  const r = await fetch('https://open.bigmodel.cn/api/paas/v4/chat/completions', {
-    method: 'POST', headers: { 'Authorization': 'Bearer ' + (process.env.ZHIPU_API_KEY || ''), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'glm-4v', messages: [{ role: 'user', content: [{ type: 'text', text: instruction }, { type: 'image_url', image_url: { url } }] }] }),
-  });
-  const j = await r.json();
-  return (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || '';
-}
-async function amzSuggest(prefix) {
-  const u = 'https://completion.amazon.co.uk/api/2017/suggestions?mid=' + MID + '&alias=aps&prefix=' + encodeURIComponent(prefix) + '&limit=12';
-  try {
-    const r = await fetch(u, { headers: { 'User-Agent': 'Mozilla/5.0' } });
-    const j = await r.json();
-    return (j.suggestions || []).map((s) => s.value).filter(Boolean);
-  } catch (e) { return []; }
-}
+const { ZhipuClient } = require('./app/Services/ZhipuClient');
+let _zc = null;
+function zhipu() { if (!_zc) _zc = new ZhipuClient(config); return _zc; }
+async function zhipuChat(sys, user) { return zhipu().chat(sys, user); }
+async function zhipuVision(url, instruction) { return zhipu().chatVision(url, instruction); }
 
 (async () => {
   fs.mkdirSync(OUTDIR, { recursive: true });
@@ -64,24 +47,15 @@ async function amzSuggest(prefix) {
   const prodcost = p.pricing && p.pricing.minPrice;
   console.log('🔍 数据源: ' + enName + ' | 材质 ' + material + ' | 尺码 ' + sizes + ' | 颜色 ' + colors);
 
-  // ① 关键词（亚马逊UK联想词，种子词按商品自动生成以适配品类）
-  const nm = (ident.enName || ident.cnName || '').toLowerCase();
-  let seeds;
-  if (/toilet|seat|lid|tank|cushion|cover/.test(nm)) seeds = ['toilet lid cover', 'toilet seat cover', 'toilet cover set', 'toilet tank cover', 'toilet lid cover set', 'elastic toilet cover'];
-  else if (/pajama|pyjama|sleepwear|sleep|hoodie|shirt/.test(nm)) seeds = ['silk pajama men', 'men pajama set', 'satin lounge set men', 'men pyjama set', 'sleepwear set'];
-  else seeds = [nm, nm.replace(/set.*/i, 'set').trim()];
-  const freq = {};
-  const sources = {};
-  for (const s of seeds) {
-    const suggs = await amzSuggest(s);
-    sources[s] = suggs;
-    suggs.forEach((w, i) => { freq[w] = (freq[w] || 0) + 1; sources[w] = sources[w] || s; });
-  }
-  const keywords = Object.keys(freq).sort((a, b) => freq[b] - freq[a]).slice(0, 30);
-  console.log('🔑 关键词(联想词) ' + keywords.length + ' 条: ' + keywords.slice(0, 12).join(', '));
+  // ① 关键词（大模型理解品类 → 核心词 → 亚马逊联想词 → LLM 综合选词；不再用正则机械匹配类目）
+  const { KeywordResearch } = require('./app/Services/KeywordResearch');
+  const kr = new KeywordResearch(app.make('zhipuClient'));
+  const kwRes = await kr.research({ enName: ident.enName, cnName: ident.cnName, alias: ident.alias, material, size: sizes, color: colors });
+  const keywords = kwRes.keywords;
+  console.log('🔑 核心词(LLM): ' + (kwRes.coreTerms || []).join(', ') + ' | 关键词 ' + keywords.length + ' 条: ' + keywords.slice(0, 12).join(', '));
 
   // ② LLM 生成文案（glm-4）——遵循上架规范 + 只用真实属性
-  const sys = 'You are an expert Amazon UK/CA listing writer for custom-printed apparel. Write in British English. RULES (follow strictly):\n'
+  const sys = 'You are an expert Amazon UK/CA listing writer for custom-printed products (POD). Write in British English. RULES (follow strictly):\n'
     + '1) Title <= 70 characters, core keywords at front, no word repeated >3 times (excl. prepositions/conjunctions).\n'
     + '2) 5 bullet points, each <= 400 chars, EACH starts with a DIFFERENT core product keyword/phrase, and each includes material + size + colour, a real usage scenario, plus a "Customized Now" guide to upload image/text/logo. One bullet must cover gift occasions (mention pet lovers / corporate teams if applicable). One bullet must cover an extra/other use. Do NOT start bullets with "-" or "•".\n'
     + '3) generic_keyword <= 250 chars, space-separated (NO commas or symbols), no word repeated >3 times, include buyer-search terms not already in the title.\n'
@@ -89,17 +63,15 @@ async function amzSuggest(prefix) {
     + '5) Adults only; NEVER mention children/minors. 6) NEVER use: promotion, promotional, environment friendly, brand, branded, advertising, advertised, advertisement, vendors, vendor, any trademark (e.g. Mac), or superlative claims: best, #1, top-rated, number one, best-selling, guaranteed. 7) Brand = "Generic".\n'
     + '8) Use ONLY the provided facts; do NOT invent material, colour, size, or features. Return ONLY JSON: {"item_name":"...","bullet_points":["...","...","...","...","..."],"product_description":"...","generic_keyword":"..."}';
   let facts = 'FACTS FROM PRODUCT DATA (ONLY these are true; never invent others):\n'
-    + 'Item: ' + enName + ' (' + ident.cnName + ') — two-piece set: short-sleeve top + shorts\n'
-    + 'Material: ' + material + ' (polyester satin, imitation-silk silky drape — NOT real silk)\n'
+    + 'Item: ' + enName + ' (' + ident.cnName + ')\n'
+    + 'Material: ' + material + '\n'
     + 'Sizes: ' + sizes + '\n'
     + 'Colour: ' + colors + '\n'
-    + 'Full-surface print; classic notched collar, front button placket on top; trousers: elastic waist + drawstring, two side pockets.\n'
-    + 'Occasions: home loungewear, relaxing weekends, sleep.\n'
-    + 'Care: hand or gentle machine wash, low-temperature tumble/iron, hang dry (size tolerance 2-4cm).\n'
+    + 'Full-surface print available (custom).\n'
     + 'Style keywords: ' + style + '\n'
-    + 'Source description (Chinese, base facts on it): ' + desc + '\n'
+    + 'Source description (Chinese, base facts on it — includes material/features/use/care/size): ' + desc + '\n'
     + 'Product features: ' + features + '\n'
-    + 'Consider keywords (from Amazon UK suggestions): ' + keywords.slice(0, 18).join(', ') + '. Embed at least 3 DIFFERENT core product-word expressions (e.g. "men pajama set", "men pyjama set", "sleepwear set men").';
+    + 'Consider keywords (from Amazon UK suggestions): ' + keywords.slice(0, 18).join(', ') + '. Embed at least 3 DIFFERENT core product-word expressions based on the ACTUAL product (e.g. for a sleep mask: "sleep mask", "eye mask", "sleeping mask").';
   const hasCustom = !!(pj.customization || ((p.images && p.images.renderings && p.images.renderings.length) || 0) > 0); // 有定制/渲染图即视为定制商品
   // 以 database/product.csv 的 is_custom 为准（官方口径）
   const dbRec = repo.products().find((x) => String(x.id) === String(PROD_ID));
@@ -140,22 +112,30 @@ async function amzSuggest(prefix) {
     if (gen.product_description) gen.product_description = strip(gen.product_description);
   }
   // 清洗最高级/禁词（如 best→ideal, 去掉 #1 等）
-  const cleanSuper = (s) => s && String(s).replace(/\b#\s?1\b/gi, '').replace(/\bbest[- ]selling\b/gi, 'popular').replace(/\bbest\b/gi, 'ideal').replace(/\btop[- ]rated\b/gi, 'well-loved').replace(/\bnumber one\b/gi, 'a favourite').replace(/\bguaranteed\b/gi, 'assured').replace(/\s{2,}/g, ' ').trim();
+  const cleanSuper = (s) => s && String(s).replace(/\b#\s?1\b/gi, '').replace(/\bbest[- ]selling\b/gi, 'popular').replace(/\bbest\b/gi, 'ideal').replace(/\btop[- ]rated\b/gi, 'well-loved').replace(/\bnumber one\b/gi, 'a favourite').replace(/\bguaranteed\b/gi, 'assured').replace(/100\s?%/gi, 'premium').replace(/\s{2,}/g, ' ').trim();
   if (gen.item_name) gen.item_name = cleanSuper(gen.item_name);
   if (Array.isArray(gen.bullet_points)) gen.bullet_points = gen.bullet_points.map(cleanSuper);
   if (gen.product_description) gen.product_description = cleanSuper(gen.product_description);
 
-  // ③ 填表（映射到 xlsm 字段）
+  // ③ 组装 record（图片 URL = 合成后的「设计效果图」customization.effectImages，绝不能是指纹科技空白商品图）
+  //   POD 定制商品的 listing 图必须是设计后的效果图；dry-run 未合成 → 无设计图，标注缺失（不填空白图）
+  // Product Type = 模板下拉合法值（只读提取）按商品名自动匹配；匹配不到留空进缺失清单
+  const ptRead = readTemplateProductTypes(process.env.LISTING_TEMPLATE_PATH || (config.listing && config.listing.templatePath) || '');
+  const productType = matchProductType((ident.enName || '') + ' ' + (ident.cnName || ''), ptRead.options);
+  console.log('🏷️ Product Type 下拉合法值(模板只读): [' + ptRead.options.join(', ') + '] → 匹配: ' + (productType || '(未匹配，进缺失清单)'));
+  const des = findDesignedImages(config.outputDir, PROD_ID);
+  const hasDesignedImg = !!des.main;
   const record = {
-    marketplace: MID, language: LANG, product_type: 'SHIRT', brand: BRAND,
+    marketplace: MID, language: LANG, product_type: productType, brand: BRAND,
     item_name: gen.item_name || enName, title_differentiation: '',
     bullet_point: gen.bullet_points.slice(0, 5),
     product_description: gen.product_description || desc,
     generic_keyword: (gen.generic_keyword || keywords.slice(0, 15).join(' ')).replace(/[,\uFF0C]/g, ' ').replace(/\s+/g, ' ').trim(),
     material, color: colors, size: sizes, model_number: SPU(), model_name: enName,
-    main_image_url: prodImgs[0] || '',
-    other_image_urls: prodImgs.slice(1, 8),
-    source: { keywords: keywords, keyword_freq: freq, keyword_source: sources },
+    main_image_url: des.main,
+    other_image_urls: des.others,
+    image_url_source: des.source === 'cdn' ? 'design composite 效果图 (customization.effectImages)' : des.source === 'local' ? '本地设计图 (output/<id>/images 合成效果图)' : '无设计图（需先 design:composite 合成）—— 未用空白商品图',
+    source: { keywords: keywords, core_terms: kwRes.coreTerms, keyword_freq: kwRes.freq, keyword_source: kwRes.source },
   };
 
   // —— 自动补「可填」必填项 + 生成缺失清单 ——
@@ -167,13 +147,9 @@ async function amzSuggest(prefix) {
   record.fulfillment_channel = 'AMAZON_EU';
   record.quantity = '1';
   record.number_of_boxes = '1';
-  const nameForCls = ((record.item_name || '') + ' ' + (record.model_name || '')).toLowerCase();
-  const isToiletCls = /toilet|seat cover|lid cover|tank cover|toilet lid/.test(nameForCls);
-  if (isToiletCls) { record.product_type = ''; } // 马桶垫类目码需账号侧
   const missing = [];
   if (!record.product_type) missing.push({ field: 'Product Type', label: '产品类型码', why: '需选账号有效类目码（Valid Values/后台类目）', action: 'user/account' });
-  if (!record.product_id_type) missing.push({ field: 'Product Id Type', label: 'UPC/EAN 类型', why: '需 UPC/EAN 标识类型', action: 'user' });
-  if (!record.product_id) missing.push({ field: 'Product Id', label: 'UPC/EAN', why: '需真实条形码，否则新增商品报错', action: 'user' });
+  if (!hasDesignedImg) missing.push({ field: 'Images', label: '设计后图片(main/other)', why: '该商品未合成设计效果图（dry-run），不能用空白商品图；需先 design:composite 生成设计图', action: 'run composite' });
   const missingReport = {
     auto_filled: { fabric_type: record.fabric_type, country_of_origin: record.country_of_origin, dangerous_goods: record.dangerous_goods, package: record.package, fulfillment_channel: record.fulfillment_channel, quantity: record.quantity, number_of_boxes: record.number_of_boxes },
     missing_required: missing,
@@ -190,6 +166,12 @@ async function amzSuggest(prefix) {
     const dbP = repo.products().find((x) => String(x.id) === String(PROD_ID));
     const procurement = Number(p.pricing && p.pricing.minPrice) || (dbP && Number(dbP.minPrice)) || 0;
     const shipping = Number((dbP && dbP.specs && dbP.specs[0] && dbP.specs[0].shipping && dbP.specs[0].shipping[LIST_COUNTRY])) || 0;
+    // ⚠️ 前置校验：无物流费时价格会被严重低估（如 £3.35）。必须先跑 shipping:backfill 再跑本流程。
+    if (!shipping) {
+      console.log('⚠️⚠️ 未获取到物流费(运费)！当前会按 0 运费定价，售价' + LIST_COUNTRY + '将严重偏低。');
+      console.log('   正确顺序：先执行  node scripts/hi.js shipping:backfill --ids ' + PROD_ID + '  → 再跑本流程。');
+      console.log('   （若 HICUSTOM_MERCHANT_COOKIE 失效，请先重新登录指纹商家后台更新 .env 再跑 shipping:backfill）');
+    }
     const cp = await svc.computePrice({ country: LIST_COUNTRY, procurement, shipping, force: true });
     record.price = cp.price;
     record.currency = cp.currency;
@@ -198,7 +180,21 @@ async function amzSuggest(prefix) {
     record.pricing = { procurement, shipping, baseLocal: cp.baseLocal, denominator: cp.denominator, profitRate: cp.profitRate, platformCost: cp.platformCost };
     console.log('💰 建议售价(' + LIST_COUNTRY + '): ' + record.price + ' ' + record.currency + '  (汇率 ' + cp.rate + ', ' + cp.source + (cp.date ? ' ' + cp.date : '') + ')');
   } catch (e) { console.log('⚠️ 定价失败: ' + e.message); }
-  console.log('📋 文案已生成并填表');
+
+  // ④ 新建「上架表格」listing_upload.csv —— 列由模板动态导出（Data Definitions 的 Required/Recommended + 上架必需列），
+  //    亚马逊模板 xlsm 只读做字段规范参考，绝不回填。不同类目/模板字段不同，故不写死固定列。
+  const tplPath = process.env.LISTING_TEMPLATE_PATH || (config.listing && config.listing.templatePath) || '';
+  let tplStructure = { columns: [], productTypes: [] };
+  try { tplStructure = readTemplateStructure(tplPath); } catch (e) { console.log('⚠️ 读取模板结构失败: ' + e.message); }
+  const sheet = buildListingSheet({ columns: tplStructure.columns }, record, { targetMarket: MID });
+  const uploadCols = sheet.columns;
+  const uploadRow = sheet.row;
+  const csvCell = (v) => { const s = String(v == null ? '' : v); return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const uploadCsv = '\uFEFF' + uploadCols.map(csvCell).join(',') + '\r\n' + uploadCols.map((c) => csvCell(uploadRow[c])).join(',') + '\r\n';
+  const uploadCsvFile = path.join(OUTDIR, 'listing_upload.csv');
+  fs.writeFileSync(uploadCsvFile, uploadCsv, 'utf8');
+  fs.writeFileSync(path.join(OUTDIR, 'listing_upload.json'), JSON.stringify(uploadRow, null, 2), 'utf8');
+  console.log('📋 文案已生成 | 🧾 上架表格(模板动态导出 ' + uploadCols.length + ' 列): ' + uploadCsvFile + '  (图片URL来源: ' + record.image_url_source + ')');
 
   // ④ 检查：平台政策（规则） + 图片侵权（glm-4v 主图）
   const issues = [];
@@ -232,12 +228,21 @@ async function amzSuggest(prefix) {
 
   // ⑤ 渲染亚马逊详情页风格 HTML
   const html = renderPDP(record, keywords);
-  fs.writeFileSync(path.join(OUTDIR, 'keywords.json'), JSON.stringify({ seeds, sources, keywords, freq }, null, 2), 'utf8');
+  fs.writeFileSync(path.join(OUTDIR, 'keywords.json'), JSON.stringify({ core_terms: kwRes.coreTerms, source: kwRes.source, keywords, freq: kwRes.freq }, null, 2), 'utf8');
   fs.writeFileSync(path.join(OUTDIR, 'record.json'), JSON.stringify(record, null, 2), 'utf8');
   fs.writeFileSync(path.join(OUTDIR, 'check_report.json'), JSON.stringify(check, null, 2), 'utf8');
   console.log('\n📦 已写入 output\\' + PROD_ID + '\\listing\\  (keywords.json / record.json / check_report.json)');
+
+  // ④b 回填「亚马逊原始模板」→ 输出可上传的 .xlsx（必须在 record.json 写入之后，否则用的是旧数据）
+  try {
+    const py = path.join(__dirname, 'tmp_fill_xlsm.py');
+    const tplFill = process.env.LISTING_TEMPLATE_PATH || (config.listing && config.listing.templatePath) || '';
+    const out = require('child_process').execSync('python "' + py + '" ' + PROD_ID + ' "' + tplFill + '"', { encoding: 'utf8', stdio: 'pipe' });
+    console.log((out || '').trim().split('\n').map((l) => '  ' + l).join('\n'));
+  } catch (e) { console.log('⚠️ 回填原模板失败(需 python+openpyxl): ' + (e.stdout || e.message)); }
+
   console.log('✅ 完成 | 预览(通用模板): http://127.0.0.1:8098/listing.html?id=' + PROD_ID);
-  console.log('   xlsm 填充: output\\' + PROD_ID + '\\listing\\listing_filled.xlsm');
+  console.log('   上架表格: output\\' + PROD_ID + '\\listing\\listing_upload.csv  (亚马逊模板 xlsm 仅作字段规范只读参考，不回填)');
   console.log('   检查: policy.passed=' + check.policy.passed + ' | image.passed=' + check.image.passed + ' | 定制一致性=' + check.custom_consistency.consistent + ' (is_custom=' + check.custom_consistency.is_custom + ', copy_mentions_custom=' + check.custom_consistency.copy_mentions_custom + ')');
   if (!check.policy.passed) console.log('   policy issues: ' + check.policy.issues.join('; '));
   console.log('   image: ' + check.image.conclusion);

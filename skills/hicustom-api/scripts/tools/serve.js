@@ -10,6 +10,16 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const { readFilledTable } = require('../app/Support/ListingTable');
+// 加载 skill 根目录 .env（ZHIPU_API_KEY 等），供翻译/预览用（serve 不 bootstrap，需手动加载）
+(function loadDotEnv() {
+  const envFile = path.join(__dirname, '..', '..', '.env');
+  if (!fs.existsSync(envFile)) return;
+  for (const line of fs.readFileSync(envFile, 'utf8').split(/\r?\n/)) {
+    const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+    if (m && process.env[m[1]] == null) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
+  }
+})();
 const ROOT = path.join(__dirname, '..', '..', 'output');
 const PORT = Number(process.env.HICUSTOM_SERVE_PORT || 8098);
 const MIME = { '.html': 'text/html; charset=utf-8', '.json': 'application/json', '.csv': 'text/csv; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.css': 'text/css', '.js': 'application/javascript', '.svg': 'image/svg+xml', '.txt': 'text/plain; charset=utf-8' };
@@ -124,23 +134,35 @@ http.createServer((req, res) => {
     return;
   }
 
-  // 上架预览数据：GET /api/listing.json?id=X → 该商品的 listing record + 本地 images 列表
+  // 上架预览数据：GET /api/listing.json?id=X → 回填后的亚马逊原始模板 listing_filled.xlsm（上传文件）为唯一数据源
   if (p === '/api/listing.json') {
     const id = q.get('id');
     if (!id) return json(res, 400, { ok: false, err: '缺少 id' });
     const dir = path.join(ROOT, String(id));
     let record = null;
     try { record = JSON.parse(fs.readFileSync(path.join(dir, 'listing', 'record.json'), 'utf8')); } catch (e) {}
-    const imgs = [];
+    // 数据源 = 「回填后的亚马逊原始模板」listing_filled.xlsx（亚马逊只认 xlsx 工作簿，不认 xlsm）。source 标注实际读取文件，便于核对。
+    let sheet = null, source = '', filled = [];
+    try { const t = readFilledTable(path.join(dir, 'listing', 'listing_filled.xlsx')); if (t.filled.length) { sheet = t.row; filled = t.filled; source = 'listing_filled.xlsx（上传文件）'; } } catch (e) {}
+    if (!sheet) { try { const t2 = readFilledTable(path.join(dir, 'listing', 'listing_filled.xlsm')); if (t2.filled.length) { sheet = t2.row; filled = t2.filled; source = 'listing_filled.xlsm（旧，请重跑）'; } } catch (e) {} }
+    if (!sheet) { try { sheet = JSON.parse(fs.readFileSync(path.join(dir, 'listing', 'listing_upload.json'), 'utf8')); source = 'listing_upload.json（旧，请重跑）'; } catch (e) {} }
+    const localImgs = [];
     const base = path.join(dir, 'images');
-    const walk = (d) => { let items = []; try { items = fs.readdirSync(d); } catch (e) { return; } for (const it of items) { const f = path.join(d, it); let st; try { st = fs.statSync(f); } catch (e) { continue; } if (st.isDirectory()) walk(f); else if (/\.(jpe?g|png|webp)$/i.test(it)) imgs.push('/' + String(id) + '/images/' + path.relative(base, f).replace(/\\/g, '/')); } };
+    const walk = (d) => { let items = []; try { items = fs.readdirSync(d); } catch (e) { return; } for (const it of items) { const f = path.join(d, it); let st; try { st = fs.statSync(f); } catch (e) { continue; } if (st.isDirectory()) walk(f); else if (/\.(jpe?g|png|webp)$/i.test(it)) localImgs.push('/' + String(id) + '/images/' + path.relative(base, f).replace(/\\/g, '/')); } };
     walk(base);
-    // 无论有无 record，都返回本地图列表（product.html 用它）；record 可空
     const rank = (u) => (/main-amazon\.jpg$/.test(u) ? 0 : /main-1\.jpg$/.test(u) ? 1 : /other-\d+\.jpg$/.test(u) ? 2 : /design-/i.test(u) ? 4 : 3);
-    imgs.sort((a, b) => (rank(a) - rank(b)) || a.localeCompare(b));
-    const main = imgs.filter((u) => /main-amazon\.jpg$/.test(u))[0] || imgs.filter((u) => /main-1\.jpg$/.test(u))[0] || imgs[0] || '';
-    return json(res, 200, { ok: true, id, record, images: imgs, main });
-    return json(res, 200, { ok: true, id, record, images: imgs, main });
+    localImgs.sort((a, b) => (rank(a) - rank(b)) || a.localeCompare(b));
+    // 上架表格里的图片 URL（渲染唯一数据源）；有 sheet 就以 sheet 为准，绝不回退本地空白图
+    let imgs = [];
+    let main = '';
+    if (sheet) {
+      main = sheet['Main Image URL'] || '';
+      imgs = [main].concat([1, 2, 3, 4, 5, 6, 7, 8].map((i) => sheet['Other Image URL ' + i] || '')).filter(Boolean);
+    } else if (record) {
+      main = record.main_image_url || '';
+      imgs = [main].concat(record.other_image_urls || []).filter(Boolean);
+    }
+    return json(res, 200, { ok: true, id, sheet, source, filled, record, images: imgs, main, localImages: localImgs });
   }
 
   // 中文翻译（审阅用）：GET /api/listing/translate?id=X [&force=1] → 读/生成 translation.json
@@ -154,8 +176,12 @@ http.createServer((req, res) => {
     (async () => {
       try {
         const { translateRecord } = require('../app/Services/ListingTranslation');
+        const { ZhipuClient } = require('../app/Services/ZhipuClient');
+        const cfgPath = path.join(__dirname, '..', '..', 'config', 'hicustom.json');
+        const cfg = fs.existsSync(cfgPath) ? require(cfgPath) : {};
+        const zc = new ZhipuClient({ zhipu: cfg.zhipu || {}, zhipuApiKey: process.env.ZHIPU_API_KEY || '' });
         const record = JSON.parse(fs.readFileSync(recFile, 'utf8'));
-        const translation = await translateRecord(record);
+        const translation = await translateRecord(record, zc);
         fs.mkdirSync(path.dirname(transFile), { recursive: true });
         fs.writeFileSync(transFile, JSON.stringify(translation, null, 2), 'utf8');
         return json(res, 200, { ok: true, id, translation, cached: false });

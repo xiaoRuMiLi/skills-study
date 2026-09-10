@@ -39,6 +39,7 @@ const COMMANDS = [
   require('../app/Console/Commands/PricingCommand').PricingCommand,
   require('../app/Console/Commands/PricingBackfillCommand').PricingBackfillCommand,
   require('../app/Console/Commands/ListingTranslateCommand').ListingTranslateCommand,
+  require('../app/Console/Commands/ListingTableCommand').ListingTableCommand,
 ];
 
 function bootstrap() {

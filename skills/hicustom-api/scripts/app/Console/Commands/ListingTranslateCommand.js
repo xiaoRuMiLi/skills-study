@@ -7,6 +7,7 @@
 const fs = require('fs');
 const path = require('path');
 const { translateRecord } = require('../../Services/ListingTranslation');
+const { ZhipuClient } = require('../../Services/ZhipuClient');
 
 class ListingTranslateCommand {
   constructor(app) { this.app = app; this.signature = 'listing:translate'; this.description = '上架文案→中文(审阅用,不改表格)'; this.usage = '--product-id <id> [--force]'; }
@@ -19,8 +20,9 @@ class ListingTranslateCommand {
     if (!fs.existsSync(recFile)) { console.log('未找到 ' + recFile + '（先跑 listing 流程生成 record.json）。'); return; }
     if (!opts.force && fs.existsSync(outFile)) { console.log('已存在中文翻译，跳过复用（--force 重新翻译）→ ' + outFile); return; }
     const record = JSON.parse(fs.readFileSync(recFile, 'utf8'));
-    console.log('翻译中(智谱 glm-4)…');
-    const zh = await translateRecord(record);
+    console.log('翻译中(智谱 ' + ((config.zhipu && config.zhipu.textModel) || 'glm-4-plus') + ')…');
+    const zc = new ZhipuClient(config);
+    const zh = await translateRecord(record, zc);
     fs.mkdirSync(path.dirname(outFile), { recursive: true });
     fs.writeFileSync(outFile, JSON.stringify(zh, null, 2), 'utf8');
     console.log('✅ 中文翻译: ' + outFile);

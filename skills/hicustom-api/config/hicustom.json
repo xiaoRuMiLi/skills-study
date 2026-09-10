@@ -32,5 +32,15 @@
     "productEdit": "https://www.hicustom.com/merchant/productType/edit?type=0&cat_id=&id={id}",
     "customerProductList": "https://www.hicustom.com/merchant/customerProduct/index",
     "shippingQuote": "/merchant/shippingRule/calculateNew"
+  },
+  "listing": {
+    "templatePath": "C:/Users/Administrator/.openclaw/workspace-dev/skills/hicustom-api/amazon_category_table/HAT.xlsm",
+    "templateProductTypeRange": "product_type1.value"
+  },
+  "zhipu": {
+    "baseUrl": "https://open.bigmodel.cn/api/paas/v4",
+    "textModel": "glm-4-plus",
+    "visionModel": "glm-4v",
+    "imageModel": "glm-image"
   }
 }
