@@ -16,14 +16,20 @@
 - 需要把客户图/自定义图做成商品上架图；
 - 需要批量抓取商品属性、价格、包装、印刷区做 listing / 选品。
 
-## 5 步流程
+## 5 步流程（+ 可选「合成后叠字」分支）
 ```
 ① 抓空白产品详情        GET  /api/v1/product-type/{id}          → product:detail
 ② 解析产品画像          把原始 JSON 解析成结构化画像            → ProductProfile.js
 ③ 处理客户图→填充尺寸    从上下文获取图片源，如果客户没有提供，询问客户使用的图片来源，是否需要做定制款（定制款需要加文字，参照design-area.md处理图片来源和加工），sharp fit(cover/contain) 到印刷区尺寸   → tools/image.js
 ④ 上传图库 + 自动合成    gallery:upload → design:composite
 ⑤ 缓存 + CSV + HTML     product.json / product.csv / index.html  → 可扩展模板
+
+⑥（可选）合成效果图 → 叠字   用 ④ 的干净效果图(colors[].renderings[])当底 → stamp 叠宣传/占位文字
+   ⚠️ 用④合成后的效果图当底；别拿空白产品的 renderings_info（带 YOUR DESIGN HERE 占位，叠字会重叠）
+   → node scripts/stamp.js <效果图> "行1 颜色 字体 粗细 位置" "行2 ..."（见 references/stamp.md / design-area.md「变体流程」）
 ```
+> `stamp` 是纯本地叠字引擎（N 行/颜色/字体/粗细/位置/文字块宽高比/按词换行/`--preset`），
+> 与 ④`design:composite`（云合成出效果图）前后配合：**先合成出底图，再本地叠字**。
 
 ## 原稿归档规范（必做 ✅）
 每个「合成/设计」所用的图案原稿，必须归档到 **`output/<产品id>/原稿/`**，便于客户后续索要图案时直接取用。
@@ -58,7 +64,8 @@ node scripts/hi.js listing:generate --product-id 11243 --images "客户图.jpg" 
 |------|------|
 | `product:detail --id 11243` | 抓空白产品详情 |
 | `gallery:upload --file x.jpg ...` | 上传图库 |
-| `design:composite --product-type-id 11243 --cfgs '[...]'` | 自动合成 |
+| `design:composite --product-type-id 11243 --cfgs '[...]'` | 自动合成（出干净效果图） |
+| `stamp <效果图> "行1 颜色 字体 粗细 位置" "行2 ..."` | 本地叠字（合成后叠宣传/占位文字） |
 | `listing:generate ...` | 一条龙 |
 
 ## 完成后自动登记

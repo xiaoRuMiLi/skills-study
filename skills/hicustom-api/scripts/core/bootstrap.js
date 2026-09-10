@@ -40,6 +40,8 @@ const COMMANDS = [
   require('../app/Console/Commands/PricingBackfillCommand').PricingBackfillCommand,
   require('../app/Console/Commands/ListingTranslateCommand').ListingTranslateCommand,
   require('../app/Console/Commands/ListingTableCommand').ListingTableCommand,
+  require('../app/Console/Commands/StampCommand').StampCommand,
+  require('../app/Console/Commands/SampleListCommand').SampleListCommand,
 ];
 
 function bootstrap() {

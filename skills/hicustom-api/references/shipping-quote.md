@@ -12,7 +12,7 @@
 - 抓取方式（从已登录的浏览器，无需手粘）：
   1. 确定浏览器已开 hicustom 商家页（如 `/merchant/customerProduct/index`）。
   2. 用 Chrome DevTools Protocol 直接连该页 target，取 `Network.getCookies`（urls 含 `https://www.hicustom.com`），拼成 Cookie 头写入 `.env`。
-  3. 工具脚本：`scripts/tools/get-merchant-cookie.js`（自取 CDP 端口/页面，写入 `.env`，不打印 cookie 值）。
+  3. 工具脚本：`scripts/dev/oneshot/get-merchant-cookie.js`（自取 CDP 端口/页面，写入 `.env`，不打印 cookie 值）。
 - 起效键：`PHPSESSID`、`UCSDK_COOKIES`（登录态）。cookie 过期 → `shipping:quote` 报 `COOKIE_EXPIRED`，重取即可。
 
 ## 计算参数口径（固定）

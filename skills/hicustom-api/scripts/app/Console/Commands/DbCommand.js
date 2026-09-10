@@ -66,9 +66,9 @@ class DbCommand {
     if (action === 'admin' || action === 'dashboard') {
       const config = this.app.make('config');
       const products = repo.products();
-      const file = renderAdmin({ records: products, merchant: config.merchant, htmlDir: config.outputDir, htmlFile: 'manage.html', title: '产品管理后台' });
+      const file = renderAdmin({ records: products, merchant: config.merchant, htmlDir: config.pagesDir, htmlFile: 'manage.html', title: '产品管理后台' });
       console.log('✅ 管理后台: ' + file + ' | 访问 /manage.html 共 ' + products.length + ' 个商品');
-      console.log('  📄 商品详情统一用 output/product.html?id=<id> 模板');
+      console.log('  📄 商品详情统一用 /product.html?id=<id> 模板（pages/product.html）');
       return;
     }
 

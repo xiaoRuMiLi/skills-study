@@ -1,7 +1,9 @@
 # hicustom-api 操作手册
 
-> 指纹科技 HICUSTOM 开放平台客户端 + 定制产品上架素材一条龙 + CSV 类数据库管理。
+> 指纹科技 HICUSTOM 开放平台客户端 + 定制产品上架素材一条龙 + CSV 类数据库管理 + 叠字/排版。
 > 设计哲学：Laravel 风（DI 容器 + 服务提供者 + 服务层 + artisan 命令总线 + 配置分离）。零第三方依赖（仅图像步骤用 sharp）。
+>
+> **分层原则**：业务进 `app/`，页面进 `app/pages/`，库进 `tools/`，服务进 `server/`，实验进 `dev/`，数据进 `output/`（**output 只放数据/图片**）。
 
 ---
 
@@ -12,7 +14,7 @@
 4. [命令一览](#4-命令一览)
 5. [CSV 类数据库 + 管理后台](#5-csv-类数据库--管理后台)
 6. [设计器 SDK 对接](#6-设计器-sdk-对接)
-7. [本地预览服务器](#7-本地预览服务器)
+7. [本地页面服务](#7-本地页面服务)
 8. [文件结构 / References](#8-文件结构--references)
 
 ---
@@ -23,13 +25,14 @@
 # 安装图像处理依赖（sharp，仅图像步骤需要）
 cd scripts/tools && npm install && cd ../..
 
-# 密钥：复制 .env.example 为 .env 并填写
+# 密钥：复制 .env.example 为 .env（skill 根）并填写
 HICUSTOM_APP_KEY=
 HICUSTOM_APP_SECRET=        # 首次换 token 用
 HICUSTOM_REFRESH_TOKEN=     # 刷新用（可选，会自动保存）
 ```
 
 > access_token 自动缓存到 `.hicustom/token.json`，**绝不明文出示**。
+> `HICUSTOM_MERCHANT_COOKIE`（运费试算用）由 `app/Support/MerchantCookie.js` 读写 **skill 根 `.env`**。
 
 ## 2. 快速上手
 
@@ -37,7 +40,11 @@ HICUSTOM_REFRESH_TOKEN=     # 刷新用（可选，会自动保存）
 node scripts/hi.js list                 # 看全部命令
 node scripts/hi.js token:get            # 拿/刷新 access_token
 node scripts/hi.js product:detail --id 11243   # 抓空白产品详情
-node scripts/hi.js db admin             # 生成管理后台 output/admin.html
+node scripts/hi.js db admin             # 生成管理后台 pages/manage.html（访问 /manage.html）
+
+# 叠字（本地、零 API）
+node scripts/stamp.js input/x.jpg "YOUR DESIGN HERE" "#FFE873" bold 800 居中 \
+  "Any Color Text Logo Photo" "#9AD8FF" modern 500 偏下
 ```
 
 ## 3. 核心工作流：listing:generate
@@ -53,14 +60,16 @@ node scripts/hi.js listing:generate --product-id 11243 --images "客户图.jpg"
 
 # 不同面不同图（:view 指定面）
 node scripts/hi.js listing:generate --product-id 11243 --images "图A.jpg:1,图B.jpg:2"
-
-# 也可传 URL 图
-node scripts/hi.js listing:generate --product-id 11243 --images "https://.../xx.jpg"
 ```
 
 可选项：`--fit cover|contain`（默认 cover 填满）、`--default-color-id`、`--default-view-id`、`--external-id`、`--customer-id`。
 
-产物（`output/<id>/`）：`product.json`、`product.csv`、`images/`、`index.html`；并自动 `upsert` 进数据库 + 刷新后台。
+产物：
+- **数据**（`output/<id>/`）：`product.json`、`product.csv`、`images/…`
+- **页面**（`pages/<id>/`）：`index.html`（详情页，URL `/<id>/index.html`）
+- 并自动 `upsert` 进数据库 + 刷新后台 `pages/manage.html`
+
+> ⚠️ 设计稿**宽高比贴合印刷区**，否则合成时 `cover` 会裁掉侧边（或用 `--fit contain`）。
 
 ## 4. 命令一览
 
@@ -68,13 +77,17 @@ node scripts/hi.js listing:generate --product-id 11243 --images "https://.../xx.
 |------|------|
 | `token:get` | 获取/刷新 access_token |
 | `gallery:categories / list / detail / edit` | 图库分类 / 列表 / 详情 / 编辑 |
-| `gallery:upload --file x` | 上传图库 |
-| `gallery:batch` | 批量上传输入夹 |
+| `gallery:upload --file x` / `gallery:batch` | 上传图库 / 批量上传输入夹 |
 | `product:list / categories / detail / removed` | 空白产品 列表/分类/详情/下架 |
-| `design:list / detail` | 定制产品 列表/详情 |
-| `design:preview` | 效果图预览（GET，单张） |
-| `design:composite` | **自动合成**（POST /api/v1/product，出完整展示图） |
+| `design:list / detail / preview` | 定制产品 列表/详情/效果图预览 |
+| `design:composite` | **自动合成**（出完整展示图） |
 | `listing:generate` | **总编排**（一条龙） |
+| `design-area:generate` | **独立**：解析**排版样稿**(`type-setting-images/`, `--sample <名字\|auto>`) 或空白产品主图 → 文生图 → 用 `stamp` 叠定制区文字 |
+| `stamp` | **独立**：给图案叠加 N 行可配置文字（本地零 API）；入口 `node scripts/stamp.js` |
+| `sample:list` | 列出排版样稿库 `type-setting-images/` |
+| `shipping:quote` / `shipping:backfill` | 运费试算 / 批量回填（商家后台 cookie 鉴权） |
+| `pricing:calc` / `pricing:backfill` | 定价计算 / 多国售价回填 |
+| `listing:translate` / `listing:table` | 上架文案→中文（审阅） / 读模板数据列 |
 | `order:create / list / detail / by-out-id / item-production` | 订单 创建/列表/详情/按店铺/生产信息 |
 | `trade:list` | 交易记录 |
 | `error:describe / list` | 错误码中文说明 |
@@ -91,36 +104,42 @@ node scripts/hi.js listing:generate --product-id 11243 --images "https://.../xx.
   node scripts/hi.js db get 11243
   node scripts/hi.js db update 11243 --status synced --notes "..."
   node scripts/hi.js db delete 11243
-  node scripts/hi.js db admin     # 重新生成后台
+  node scripts/hi.js db admin     # 重新生成后台 → pages/manage.html
   ```
-- **后台**：`output/admin.html`（列出所有商品 + 详情/编辑/定制列表入口）。访问 `http://127.0.0.1:8098/admin.html`。
+- **后台**：`pages/manage.html`（列出所有商品 + 详情/编辑入口）。访问 `http://127.0.0.1:8098/manage.html`。
 
 ## 6. 设计器 SDK 对接
 
-前端 iframe 嵌入 hicustom 设计器（供用户在线设计）。详见 `references/designer-sdk.md`；demo 页 `imgtool/designer-demo.html`。
+前端 iframe 嵌入 hicustom 设计器（供用户在线设计）。回调服务器：`node scripts/server/server.js`（默认 `http://127.0.0.1:8899`）。
+详见 `references/designer-sdk.md`。
 
-## 7. 本地预览服务器
+## 7. 本地页面服务
 
 ```bash
-# 托管 output/ 目录（商品详情 + 后台 + CSV），默认 8098
-node scripts/tools/serve.js
-# 访问: http://127.0.0.1:8098/<id>/ 、 /admin.html
+# 托管 数据(output/) + 页面(pages/)，默认 8098
+node scripts/server/serve.js
+# 访问: http://127.0.0.1:8098/<id>/index.html 、 /product.html?id=<id> 、 /manage.html
 ```
+
+> 路由：**`.html` 先查 `scripts/app/pages/`，未命中回退 `output/`**；`api/… / images/… / json/csv` 一律走 `output/`（**URL 不变**）。
+> 改动 serve.js / MerchantCookie / 数据后需**重启 serve.js**。
 
 ## 8. 文件结构 / References
 
 ```
 scripts/
-├── hi.js            # 入口（artisan 式）
-├── server.js        # 设计器 SDK 回调服务器
-├── self-test.js     # 离线自测（mock fetch）
-├── core/            # Container/Config/Router/bootstrap/ServiceProvider
-├── app/  Providers/Http/Auth/Services/Sdk/Support/Console(Commands)/
-├── tools/           # image.js(sharp) / csv.js / serve.js / regen-detail.js
-config/hicustom.json # baseUrl + endpoints + merchant + paths
-database/products.csv # CSV 类数据库
-output/<id>/         # 每商品产物（profile/images/csv/html）
-references/          # 文档（见下）
+├── hi.js · stamp.js         # 入口（CLI / 叠字薄壳）
+├── core/                    # 内核 Container/Config/Router/bootstrap/ServiceProvider
+├── app/                     # 业务 Providers/Http/Auth/Services/Sdk/Support/Console(Commands)/pages(页面)
+├── server/                  # 常驻服务 serve.js(8098) · server.js(8899 设计器回调)
+├── tools/                   # 复用库 csv/image/watermark/pick-color + sharp 锚点(node_modules)
+└── dev/                     # 非生产：tests/ flows/ oneshot/ py/ _view_server.js（可随时清）
+config/hicustom.json         # baseUrl + endpoints + merchant + paths
+database/products.csv        # CSV 类数据库
+output/<id>/                 # 每商品【数据】：product.json / product.csv / images/
+scripts/app/pages/           # 【页面】：product.html / listing.html / manage.html / <id>/index.html …
+type-setting-images/         # 排版样稿库（文件名=商品名/类别）
+references/                  # 文档（见下）
 ```
 
 | References（何时引用） | 用途 |
@@ -131,7 +150,12 @@ references/          # 文档（见下）
 | `references/html-template.md` | 详情 HTML section 扩展 |
 | `references/database.md` | CSV 数据库 + 后台 + 扩展 |
 | `references/designer-sdk.md` | 前端设计器 iframe 对接 |
+| `references/design-area.md` | 给商品图/效果图加定制区文字（含"以效果图为底"变体） |
+| `references/stamp.md` | 本地叠字命令（N 行/颜色/字体/位置/换行/预设） |
+| `references/shipping-quote.md` | 运费试算（cookie、8 国口径、推荐渠道） |
+| `references/shipping-pricing-flow.md` | 运费规范 + 存档 + 易错点 |
+| `references/listing-flow.md` | 亚马逊上架文案/关键词/填模板/预览 |
 
 ---
 
-**一次典型使用**：给商品链接/ID + 设计图 → `listing:generate` → 后台 `admin.html` 看全部 → `db` 查/改 → 需要下单走 `order:create`（谨慎，涉及资金）。
+**一次典型使用**：给商品链接/ID + 设计图 → `listing:generate` → 后台 `manage.html` 看全部 → `db` 查/改 → 需要下单走 `order:create`（谨慎，涉及资金）。

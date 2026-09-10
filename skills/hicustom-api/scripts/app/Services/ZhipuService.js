@@ -40,28 +40,46 @@ class ZhipuService {
     return j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
   }
 
-  // 根据印刷区宽高比挑一个智谱支持的尺寸
+  // 智谱支持的尺寸（w/h）。按宽高比挑最接近的一个。
+  static get SIZES() { return ['1024x1024', '1344x768', '768x1344', '1280x720', '720x1280', '1152x896', '896x1152']; }
   static pickSize(w, h) {
     const a = (w || 1) / (h || 1);
-    if (a > 1.15) return '1344x768';   // 横
-    if (a < 0.87) return '768x1344';   // 竖
-    return '1024x1024';                 // 方
+    let best = '1024x1024', bestD = Infinity;
+    for (const s of ZhipuService.SIZES) {
+      const [sw, sh] = s.split('x').map(Number);
+      const d = Math.abs(Math.log(a) - Math.log(sw / sh)); // 比率对数距离
+      if (d < bestD) { bestD = d; best = s; }
+    }
+    return best;
   }
 
-  // 根据商品信息构造文生图提示词：生成【平面印花图案】本身（非商品实物）
+  // 根据商品信息构造文生图提示词：生成【平面印花图案】本身（非商品实物），并带上商品属性与画布比例
   static buildImagePrompt(product) {
     const d = product || {};
     const pd = d.product_description || {};
     const style = (pd.design_style && pd.design_style.recommend_style) || '';
     const theme = (pd.design_style && pd.design_style.theme_element) || '';
-    const mat = (pd.product_material && pd.product_material.cn_name) || '';
-    let desc = (pd.detail_info_desc || '').replace(/\n/g, ' ').slice(0, 100);
-    const margin = Math.round((1 - 0.88) * 100); // 底部留白约12%（用于后期裁掉水印）
-    // ⚠️ 刻意不提商品名/桌布/布料等实物词，只描述图案主题风格，让模型输出"平铺印花设计"
-    return `生成一幅【满幅平铺的印花图案设计稿】（纯平面设计图，只用来印花到面料上）。这不是商品实物照！不要在图中画出任何布料、织物、桌布、被子、衣服、桌子或实体物品，不要 3D、不要场景、不要阴影投在产品上——整张图就是一层平铺的花纹设计。
-- 主题风格：${style || '优雅复古'}；图案元素：${theme || '原创花卉/几何纹理'}；质感参考：${mat || ''}。
-- 花色协调、层次丰富、满幅可重复，适合作为整幅印花底图。${desc}
-要求：图案内绝不能出现任何文字、字母、水印或 logo；不能出现知名品牌/商标/受版权保护的卡通、人物、图案；全部为原创通用元素。请在图片最下方留出约 ${margin}% 高的纯白色留白边（白边内不要画任何内容/图案），主体图案只占上方约 88% 区域。`;
+    const mat = (pd.product_material && (pd.product_material.cn_name || pd.product_material.en_name)) || '';
+    const tech = pd.product_technology || '';
+    const colors = (d.colors || []).map((c) => c.cn_name || c.name).filter(Boolean).join('/');
+    const sizes = (d.sizes || []).map((s) => s.name).filter(Boolean).join('/');
+    const attrs = (d.product_attr || []).map((a) => {
+      const k = a.name || a.cn_name || ''; const v = a.value || a.attr_value || a.field_value || '';
+      return k ? (k + ':' + v) : '';
+    }).filter(Boolean).join('；');
+    const feats = (pd.product_features || []).map((x) => x.value).filter(Boolean).join('；').slice(0, 90);
+    const desc = (pd.detail_info_desc || '').replace(/\n/g, ' ').replace(/\s+/g, ' ').slice(0, 160);
+    const f = (pd.print_areas && pd.print_areas[0]) || { width: 1024, height: 1024 };
+    const orient = f.width >= f.height ? '横向' : '纵向';
+    const margin = 12; // 底部留白%，用于后期裁掉 AI 水印
+    return `生成一幅【满幅平铺的印花图案设计稿】——纯平面设计，仅用于印到面料/材质表面（印花布/印图底稿）。
+⚠️ 这**不是商品照片/效果图**；图中**严禁出现任何实物或其轮廓**（帽子、衣服、杯子、桌布/地毯、桌子……通通不要），不要 3D、不要场景、不要投影/阴影。整张图必须是一层**无缝平铺、四边铺满**的花纹，画面里**没有物体边缘**。
+- 承载与工艺：图案印在 ${mat || '面料'} 上${tech ? '（' + tech + '）' : ''}。
+- 风格：${style || '优雅复古'}；图案元素：${theme || '原创花卉/几何纹理'}。
+- 配色：**明快、层次丰富、色彩协调**；**不要黑白/单色，避免大面积纯黑背景**（图案为主体，浅色/彩色底更佳）。
+- 氛围关键词（仅作风格暗示，**勿画成实物或场景**）：${feats || '原创通用'}。
+- 画布比例：**${orient}**，宽:高 ≈ ${f.width}:${f.height}（≈${(f.width / f.height).toFixed(3)}），按此比例满幅铺开。
+要求：图案内绝不能出现任何文字、字母、水印或 logo（**含极小文字**）；不要出现**卡片/票据/标签/条带/边框/纹理带**等元素；不能出现知名品牌/商标/受版权保护的卡通、人物、图案；全部为原创通用元素。请在图片最下方留出约 ${margin}% 高的**纯白色**留白边（白边内不要画任何内容/图案），主体图案只占上方约 88% 区域。`;
   }
 }
 

@@ -196,7 +196,7 @@ class ListingGenerateCommand {
     if (me.productEdit) links.push({ label: '✏️ 编辑当前空白商品', url: String(me.productEdit).replace('{id}', productId), kind: 'product' });
     if (me.customerProductList) links.push({ label: '📦 我的定制商品列表', url: me.customerProductList, kind: 'list' });
 
-    const htmlFile = render({ profile, customization, options: { title: profile.identity.cnName + ' — 产品信息', sections: undefined, links, dir: String(productId) }, htmlDir: outDir });
+    const htmlFile = render({ profile, customization, options: { title: profile.identity.cnName + ' — 产品信息', sections: undefined, links, dir: String(productId) }, htmlDir: path.join(config.pagesDir, String(productId)) });
     // ⑥ 登记到 CSV 类数据库 + 刷新管理后台
     const repo = app.make('productRepo');
     const shared = {
@@ -209,7 +209,7 @@ class ListingGenerateCommand {
       status: dry ? 'draft' : 'synced', notes: dry ? 'DRY-RUN' : '',
     };
     const nSpec = repo.upsertProduct(String(productId), shared, profile.specs, JSON.stringify({ profile, customization }));
-    const adminFile = renderAdmin({ records: repo.products(), merchant: config.merchant, htmlDir: config.outputDir, htmlFile: 'manage.html' });
+    const adminFile = renderAdmin({ records: repo.products(), merchant: config.merchant, htmlDir: config.pagesDir, htmlFile: 'manage.html' });
 
     console.log('\n✅ 已缓存到: ' + outDir);
     console.log('  product.json / product.csv');

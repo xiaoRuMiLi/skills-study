@@ -42,7 +42,7 @@ node scripts/hi.js db admin               # 生成管理后台 output/admin.html
 - 访问（输出服务器）：`http://127.0.0.1:8098/manage.html`
 - 生成：`node scripts/hi.js db admin`（重建 manage.html）
 - JSON API：`http://127.0.0.1:8098/api/products.json`（返回全部商品 + specs + detail）
-- 刷新单商品：`node scripts/tools/refresh-product.js <商品id>`（重抓详情补 specs → 更新 CSV，不重新合成）
+- 刷新单商品：`node scripts/dev/oneshot/refresh-product.js <商品id>`（重抓详情补 specs → 更新 CSV，不重新合成）
 - 商品文件夹（`output/<id>/`）只存**数据**（product.json / product.csv / images），展示统一走模板，无逐商品 HTML。
 
 ## 扩展

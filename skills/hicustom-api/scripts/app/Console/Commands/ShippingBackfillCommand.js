@@ -67,7 +67,7 @@ class ShippingBackfillCommand {
         const pr = await psvc.backfill({ repo, ids: products.map((p) => String(p.id)) });
         console.log('💰 自动定价完成: ' + pr.count + ' 个商品（8国）→ detail_json.pricing');
       } catch (e) { console.log('⚠️ 自动定价失败: ' + e.message); }
-      const adminFile = renderAdmin({ records: repo.products(), merchant: config.merchant, htmlDir: config.outputDir, htmlFile: 'manage.html' });
+      const adminFile = renderAdmin({ records: repo.products(), merchant: config.merchant, htmlDir: config.pagesDir, htmlFile: 'manage.html' });
       console.log('📊 管理后台已刷新: ' + adminFile);
     }
   }

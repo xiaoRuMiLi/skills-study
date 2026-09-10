@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Listing 列表 · HICUSTOM 工作台</title>
+<style>
+  :root{--bg:#f2f3f5;--card:#fff;--line:#e3e6e6;--ink:#0f1111;--muted:#565959;--brand:#e8590c;--link:#007185}
+  *{box-sizing:border-box}
+  body{font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);margin:0;color:var(--ink)}
+  header{position:sticky;top:0;background:#131921;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:600}
+  header a{color:#cbd5e1;text-decoration:none;font-size:13px}
+  header a:hover{color:#fff}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px}
+  .tools{display:flex;gap:10px;align-items:center;margin:6px 0 14px;flex-wrap:wrap}
+  input{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px}
+  button{font:inherit;padding:7px 14px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button:hover{border-color:var(--brand)}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--line);font-size:13px;text-align:left;vertical-align:middle}
+  th{background:#fafafa;color:var(--muted);font-weight:600;font-size:12px}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#fffdf9}
+  .thumb{width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:#fff}
+  .t{font-weight:600}
+  .id{color:var(--muted);font-size:12px}
+  a.act{color:var(--link);text-decoration:none;margin-right:10px;font-size:13px}
+  a.act:hover{text-decoration:underline}
+  .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:#eef2f7;color:#3b4a5a}
+  .badge.synced{background:#e6f4ea;color:#1b7f3b}.badge.draft{background:#fdf1e6;color:#b5651d}.badge.ready{background:#e8f0fe;color:#1a56c4}
+  .muted{color:var(--muted);font-size:13px}.err{color:#b91c1c}
+</style>
+</head>
+<body>
+<header>
+  <h1>📦 Listing 列表</h1>
+  <a href="/">首页</a><a href="/manage.html">管理后台</a><a href="/listing-list.html">Listing 列表</a>
+</header>
+<div class="wrap">
+  <div class="tools">
+    <input id="q" placeholder="按商品/标题过滤…" style="min-width:260px"/>
+    <button id="refresh">↻ 刷新</button>
+    <span id="cnt" class="muted"></span>
+  </div>
+  <table>
+    <thead><tr><th>#</th><th>图</th><th>商品</th><th>标题</th><th>时间</th><th>状态</th><th>预览</th></tr></thead>
+    <tbody id="tb"><tr><td colspan="7" class="muted">加载中…</td></tr></tbody>
+  </table>
+  <div id="msg" class="muted" style="margin-top:10px"></div>
+</div>
+<script>
+const $=(id)=>document.getElementById(id); let ALL=[];
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function imgSrc(u){ if(!u) return ''; return /^https?:/.test(u)||u.startsWith('/')||u.startsWith('./') ? u : './'+u; }
+function render(){
+  const f=($('q').value||'').trim().toLowerCase();
+  const rows = ALL.filter(x=>!f || ((x.cn_name||'')+(x.title||'')).toLowerCase().includes(f));
+  $('cnt').textContent='共 '+ALL.length+' 条'+(f?(' · 过滤后 '+rows.length):'');
+  $('tb').innerHTML = rows.length ? rows.map(x=>`<tr>
+    <td class="id">${esc(x.id)}</td>
+    <td>${x.image?`<img class="thumb" src="${esc(imgSrc(x.image))}" onerror="this.style.visibility='hidden'"/>`:''}</td>
+    <td class="t">${esc(x.cn_name||'')}</td>
+    <td>${esc(x.title||'')}</td>
+    <td class="muted">${esc(x.updated_at||'')}</td>
+    <td><span class="badge ${esc(x.status||'draft')}">${esc(x.status||'draft')}</span></td>
+    <td>
+      <a class="act" href="/listing.html?id=${encodeURIComponent(x.id)}" target="_blank">预览</a>
+      <a class="act" href="/${encodeURIComponent(x.id)}/index.html" target="_blank">详情页</a>
+    </td></tr>`).join('') : '<tr><td colspan="7" class="muted">暂无（先跑 listing 流程：node scripts/dev/flows/run-listing-flow.js <id>）</td></tr>';
+}
+async function load(){ $('msg').textContent='加载中…'; try{ const r=await fetch('/api/listing/list'); const j=await r.json(); if(!j.ok) throw new Error(j.err||'fail'); ALL=(j.items||[]).sort((a,b)=>String(b.updated_at||'').localeCompare(String(a.updated_at||''))); render(); $('msg').textContent=''; }catch(e){ $('msg').textContent='加载失败: '+e.message; $('msg').className='err'; } }
+$('refresh').onclick=load; $('q').oninput=render; load();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 'use strict';
 /**
- * AdminRenderer — 生成 output/manage.html（商品列表，前端渲染，含搜索/筛选/分页）。
+ * AdminRenderer — 生成 manage.html（商品列表，前端渲染，含搜索/筛选/分页）。写到 htmlDir（默认应指向 pages/）。
  * 数据来自 /api/products.json（读 database/products.csv）。
  */
 const fs = require('fs');

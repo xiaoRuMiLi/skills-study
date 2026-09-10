@@ -1,0 +1,81 @@
+{
+  "out": {
+    "sameFolder": true,
+    "suffix": "_add_text",
+    "format": "jpeg",
+    "quality": 92,
+    "skipIfHasSuffix": true,
+    "compare": true
+  },
+
+  "block": {
+    "widthRatio": 0.7,
+    "heightRatio": 0.9,
+    "vAlign": "middle",
+    "nudgeUp": 0,
+    "lineGap": 0.35,
+    "rowGap": 0.12,
+    "safeMargin": 0.045
+  },
+
+  "background": {
+    "enabled": false,
+    "color": "rgba(0,0,0,0.48)",
+    "radius": 12,
+    "padX": 0.02,
+    "padY": 0.02
+  },
+
+  "lines": [
+    {
+      "text": "YOUR DESIGN HERE",
+      "color": "#FFE873",
+      "font": "bold",
+      "weight": 800,
+      "posV": "middle",
+      "size": "auto",
+      "letterSpacing": 0.06,
+      "outline": { "color": "#000000", "width": 0 }
+    },
+    {
+      "text": "Any Color Text Logo Photo",
+      "color": "#9AD8FF",
+      "font": "bold",
+      "weight": 800,
+      "posV": "middle",
+      "size": "auto",
+      "letterSpacing": 0.02,
+      "outline": { "color": "#000000", "width": 0 }
+    }
+  ],
+
+  "presets": {
+    "sample": {
+      "desc": "示例：主句大字按词换行 + 下方脚本副行",
+      "block": { "widthRatio": 0.7, "heightRatio": 0.9 },
+      "lines": [
+        { "text": "DESIGN YOUR CAR SHADE", "color": "#FF7A2E", "font": "bold", "weight": 800, "posV": "middle", "size": 0.16, "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "any text color image logo", "color": "#FFFFFF", "font": "script", "weight": 600, "posV": "middle", "size": "auto", "letterSpacing": 0, "outline": { "color": "#000000", "width": 0 } }
+      ]
+    }
+  },
+
+  "fonts": {
+    "modern": "Arial, Helvetica, sans-serif",
+    "bold": "Arial Black, Impact, sans-serif",
+    "elegant": "Georgia, 'Times New Roman', serif",
+    "script": "'Segoe Script', 'Brush Script MT', cursive",
+    "comic": "'Comic Sans MS', cursive"
+  },
+
+  "posAlias": {
+    "居中": "middle", "中间": "middle", "center": "middle", "middle": "middle",
+    "偏上": "top", "上": "top", "top": "top",
+    "偏下": "bottom", "下": "bottom", "bottom": "bottom"
+  },
+
+  "weightAlias": {
+    "细": 300, "常规": 400, "中": 500, "半粗": 600, "粗": 700, "特粗": 900,
+    "light": 300, "normal": 400, "medium": 500, "semibold": 600, "bold": 700, "black": 900
+  }
+}

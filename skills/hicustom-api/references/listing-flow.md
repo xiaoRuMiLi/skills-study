@@ -2,7 +2,7 @@
 
 > 定位：把 hicustom 定制商品 → 亚马逊**上架文案 + 上架表格(xlsm) + 预览页面**。
 > 触发词：上架文案、listing 生成、亚马逊标题/五点/描述/关键词、xlsm 填充、上架预览。
-> 性质：**独立流程规范**（初版已固化，不足点后续迭代）。实现脚本 `scripts/run-listing-flow.js`。
+> 性质：**独立流程规范**（初版已固化，不足点后续迭代）。实现脚本 `scripts/dev/flows/run-listing-flow.js`。
 
 ## 流程总览
 ```
@@ -112,7 +112,7 @@
 - 缺「Customized Now」定制引导则自动补；描述缺 `</br>` 分段则按句拆分。
 
 ## ④ 上架文件（回填「亚马逊原始模板」xlsm —— 亚马逊只认原模板，新造表不认）
-- **最终上架文件 = 回填后的原始模板（保存为 `.xlsx`）**：`scripts/tmp_fill_xlsm.py` 从原始模板 `.xlsm` 读取 → 按 `Template` 表列(第4行 label 定位列，写第7行数据行) → 去掉宏、保存为 **`output/<id>/listing/listing_filled.xlsx`**。⚠️ 亚马逊**只接受 `.xlsx`（工作簿）或 `.txt/.tsv`，不接受 `.xlsm`（宏）**，故必须输出 `.xlsx`。
+- **最终上架文件 = 回填后的原始模板（保存为 `.xlsx`）**：`scripts/dev/py/tmp_fill_xlsm.py` 从原始模板 `.xlsm` 读取 → 按 `Template` 表列(第4行 label 定位列，写第7行数据行) → 去掉宏、保存为 **`output/<id>/listing/listing_filled.xlsx`**。⚠️ 亚马逊**只接受 `.xlsx`（工作簿）或 `.txt/.tsv`，不接受 `.xlsm`（宏）**，故必须输出 `.xlsx`。
 - 模板路径 = `config/listing.templatePath`（默认 `PAJAMAS_TOILET_SEAT (1).xlsm`；可用环境变量 `LISTING_TEMPLATE_PATH` 覆盖）。
 - **列不写死、按模板动态导出**（`ListingSheet.js` + `TemplateFields.js`）：读取模板 → 得到每列「列表签 + 底层 attribute + 必填状态」。**Product Id Type / Product Id（UPC/EAN）用户明确不需要，已从表格/缺失清单排除**。
 - **Product Type 取值 = 模板下拉合法值**（命名范围 `product_type1.value`，只读提取，见 `TemplateProductTypes.js`），按商品名自动匹配（睡衣→PAJAMAS、马桶盖→TOILET_SEAT）；此逻辑**固化进流程**。
@@ -178,8 +178,8 @@ node scripts/hi.js pricing:backfill [--ids 12664,...]                    # 一�
 - 前端按钮调 `GET /api/listing/translate?id=X`（有缓存直接返回，无则用智谱 glm-4 翻译并缓存）。
 
 ## 实现脚本
-- `scripts/run-listing-flow.js`：读取商品 → 关键词 → LLM 文案 → **回填原始模板(listing_filled.xlsx)** + record.json + check_report.json。
-- `scripts/tmp_fill_xlsm.py`：**回填亚马逊原始模板 → 输出 `.xlsx`**（从 `.xlsm` 读、去宏存 `.xlsx`；按第4行 label 定位列，写第7行数据行；产物 listing_filled.xlsx，可直接上传）。
+- `scripts/dev/flows/run-listing-flow.js`：读取商品 → 关键词 → LLM 文案 → **回填原始模板(listing_filled.xlsx)** + record.json + check_report.json。
+- `scripts/dev/py/tmp_fill_xlsm.py`：**回填亚马逊原始模板 → 输出 `.xlsx`**（从 `.xlsm` 读、去宏存 `.xlsx`；按第4行 label 定位列，写第7行数据行；产物 listing_filled.xlsx，可直接上传）。
 - `scripts/app/Support/ListingTable.js` + `scripts/app/Console/Commands/ListingTableCommand.js`：**`listing:table` 命令**——轻量读回填模板(仅Template表4/5/7行)的回填列(列号+列名+value)，serve/预览复用。
 - `scripts/app/Support/TemplateProductTypes.js`：只读提取模板 Product Type 下拉合法值 + 按商品名匹配（固化进流程）。
 - `scripts/app/Support/TemplateFields.js`：只读解析模板 → 每列「标签 + 底层 attribute + 必填状态」+ 可用的 product types。

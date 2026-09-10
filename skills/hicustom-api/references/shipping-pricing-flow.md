@@ -39,7 +39,7 @@ shipping:quote / shipping:backfill   （商家后台 cookie 鉴权）
 ## 三、⛔ 易错点（本次已踩坑，务必遵守）
 1. **英国国家码用 `UK`**：`GB` 会返回 1 条无效通道 → `selectChannel` 空抛错 / 结果为空。
 2. **改了代码/数据必须重启 `serve.js`**：8098 是常驻进程，模块会被缓存；不重启则 `/api/products.json` 返回旧结构（如 `spec.shipping` 缺失 → 详情页运费列显示 “—”）。
-   - 重启：`taskkill /PID <8098进程> /F` → `node scripts/tools/serve.js`。
+   - 重启：`taskkill /PID <8098进程> /F` → `node scripts/server/serve.js`。
 3. **详情页两个区块数据源不同，要分别有值**：
    - 「运费试算（各国·优选渠道）」← 读 `detail.profile.shipping`（rich 对象：每国 优选+备用渠道数组）。
    - 「规格表 运费 US/UK/CA/DE/MX/FR/ES/IT 列」← 读 `/api/products.json` 的**顶层 `specs[].shipping`**（金额对象，来自 CSV `shipping_*` 列）。
@@ -66,7 +66,7 @@ node scripts/hi.js shipping:backfill --ids 12664,12661,12660,12659,12658
 node scripts/hi.js shipping:backfill            # 全库
 node scripts/hi.js shipping:backfill --ids 12661 --dry-run   # 只看不写
 # cookie 抓取（登录态浏览器 → .env）
-node scripts/tools/get-merchant-cookie.js
+node scripts/dev/oneshot/get-merchant-cookie.js
 ```
 
 ### 前端「一键算价」按钮（product.html）
@@ -79,7 +79,7 @@ node scripts/tools/get-merchant-cookie.js
 - **cookie 过期**：serve.js 算价时若 cookie 失效，会**自动从已登录浏览器刷新** `.env` 的 `HICUSTOM_MERCHANT_COOKIE`（`MerchantCookie.refreshMerchantCookie`，CDP 抓取）并重试一次（本次未成功则返回错误，前端提示确认浏览器已登录 hicustom）。cookie 始终只在服务端，前端拿不到。
 
 ### 本地 serve.js 接口（端口 8098）
-`node scripts/tools/serve.js` 启动，托管 `output/` 并暴露：
+`node scripts/server/serve.js` 启动，托管 `output/` 并暴露：
 | 接口 | 说明 |
 |------|------|
 | `GET /api/products.json` | 读 `products.csv` → 商品列表（含 `specs[].shipping`、`detail.profile.shipping`），供前端渲染 |

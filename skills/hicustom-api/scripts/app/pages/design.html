@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Design · HICUSTOM 工作台</title>
+<style>
+  :root{--bg:#f2f3f5;--card:#fff;--line:#e3e6e6;--ink:#0f1111;--muted:#565959;--brand:#e8590c;--link:#007185}
+  *{box-sizing:border-box}
+  body{font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);margin:0;color:var(--ink)}
+  header{position:sticky;top:0;background:#131921;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:600}header a{color:#cbd5e1;text-decoration:none;font-size:13px}header a:hover{color:#fff}
+  .wrap{max-width:1240px;margin:0 auto;padding:20px;display:grid;grid-template-columns:380px 1fr;gap:18px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:18px;min-width:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h2{font-size:14px;margin:0 0 10px;color:var(--muted)}
+  .prod{display:flex;gap:12px}
+  .prod img{width:104px;height:104px;object-fit:contain;border:1px solid var(--line);border-radius:10px;background:#fff}
+  .kv{font-size:13px;line-height:1.7;min-width:0}
+  .kv b{font-weight:600}
+  .preview{display:flex;align-items:center;justify-content:center;min-height:300px;border:1px dashed var(--line);border-radius:12px;background:#fafafa;overflow:hidden}
+  .preview img{max-width:100%;max-height:440px;display:block;border-radius:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;max-height:340px;overflow:auto;padding:2px}
+  .pitem{border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center}
+  .pitem img{width:100%;height:100%;object-fit:cover}
+  .pitem.sel{border-color:var(--brand);box-shadow:0 0 0 2px rgba(232,89,12,.15)}
+  .pname{font-size:10px;color:var(--muted);text-align:center;margin-top:3px;word-break:break-all;line-height:1.2}
+  textarea{width:100%;min-height:320px;height:320px;font:inherit;line-height:1.5;padding:12px;border:1px solid var(--line);border-radius:10px;resize:vertical}
+  button{font:inherit;padding:8px 14px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button:hover{border-color:var(--brand)}
+  button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  pre{background:#0f172a;color:#cbd5e1;border-radius:8px;padding:10px;font-size:11px;max-height:160px;overflow:auto;white-space:pre-wrap;margin:10px 0 0}
+  .muted{color:var(--muted);font-size:13px}.err{color:#b91c1c}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+  code{background:#f4f4f5;padding:1px 5px;border-radius:5px;font-size:12px;word-break:break-all}
+  @media(max-width:860px){ .wrap{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+  <h1>🎨 Design 流程</h1>
+  <a href="/">首页</a><a href="/manage.html">管理后台</a><a href="/listing-list.html">Listing 列表</a>
+</header>
+<div class="wrap">
+
+  <!-- 左栏：商品 + 预览 -->
+  <div class="col">
+    <div class="card prod" id="prod"><span class="muted">加载商品…</span></div>
+    <div class="card">
+      <h2>当前图案</h2>
+      <div class="preview"><img id="cur" alt="未选择" style="display:none"/></div>
+      <div id="curinfo" class="muted" style="margin-top:10px">尚未选择图案。右侧选一张，或 AI 生成。</div>
+      <div class="row" style="margin:10px 0 0">
+        <button id="next-stamp" disabled>下一步：叠字（待接）</button>
+        <button id="next-wf" disabled>下一步：跑 Workflow（待接）</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右栏：选图 + AI 生成 -->
+  <div class="col">
+    <div class="card">
+      <h2>① 选择图案（patterns/ 图案库 + input/）</h2>
+      <div class="row"><button id="rpat">↻ 刷新图案库</button><span id="patcnt" class="muted"></span></div>
+      <div class="grid" id="patgrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>② 或用 AI 生成图案（提示词可改）</h2>
+      <div class="row"><span id="gsize" class="muted"></span></div>
+      <textarea id="prompt" placeholder="AI 提示词…"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="primary" id="gen">🤖 生成图案</button>
+        <button id="resetp">↺ 用商品信息重置提示词</button>
+      </div>
+      <pre id="log" style="display:none"></pre>
+    </div>
+  </div>
+
+</div>
+<script>
+const $=(id)=>document.getElementById(id);
+const Q=new URLSearchParams(location.search); const ID=Q.get('id');
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let CUR=null, DEFAULT_PROMPT='';
+
+async function loadProduct(){
+  if(!ID){ $('prod').innerHTML='<span class="err">缺少 ?id=</span>'; return; }
+  try{
+    const j=await (await fetch('/api/blank-product?id='+encodeURIComponent(ID))).json();
+    if(!j.ok) throw new Error(j.err||'fail'); const p=j.product;
+    $('prod').innerHTML=`<img src="${esc(p.image)}" onerror="this.style.visibility='hidden'"/>
+      <div class="kv"><div style="font-size:16px;font-weight:700">${esc(p.cnName)}</div>
+      <div class="muted">${esc(p.enName)}</div>
+      <div><b>ID</b> ${esc(p.id)}</div>
+      <div><b>印刷区</b> ${(p.printAreas||[]).map(a=>esc(a.name)+' '+a.width+'×'+a.height).join(' / ')||'—'}</div>
+      <div><b>颜色</b> ${(p.colors||[]).join('/')||'—'} · <b>尺码</b> ${(p.sizes||[]).join('/')||'—'}</div>
+      <div><b>风格</b> ${esc((p.style&&p.style.recommend_style)||'')} ${esc((p.style&&p.style.theme_element)||'')}</div></div>`;
+  }catch(e){ $('prod').innerHTML='<span class="err">商品加载失败: '+esc(e.message)+'</span>'; }
+}
+async function loadPrompt(){
+  try{ const j=await (await fetch('/api/pattern/prompt?id='+encodeURIComponent(ID))).json(); if(!j.ok) throw new Error(j.err); DEFAULT_PROMPT=j.prompt; $('gsize').textContent='生成尺寸: '+j.size; $('prompt').value=j.prompt; }catch(e){ $('gsize').textContent='提示词加载失败: '+e.message; }
+}
+$('resetp').onclick=()=>{ $('prompt').value=DEFAULT_PROMPT; };
+
+async function loadPatterns(){
+  try{ const j=await (await fetch('/api/patterns')).json(); if(!j.ok) throw new Error(j.err);
+    $('patcnt').textContent='共 '+(j.items||[]).length+' 张';
+    $('patgrid').innerHTML=(j.items||[]).slice().reverse().map(x=>`<div><div class="pitem" data-url="${esc(x.url)}" onclick="pick(this)"><img src="${esc(x.url)}" loading="lazy" onerror="this.style.opacity=.2"/></div><div class="pname">${esc(x.name)}</div></div>`).join('') || '<span class="muted">图案库为空（放图到 patterns/，或 AI 生成）</span>';
+  }catch(e){ $('patcnt').textContent='加载失败: '+e.message; }
+}
+$('rpat').onclick=loadPatterns;
+window.pick=(el)=>{ document.querySelectorAll('.pitem.sel').forEach(n=>n.classList.remove('sel')); el.classList.add('sel'); setCur(el.getAttribute('data-url'),'选自图案库', false); };
+
+function setCur(url, from, alsoRefreshList){
+  CUR=url;
+  $('cur').style.display=''; $('cur').src=url;
+  $('curinfo').innerHTML='当前图案：<code>'+esc(url)+'</code> <span class="muted">（'+esc(from)+'）</span>';
+  $('next-stamp').disabled=false; $('next-wf').disabled=false;
+  if(alsoRefreshList) loadPatterns();               // 左栏刷新 + 图案库刷新（新生成的会出现在右侧列表）
+}
+
+let logLines=[];
+function showLog(s){ $('log').style.display=''; $('log').textContent=s; }
+$('gen').onclick=async()=>{
+  if(!ID){ alert('缺少商品 id'); return; }
+  $('gen').disabled=true; logLines=['提交中…']; showLog(logLines.join('\n'));
+  try{
+    const r=await fetch('/api/pattern/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productId:ID,prompt:$('prompt').value})});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err||'提交失败');
+    await pollJob(j.jobId);
+  }catch(e){ logLines.push('失败: '+e.message); showLog(logLines.join('\n')); } finally { $('gen').disabled=false; }
+};
+async function pollJob(id){
+  for(let i=0;i<160;i++){
+    const j=await (await fetch('/api/flow/status?id='+encodeURIComponent(id))).json();
+    if(!j.ok) throw new Error(j.err);
+    const job=j.job; showLog('状态: '+job.status+'\n'+(job.log||[]).join('\n'));
+    if(job.status==='done'){ setCur(job.result.url,'AI 生成', true); break; }   // ← 出图 → 左栏刷新显示
+    if(job.status==='error'){ logLines.push('出错: '+((job.result&&job.result.err)||'')); showLog(logLines.join('\n')); break; }
+    await new Promise(r=>setTimeout(r,1500));
+  }
+}
+$('next-stamp').onclick=()=>alert('叠字（design-area/stamp）将在下一阶段接上。\n当前图案: '+CUR);
+$('next-wf').onclick=()=>alert('Workflow 按钮将在下一阶段接上。\n当前图案: '+CUR);
+loadProduct(); loadPrompt(); loadPatterns();
+</script>
+</body>
+</html>

@@ -33,7 +33,10 @@ function loadConfig() {
     merchantCookie: process.env.HICUSTOM_MERCHANT_COOKIE || '',
     listing: cfg.listing || {},   // 上架流程用：templatePath 等
     databasePath: process.env.HICUSTOM_DATABASE || path.join(ROOT, 'database', 'products.csv'),
+    listingPath: process.env.HICUSTOM_LISTING_DB || path.join(ROOT, 'database', 'listing.csv'),
     editedDir: process.env.HICUSTOM_EDITED_DIR || path.join(ROOT, 'edited'),
+    typeSettingDir: process.env.HICUSTOM_TYPE_SETTING_DIR || path.join(ROOT, 'type-setting-images'),
+    pagesDir: process.env.HICUSTOM_PAGES_DIR || path.join(ROOT, 'scripts', 'app', 'pages'),
     zhipuApiKey: process.env.ZHIPU_API_KEY || '',
   };
 }

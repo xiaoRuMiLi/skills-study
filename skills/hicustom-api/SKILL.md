@@ -29,9 +29,12 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 | 要在前端嵌 hicustom 设计器（iframe + 事件） | `references/designer-sdk.md` |
 | 要管理/增删改查商品、看管理后台、扩数据库字段 | `references/database.md` |
 | 给商品图加"定制区"文字标记（独立流程） | `references/design-area.md` |
+| 要把设计**合成到空白产品**、拿**干净效果图**再叠宣传文字（成品展示图） | `references/design-area.md`（「变体流程」节） |
+| 给任意图案叠加**可配置文字**（N 行/颜色/字体/粗细/位置，config 驱动，本地零 API） | `references/stamp.md` |
 | 要算/回填物流运费（含 cookie 抓取、8 国口径、推荐渠道、写回 shipping_* 列） | `references/shipping-quote.md` |
 | 要按规范算运费+存档到 CSV/detail_json、查易错点、看提取范例 | `references/shipping-pricing-flow.md` |
 | 要生成亚马逊上架文案/关键词/填 xlsm/通用预览模板 | `references/listing-flow.md` |
+| 要搭/改**网页化流程**（首页/design/listing 页面、按钮触发、异步任务、共用 Flows） | `references/flows.md` |
 
 > 核心命令：`listing:generate --product-id <id> --images "图.jpg[:面]" [--dry-run]`
 > 图像步骤需 **sharp**（`scripts/tools/`，已装）；其余零第三方依赖。
@@ -71,7 +74,9 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 | `design:preview` | 定制产品自动合成 效果图预览 | `GET /api/v1/product-preview` |
 | `design:composite` | 定制产品**自动合成**（出完整展示图：颜色多场景） | `POST /api/v1/product` |
 | `listing:generate` | **一条龙**：抓详情→处理图→上传→合成→缓存 CSV+HTML | 见 `references/workflow.md` |
-| `design-area:generate` | **独立**：给商品图加"定制区"文字标记（YOUR DESIGN HERE 虚线框），存 edited/<id>/ | 见 `references/design-area.md` |
+| `design-area:generate` | **独立**：解析**排版样稿**（`type-setting-images/`，`--sample <名字\|auto>`）或**空白产品主图** + AI 文生图 → 用 `stamp` 叠定制区文字（无底/无描边），存 edited/<id>/ | 见 `references/design-area.md` |
+| `stamp` | **独立**：给图案叠加 **N 行可配置文字**（颜色/字体/粗细/垂直位置/水平对齐/文字块宽高比/按词换行/`--preset` 预设），本地零 API，存同目录 `<原名>_add_text.jpg` | 见 `references/stamp.md` |
+| `sample:list` | 列出排版样稿库 `type-setting-images/`（design-area `--sample` 用） | 本地 |
 | `db` | CSV**类数据库**增删改查 + 管理后台 | `list/get/add/update/delete/admin` |
 | `order:create` | 创建订单 | `POST /api/v1/order` |
 | `order:list` | 订单列表(近180天) | `GET /api/v1/orders` |
@@ -85,20 +90,51 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 | `listing:translate` | **上架文案→中文**（审阅用，`listing.html` 中文按钮/单独命令），写入 `translation.json`，**不改 record/xlsm** | 智谱 glm-4 翻译 |
 | `shipping:backfill` | **物流费规范·批量回填**：逐规格 × 8 国试算 → 写回 `products.csv` 的 `shipping_*` 列 + 详情页「运费试算（各国优选）」`profile.shipping` + 刷新后台 | 同 `shipping:quote`（见 `references/shipping-quote.md`） |
 
+## 合成图片（出干净效果图）+ 叠字
+
+> 场景：把设计图合成到「空白产品」上 → 得到**干净的产品效果图**（无 `YOUR DESIGN HERE` 占位）→ 再叠宣传/占位文字 → 产出**成品展示图**。
+>
+> ⚠️ **别直接拿空白产品的 `renderings_info` 当底**：那是带占位文字的版本，直接叠字会**重叠**；必须走 `design:composite` 拿干净效果图。
+
+```bash
+# ① 抓空白产品（拿印刷区尺寸 print_areas）
+node scripts/hi.js product:detail --id 11485
+
+# ② 设计图 sharp fit 到印刷区尺寸（如 2560x1772）；③ 上传图库 → 拿 gallery_code
+node scripts/hi.js gallery:upload --file design.jpg --cn-name demo --en-name demo
+
+# ④ 自动合成（占位被设计覆盖 → 出干净效果图 colors[].renderings[]）
+node scripts/hi.js design:composite --product-type-id 11485 \
+  --cfgs '[{"view_id":1,"gallery_code":"XXXXXX","width":2560,"height":1772,"top_x":0,"top_y":0}]'
+
+# ⑤ 下载主图（colors[0].renderings[0].big_img）→ effect_1.jpg
+# ⑥ 叠定制区/宣传文字（第一行粉、第二行黄；两行居中的堆叠由引擎处理）
+node scripts/stamp.js output/11485/images/effect_1.jpg \
+  "Custom Door Mat" "#FF6FB5" modern 700 居中 \
+  "Photo/Image/Text/Logo" "#FFE873" modern 700 居中
+```
+
+- ③④ 可整体用一条龙 `listing:generate --product-id <id> --images "设计图.jpg"` 代替（顺带缓存 CSV/HTML、自动归档原稿）。
+- 完整步骤、`cfgs` 语义与门垫实跑示例见 `references/design-area.md`「变体流程：以产品效果图为底」。
+
 ## 本地 HTTP 服务（serve.js，端口 8098）
-`node scripts/tools/serve.js` 启动，托管 `output/` 并暴露接口（`product.html` 靠它渲染）：
+`node scripts/server/serve.js` 启动，托管 **`output/`（数据）+ `scripts/app/pages/`（可复用页面）**：
+**`.html` 先查 `pages/`，未命中回退 `output/`**；`api/…`、`images/…`、`json/csv` 一律走 `output/`（**URL 不变**，故页面里的相对取数不受物理位置影响）。
+页面目录可用 `HICUSTOM_PAGES_DIR` 覆盖。并暴露接口（`product.html` 靠它渲染）：
 | 接口 | 说明 |
 |------|------|
 | `GET /api/products.json` | 读 `products.csv` → 商品列表（含 `specs[].shipping` 与 `detail.profile.shipping`），供 manage.html / product.html 前端渲染 |
 | `POST /api/shipping/calc` body `{id, commit}` | 前端「🧮 物流算价」：`commit=false` 试算预览（服务端缓存 PENDING，不写库）；`commit=true` 写入 CSV `shipping_*` + `profile.shipping` + 刷新 manage.html。cookie 只在服务端 |
-| cookie 自动刷新 | 算价时 cookie 失效 → serve 自动从已登录浏览器 CDP 抓新 cookie 写 `.env`（清 `process.env` 缓存）→ 重试一次。脚本：`scripts/app/Support/MerchantCookie.js`；手动：`node scripts/tools/get-merchant-cookie.js` |
-> ⚠️ 改动 serve.js / MerchantCookie / 数据后需**重启 serve.js**（`taskkill /PID <8098进程> /F` 再 `node scripts/tools/serve.js`）。
+| cookie 自动刷新 | 算价时 cookie 失效 → serve 自动从已登录浏览器 CDP 抓新 cookie 写 `.env`（清 `process.env` 缓存）→ 重试一次。脚本：`scripts/app/Support/MerchantCookie.js`；手动：`node scripts/dev/oneshot/get-merchant-cookie.js` |
+> ⚠️ 改动 serve.js / MerchantCookie / 数据后需**重启 serve.js**（`taskkill /PID <8098进程> /F` 再 `node scripts/server/serve.js`）。
 
 ## 文件夹 / 密钥
 - 密钥：`.env`（`HICUSTOM_APP_KEY`/`HICUSTOM_APP_SECRET`/`HICUSTOM_REFRESH_TOKEN`），只放本机。
 - `HICUSTOM_MERCHANT_COOKIE`：商家后台会话 cookie（运费试算 `shipping:quote` 用）。**注意**：开放平台无运费试算端点，该 endpoint 走 `www.hicustom.com` 商家后台、需 cookie；过期会报「会话过期」，需重新登录商家后台更新。「过期刷新 .env 即可」，秘钥勿明文外泄。
 - 输入图文件夹：`config/paths.input`（或 env `HICUSTOM_INPUT_DIR`，默认 `./input`）。
 - 输出图文件夹：`config/paths.output`（或 env `HICUSTOM_OUTPUT_DIR`，默认 `./output`），`gallery:batch` 的清单写这里。
+- **排版样稿**：`type-setting-images/`（design-area 解析排版用；文件名 = 商品名/类别，如 `衬衫.jpg`；env `HICUSTOM_TYPE_SETTING_DIR` 可改）。
+- **页面 vs 数据（分离）**：**HTML 页面一律放 `scripts/app/pages/`**（可复用，后续做成 **ERP 复用页**）；**`output/` 只放数据/图片**（`<id>/images`、`product.json/csv`、`database/products.csv`、`gallery-random`）。serve 按 URL 路由：`.html`→`pages/`，其它→`output/`（URL 不变）。env `HICUSTOM_PAGES_DIR` 可改。
 - `access_token` 缓存：`.hicustom/token.json`（自动有效期判断+刷新）。
 
 ## 鉴权（OAuth2）
@@ -111,35 +147,58 @@ node scripts/hi.js gallery:upload --file ./test-upload.png [--cn-name 徽章] [-
 ```
 scripts/
 ├── hi.js                    # 入口：bootstrap -> dispatch（artisan 式）
-├── server.js                # 设计器 SDK 回调服务器（供 HICUSTOM 调用）
-├── self-test.js             # 离线自测（mock fetch，全链路）
-├── self-test-sdk.js         # SDK 回调自测（sign + list/original）
-├── core/
+├── stamp.js                 # 独立入口：叠字（薄壳 → stamp 命令）
+├── core/                    # 内核
 │   ├── Container.js         # DI 容器 bind/singleton/make
 │   ├── Config.js            # 加载 config/hicustom.json + .env
 │   ├── ServiceProvider.js   # 服务提供者基类
 │   ├── Router.js            # 命令路由 + 参数解析(--kebab->camel)
 │   └── bootstrap.js         # 组装容器/Provider/Kernel 的引导
-└── app/
-    ├── Providers/AppServiceProvider.js
-    ├── Http/HttpClient.js
-    ├── Auth/TokenManager.js
-    ├── Services/            # Gallery/Product/Design/Order/Trade
-    ├── Sdk/DesignerCallback.js  # 设计器 SDK 回调（取图源/原图+签名）
-    ├── Support/             # ProductProfile/CsvReport/ListingRenderer
-    └── Console/Commands/    # 20+ 命令（含 design:composite / listing:generate）
-scripts/tools/               # 图像处理（sharp，见 package.json）→ image.js
+├── app/                     # 业务层
+│   ├── Providers/AppServiceProvider.js
+│   ├── Http/HttpClient.js
+│   ├── Auth/TokenManager.js
+│   ├── Services/            # Gallery/Product/Design/Order/Trade
+│   ├── Sdk/DesignerCallback.js  # 设计器 SDK 回调（取图源/原图+签名）
+│   ├── Support/             # ProductProfile/CsvReport/ListingRenderer/ContrastColor…
+│   ├── pages/               # ★ 可复用页面（product.html / listing.html / manage.html …）；.html 优先此目录
+│   └── Console/Commands/    # 20+ 命令（含 design:composite / listing:generate / stamp）
+├── server/                  # ★ 常驻服务：serve.js（本地页服务 8098）、server.js（设计器回调 8899）
+├── tools/                   # ★ 复用库 + sharp 锚点：image / watermark / csv / pick-color（+ node_modules/sharp）
+└── dev/                     # ★ 非生产（可随时清）
+    ├── tests/               # self-test.js / self-test-sdk.js
+    ├── flows/               # run-listing-flow.js / run-trump-design.js
+    ├── oneshot/             # _build_view / _probe_prompt / make-compare / refresh-product / regen-detail / build-pj / find-complex-product / get-merchant-cookie
+    ├── py/                  # tmp_check_xlsm.py / tmp_fill_xlsm.py
+    └── _view_server.js      # 旧版静态查看服务（8099）
 config/hicustom.json         # baseUrl + endpoints 映射
 references/                  # workflow / schema / csv / html / designer-sdk 说明
 .env.example                 # 密钥模板
 ```
 
-## 设计器 SDK 回调（scripts/server.js）
+## 代码组织约定（加新功能"去哪"）★
+**原则：按"职责"分层，生产链路只依赖 `core/ app/ tools/ server/`；`dev/` 可随时清。**
+
+| 要加的东西 | 放哪 | 做法 |
+|---|---|---|
+| 新业务域/接口 | `app/` | 加 `Services/<X>Service.js`（语义）+ `Console/Commands/<X>Command.js`（命令）+ `Providers/AppServiceProvider` 绑一行 + `Router/bootstrap` 注册；**核心 Container/Http/Token 零改动**（开闭原则） |
+| 新页面（复用） | `app/pages/` | 通用模板放 `pages/` 根；`<id>` 级页面放 `pages/<id>/`；取数一律用 **URL 相对/绝对路径**（`api/…`、`./<id>/images/…`），不写物理路径 |
+| 复用工具/库 | `tools/` | `image / watermark / csv / pick-color`…；**`tools/node_modules/sharp` 是依赖锚点**（app 按固定相对路径引用），勿随意搬 |
+| 常驻服务 | `server/` | `serve.js`（本地页服务 8098）、`server.js`（设计器回调 8899） |
+| 一次性脚本/实验/测试 | `dev/` | `dev/tests`（自测）、`dev/flows`（流程原型）、`dev/oneshot`（一次性）、`dev/py`（python）——**随便堆，不进生产** |
+| 配置 | `config/` | `hicustom.json` / `pricing.json` / `stamp.json`；密钥只进 `.env` |
+| 数据/产物 | `input/ edited/ output/` | **`output/` 只放数据/图片**（`<id>/images`、`product.json/csv`、`database`、`gallery-random`），**不放 HTML** |
+| 排版样稿 | `type-setting-images/` | 文件名 = 商品名/类别 |
+| 文档 | `references/` | 每个流程一篇；在 SKILL.md 的 References 表登记 |
+
+> 一句话：**业务进 `app/`，页面进 `app/pages/`，库进 `tools/`，服务进 `server/`，实验进 `dev/`，数据进 `output/`。**
+
+## 设计器 SDK 回调（scripts/server/server.js）
 HICUSTOM 定制设计器在「取图」「保存设计」时**回调你提供的服务器**：
 - `GET /gallery/list` — 自定义图库（设计器取图源；图源 = `config/paths.input` 图片，本服务器 `/files/<name>` 提供）。
 - `GET /gallery/original?ids=A,B&timestamp=..&sign=..` — 原图地址（保存设计时 HICUSTOM 拉原图），**hmacsha256 验签**（app_secret）。
 - 在 HICUSTOM 设计器 iframe 加 `customer_gallery_list` / `customer_gallery_map` 参数即可接入。
-- 运行：`node scripts/server.js`（默认 `http://127.0.0.1:8899`；`HICUSTOM_CALLBACK_PORT`/`HICUSTOM_CALLBACK_BASE_URL` 可改）。
+- 运行：`node scripts/server/server.js`（默认 `http://127.0.0.1:8899`；`HICUSTOM_CALLBACK_PORT`/`HICUSTOM_CALLBACK_BASE_URL` 可改）。
 
 ## 扩展新接口（开闭原则）
 1. `config/hicustom.json` 加 endpoint 路径。
