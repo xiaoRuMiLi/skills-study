@@ -9,6 +9,8 @@
 |---|---|---|
 | 首页 | `app/pages/index.html` | 指纹**上新空白商品**卡片 + 入口（manage / listing）|
 | design | `app/pages/design.html?id=<id>` | 选图案 / **AI 生成**（提示词可改）→ 产出图案 → 继续叠字/workflow |
+| 叠字 | `app/pages/stamp.html?id=<id>&src=<图URL>` | **可视化叠字**：左实时预览 + 右参数（N 行/颜色/字体/粗细/位置/字号/对齐 + 块占比 + 衬底）；🎨自动配色、📐解析排版样稿、💾保存（见 `stamp.md`）|
+| Workflow | `app/pages/workflow.html?id=<id>&image=<成品URL>` | **异步跑 workflow**：选成品(缩略图) → 入队 → **串行执行**（5 步进度/日志/结果），可**排队多个**、可**取消排队**；dry-run 开关（见 `workflow.md`「网页化」）|
 | listing 列表 | `app/pages/listing-list.html` | 跑过 listing 流程的商品列表（ID/商品/标题/图/时间/状态/预览）|
 | listing 预览 | `app/pages/listing.html?id=<id>` | （已有）上架预览，复用 |
 | 管理后台 | `app/pages/manage.html` | （已有）CSV 数据库后台 |
@@ -22,7 +24,10 @@ serve 路由：`.html` → `pages/` 优先，数据 → `output/`；URL 不变�
 | `GET /api/patterns` | 图案图源候选（`patterns/` + `input/**`）|
 | `POST /api/pattern/generate {productId, prompt?}` | AI 生成图案（`glm-image`；默认提示词 = 由商品信息合成 `buildImagePrompt`，可覆盖；尺寸按印刷区比例 + 去水印）→ 异步任务 |
 | `GET /api/listing/list` | listing 列表（读新表 `database/listing.csv`）|
-| `POST /api/flow/run {flow,params}` / `GET /api/flow/status?id=` | 通用异步任务（workflow / design-area / listing-flow…）|
+| `POST /api/flow/run {flow,params}` | 入队异步任务（`flow:'workflow'`，params `{productId,images,fit,dryRun}`）→ `{jobId}` |
+| `GET /api/flow/list[?flow=]` | 任务列表（页面多任务）；`GET /api/flow/status?id=` 单任务 |
+| `POST /api/flow/cancel {id}` | 取消「排队中」的任务 |
+| `GET /api/edited/list?id=` | 该商品 `edited/<id>/` 的**成品**列表（名/URL/时间，最新在前）|
 
 ## 异步任务模型
 ```json
@@ -50,7 +55,7 @@ serve 路由：`.html` → `pages/` 优先，数据 → `output/`；URL 不变�
 1. ✅ **首页 + `/api/blank-products`（+ `/api/blank-product`）**，serve 绑 `127.0.0.1`
 2. ✅ **listing 表 `database/listing.csv` + `ListingRepository` + `/api/listing/list` + `pages/listing-list.html`**（`run-listing-flow` 已写入该表）
 3. ✅ **design 页**（`/api/patterns` 选图 + `/api/pattern/generate` AI 生成（异步）+ `/api/flow/status`；`/input`、`/patterns` 直通）
-4. ⬜ **接「叠字 / 跑 Workflow」按钮**（把 `design-area` 与 `listing:generate` 抽成 `app/Flows/*`，加 `POST /api/flow/run`）
+4. ✅ **design 页「下一步」**：「叠字」→ `stamp.html`（见 `stamp.md`）；「跑 Workflow」→ `workflow.html`（异步队列，见 `workflow.md`「网页化」节）。**编排层**已抽出 `app/Flows/WorkflowFlow.js`（命令 `listing:generate` 与网页**共用**）。
 
 > 已落地文件：`app/pages/{index,design,listing-list}.html`、`app/Support/{ListingRepository,JobStore}.js`、`app/Services/PatternService.js`、`patterns/`（图案库）、`server/serve.js`（+接口，绑本机）。
 

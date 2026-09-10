@@ -1,0 +1,61 @@
+{
+  "id": "workflow_12666_1789054168104",
+  "flow": "workflow",
+  "params": {
+    "productId": "12666",
+    "images": "/edited/12666/pattern-2026-09-10T12-30-38-287Z.clean_add_text.jpg",
+    "dryRun": false,
+    "allColors": false
+  },
+  "status": "done",
+  "steps": [
+    {
+      "name": "抓产品详情",
+      "status": "done"
+    },
+    {
+      "name": "处理图片",
+      "status": "done"
+    },
+    {
+      "name": "上传图库",
+      "status": "done"
+    },
+    {
+      "name": "合成定制产品",
+      "status": "done"
+    },
+    {
+      "name": "缓存/入库",
+      "status": "done"
+    }
+  ],
+  "log": [
+    "[23:29:28] 已入队（排队中）",
+    "[23:29:30] 产品 12666 12in拉链工具袋",
+    "[23:29:30] ✅ 处理图片 → design-all.jpg (1317x645, cover)",
+    "[23:29:30] 🗂️ 图案原稿已归档: output\\12666\\原稿 (pattern-2026-09-10T12-30-38-287Z.clean_add_text.jpg)",
+    "[23:29:31] ✅ 上传图库 → FZN6S4",
+    "[23:29:31] 合成 cfgs: [{\"view_id\":1,\"gallery_code\":\"FZN6S4\",\"width\":1317,\"height\":645,\"top_x\":0,\"top_y\":0},{\"view_id\":2,\"gallery_code\":\"FZN6S4\",\"width\":1317,\"height\":645,\"top_x\":0,\"top_y\":0}]",
+    "[23:29:39] ✅ 合成成功 定制产品: DL56TWX5 | 颜色 1（只取主色） | 效果图 URL 7 个（不下载本地）",
+    "[23:29:39] 🔗 效果图 URL 已记录 7 个（主图取第 1 个）",
+    "[23:29:49] ✅ 已缓存到 output\\12666",
+    "[23:29:49] 📊 管理后台已刷新",
+    "[23:29:49] ✅ 完成"
+  ],
+  "result": {
+    "productId": "12666",
+    "dryRun": false,
+    "cnName": "12in拉链工具袋",
+    "compositeProductCode": "DL56TWX5",
+    "effectImageCount": 7,
+    "galleryCodes": [
+      "FZN6S4"
+    ],
+    "specRows": 1,
+    "productUrl": "/product.html?id=12666",
+    "adminUrl": "/manage.html"
+  },
+  "t0": "2026-09-10T15:29:28.104Z",
+  "t1": "2026-09-10T15:29:49.481Z"
+}

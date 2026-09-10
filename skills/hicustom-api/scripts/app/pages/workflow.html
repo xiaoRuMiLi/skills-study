@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Workflow · HICUSTOM 工作台</title>
+<style>
+  :root{--bg:#f2f3f5;--card:#fff;--line:#e3e6e6;--ink:#0f1111;--muted:#565959;--brand:#e8590c;--link:#007185;--ok:#128a3f;--err:#b91c1c}
+  *{box-sizing:border-box}
+  body{font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);margin:0;color:var(--ink)}
+  header{position:sticky;top:0;background:#131921;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:600}header a{color:#cbd5e1;text-decoration:none;font-size:13px}header a:hover{color:#fff}
+  .wrap{max-width:1240px;margin:0 auto;padding:20px;display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h2{font-size:14px;margin:0 0 10px;color:var(--muted)}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  label{font-size:12px;color:var(--muted)}
+  input[type=text],select{font:inherit;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  button{font:inherit;padding:7px 13px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button:hover{border-color:var(--brand)}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;max-height:260px;overflow:auto;padding:2px}
+  .pitem{border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;background:#fff;position:relative}
+  .pitem img{width:100%;height:110px;object-fit:contain;background:#fafafa;display:block}
+  .pitem .nm{font-size:10px;color:var(--muted);padding:3px 5px;word-break:break-all;line-height:1.2}
+  .pitem.sel{border-color:var(--brand);box-shadow:0 0 0 2px rgba(232,89,12,.15)}
+  .job{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fcfcfd}
+  .badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:20px;border:1px solid var(--line)}
+  .b-queued{background:#fff7e6;border-color:#ffd591;color:#ad6800}
+  .b-running{background:#e6f4ff;border-color:#91caff;color:#0958d9}
+  .b-done{background:#e8fff3;border-color:#b7eb8f;color:#128a3f}
+  .b-error{background:#fff1f0;border-color:#ffa39e;color:#b91c1c}
+  .steps{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+  .step{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--line);color:var(--muted);background:#fff}
+  .step.running{border-color:#91caff;color:#0958d9;background:#e6f4ff}
+  .step.done{border-color:#b7eb8f;color:#128a3f;background:#e8fff3}
+  pre{background:#0f172a;color:#cbd5e1;border-radius:8px;padding:8px;font-size:11px;max-height:150px;overflow:auto;white-space:pre-wrap;margin:8px 0 0}
+  code{background:#f4f4f5;padding:1px 5px;border-radius:5px;font-size:12px;word-break:break-all}
+  .muted{color:var(--muted);font-size:12px}.err{color:var(--err)}
+  @media(max-width:800px){ .wrap{padding:12px} }
+</style>
+</head>
+<body>
+<header>
+  <h1>▶️ Workflow 工作台 <span style="font-size:11px;opacity:.55;font-weight:400">v2</span></h1>
+  <a href="/">首页</a><a href="/manage.html">管理后台</a><a href="/listing-list.html">Listing 列表</a>
+</header>
+<div class="wrap">
+
+  <div class="card">
+    <h2>新建任务（异步：入队后你可以去做别的，回来再看）</h2>
+    <div class="row">
+      <label>商品ID</label><input type="text" id="pid" placeholder="空白产品 id，如 12666" style="width:140px"/>
+      <button id="loaditems">🔄 加载成品</button>
+      <label>fit</label>
+      <select id="fit"><option value="cover">cover（居中裁切填满）</option><option value="contain">contain（完整留白）</option></select>
+      <label><input type="checkbox" id="dry"/> dry-run（试跑：不上传/不合成）</label>
+      <label><input type="checkbox" id="allcolors"/> 全部颜色（默认只主色）</label>
+      <button class="primary" id="start">▶️ 开始（入队）</button>
+    </div>
+    <div class="muted" id="selinfo">未选择成品。</div>
+    <div class="grid" id="items" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <h2 style="margin:0">任务列表 <span class="muted" id="jobstat"></span></h2>
+      <span class="row" style="margin:0">
+        <label><input type="checkbox" id="showdone"/> 显示已完成/失败</label>
+        <button id="clear">🗑 清理已完成/失败</button>
+      </span>
+    </div>
+    <div id="jobs"></div>
+  </div>
+</div>
+
+<script>
+const $=(id)=>document.getElementById(id);
+const Q=new URLSearchParams(location.search);
+const STEPS=['抓产品详情','处理图片','上传图库','合成定制产品','缓存/入库'];
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const S={ id:Q.get('id')||'', sel:Q.get('image')||'', items:[] };
+
+$('pid').value=S.id;
+if(S.id) setTimeout(()=>loadItems(), 100);
+
+async function loadItems(){
+  const id=$('pid').value.trim(); S.id=id;
+  if(!id){ $('selinfo').textContent='先填商品ID。'; return; }
+  $('selinfo').textContent='加载成品中…';
+  try{
+    const j=await (await fetch('/api/edited/list?id='+encodeURIComponent(id))).json(); if(!j.ok) throw new Error(j.err);
+    S.items=j.items||[];
+    if(!S.sel && S.items.length) S.sel=S.items[0].url;    // 默认最新
+    renderItems();
+  }catch(e){ $('selinfo').className='err'; $('selinfo').textContent='加载失败: '+e.message; }
+}
+function renderItems(){
+  $('items').innerHTML=S.items.length? S.items.map(x=>`
+    <div class="pitem ${x.url===S.sel?'sel':''}" data-url="${esc(x.url)}" onclick="pick(this)">
+      <img src="${esc(x.url)}" loading="lazy" onerror="this.style.opacity=.2"/><div class="nm">${esc(x.name)}</div>
+    </div>`).join('') : '<span class="muted">该商品暂无成品（先在叠字页「保存到成品」）。</span>';
+  const it=S.items.find(x=>x.url===S.sel);
+  $('selinfo').className='muted';
+  $('selinfo').innerHTML = S.items.length ? ('已选成品：<code>'+esc(it?it.name:S.sel)+'</code>') : '';
+}
+window.pick=(el)=>{ document.querySelectorAll('.pitem.sel').forEach(n=>n.classList.remove('sel')); el.classList.add('sel'); S.sel=el.getAttribute('data-url'); renderItems(); };
+
+$('loaditems').onclick=loadItems;
+$('start').onclick=async()=>{
+  const id=$('pid').value.trim();
+  if(!id){ alert('请填商品ID'); return; }
+  if(!S.sel){ alert('请先「加载成品」并选择一张'); return; }
+  const b=$('start'); b.disabled=true; const o=b.textContent; b.textContent='入队中…';
+  try{
+    // images: 单图 → 应用到所有可设计面（无 :view）
+    const r=await fetch('/api/flow/run',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({flow:'workflow',params:{productId:id,images:S.sel,fit:$('fit').value,dryRun:$('dry').checked,allColors:$('allcolors').checked}})});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    await refresh();
+  }catch(e){ alert('入队失败: '+e.message); }
+  finally{ b.disabled=false; b.textContent=o; }
+};
+
+const STA={queued:['排队中','b-queued'],running:['运行中','b-running'],done:['完成','b-done'],error:['失败','b-error']};
+async function refresh(){
+  try{
+    const j=await (await fetch('/api/flow/list?flow=workflow')).json(); if(!j.ok) return;
+    const all=j.jobs||[];
+    const cnt=(st)=>all.filter(x=>x.status===st).length;
+    $('jobstat').textContent = all.length? ('运行 '+cnt('running')+' · 排队 '+cnt('queued')+' · 完成 '+cnt('done')+' · 失败 '+cnt('error')) : '';
+    const vis = $('showdone').checked ? all : all.filter(x=>x.status==='queued'||x.status==='running');
+    $('jobs').innerHTML = vis.length? vis.map(job=>{
+      const st=STA[job.status]||[job.status,''];
+      const steps=job.steps||[];
+      const stepHtml=STEPS.map(name=>{ const s=steps.find(x=>x.name===name); const cls=s?(s.status==='done'?'done':(s.status==='running'?'running':'')):''; return '<span class="step '+cls+'">'+esc(name)+'</span>'; }).join('');
+      const p=job.params||{};
+      const img=p.images||'';
+      let res='';
+      if(job.status==='done'&&job.result){ const R=job.result;
+        res='<div class="muted" style="margin-top:6px">定制产品码 <code>'+esc(R.compositeProductCode||'—')+'</code> · 效果图 '+esc(R.effectImageCount||0)+' 张 · 入库规格 '+esc(R.specRows||0)+' · <a href="'+esc(R.productUrl||'#')+'" target="_blank">product.html</a> · <a href="'+esc(R.adminUrl||'#')+'" target="_blank">管理后台</a></div>'; }
+      if(job.status==='error'){ res='<div class="err" style="margin-top:6px">'+esc((job.result&&job.result.err)||'出错')+'</div>'; }
+      const cancel = job.status==='queued' ? '<button data-cancel="'+esc(job.id)+'">✖ 取消</button>' : '';
+      const lg=(job.log||[]).slice(-8).join('\n');
+      return '<div class="job"><div class="row" style="justify-content:space-between;margin-bottom:6px">'
+        +'<span><b>#'+esc(p.productId||'')+'</b> · '+esc((img||'').split('/').pop()||'')+' <span class="badge '+st[1]+'">'+st[0]+'</span></span>'
+        +'<span>'+cancel+'</span></div>'
+        +'<div class="steps">'+stepHtml+'</div>'+res
+        +(lg?'<pre>'+esc(lg)+'</pre>':'')
+        +'</div>';
+    }).join('') : '<span class="muted">暂无进行中任务（勾选「显示已完成/失败」可看历史）。</span>';
+  }catch(e){}
+}
+$('jobs').addEventListener('click',(e)=>{ const b=e.target.closest&&e.target.closest('[data-cancel]'); if(!b) return;
+  fetch('/api/flow/cancel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.getAttribute('data-cancel')})}).then(()=>refresh()); });
+
+$('showdone').addEventListener('change', refresh);
+$('clear').onclick=async()=>{
+  if(!confirm('清理所有「已完成/失败」的 workflow 任务？（不影响排队/运行中的）')) return;
+  try{ await fetch('/api/flow/clear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({flow:'workflow'})}); }catch(e){}
+  refresh();
+};
+refresh();
+setInterval(refresh, 2000);
+</script>
+<script src="/ai-edit.js"></script>
+</body>
+</html>

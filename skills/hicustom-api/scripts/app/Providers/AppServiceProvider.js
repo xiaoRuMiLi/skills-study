@@ -17,6 +17,9 @@ const { ProductRepository } = require('../Support/ProductRepository');
 const { ZhipuService } = require('../Services/ZhipuService');
 const { ZhipuClient } = require('../Services/ZhipuClient');
 const { PatternService } = require('../Services/PatternService');
+const { AiAssistService } = require('../Services/AiAssistService');
+const { StampStudioService } = require('../Services/StampStudioService');
+const { FlowRunner } = require('../Support/FlowRunner');
 
 class AppServiceProvider extends ServiceProvider {
   register(app) {
@@ -41,6 +44,12 @@ class AppServiceProvider extends ServiceProvider {
     app.singleton('zhipu', (a) => new ZhipuService(a.make('config')));
     // 图案生成（AI 文生图 → 去水印 → input/<id>/）
     app.singleton('pattern', (a) => new PatternService(a.make('config'), a.make('product'), a.make('zhipu')));
+    // 页面「唤起 AI 协作」的统一网关（type→handler；今天走本机 LLM，将来可转 OpenClaw agent）
+    app.singleton('aiAssist', (a) => new AiAssistService(a));
+    // 叠字工作台（本地渲染 + 自动配色 + 源图解析）
+    app.singleton('stampStudio', (a) => new StampStudioService(a.make('config')));
+    // 流程队列（异步跑 workflow：串行、排队、可取消）
+    app.singleton('flowRunner', (a) => new FlowRunner(a));
     // 智谱统一客户端（文本/视觉/图像；模型名统一从 config.zhipu 读）—— 所有 LLM 调用的唯一入口
     app.singleton('zhipuClient', (a) => new ZhipuClient(a.make('config')));
   }

@@ -160,6 +160,7 @@ node scripts/hi.js design-area:generate --product-id 12583 --image "图案.jpg" 
 ### 智谱配置
 - `.env`：`ZHIPU_API_KEY=<在 open.bigmodel.cn 生成的 key>`（只放本机）。
 - 模型：文生图 `glm-image`；图片理解 `glm-4v`。
+- **尺寸约束（glm-image）**：宽高各 **512~2880**、**32 的整数倍**、总像素 **≤ 2²²**。`ZhipuService.pickSize(印刷区w,h)` 按比例自动算合法尺寸（长边 2048）；`generateImage` 发送前再用 `normalizeSize` 兜底。⚠️ 别再用 `1280x720 / 720x1280`（720 不是 32 的倍数，会报 "size…32整数倍" 错）。
 - ⚠️ **费用**：图片理解和文生图每次调用都计费，**非必要不要频繁调用**。
 
 ### 水印去除（强制，必须有）

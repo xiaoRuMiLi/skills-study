@@ -106,3 +106,33 @@ node scripts/stamp.js --preset            # 单用 = 列出全部预设
 - `scripts/app/Console/Commands/StampCommand.js`：命令装配（配置/路径/批量/对比页）。
 - `scripts/stamp.js`：独立入口薄壳。
 - 双行同「居中」时：第 1 行落中线之上、第 2 行落中线之下，堆叠不重叠。
+
+---
+
+## 网页叠字工作台（`app/pages/stamp.html` + serve 端点）
+
+> 把 `stamp` 做成**可视化、可调、实时预览**的网页步骤。从 design 页「下一步：叠字」进入：
+> `/stamp.html?id=<id>&src=<当前图URL>`。
+
+**页面**：左侧**预览**（**点「🔄 预览」才渲染**——改参不自动跑，避免频繁执行把服务跑卡），右侧参数面板。
+- **文字行**：默认 **2 行**（预填 `config/stamp.json` 默认值），可「+ 加一行 / − 删末行」（引擎支持 N 行）。每行：内容 / 颜色(色板) / **字体(16 别名下拉：modern·bold·elegant·serif·impact·narrow·rounded·verdana·century·garamond·script·comic·mono·hei·song·kai)** / 粗细 / **字号(数字 px，留空=自适应)** / 逐词堆叠(勾选) / 位置(上中下) / 对齐(左中右) / **自定义字体(字体族名；默认隐藏，点「✎ 手输字体」才展开，覆盖别名)**。
+- **文字块**：宽占比 / 高占比滑杆；**半透明衬底**开关（默认关）。
+- **预设**：下拉读 `config/stamp.json` 的 `presets`（内置 5 个：`sample`/`门垫`/`双行居中`/`上下分布`/`手写副行`，可自行加）→ 一键套用。
+- **排版样稿**：下拉选 `type-setting-images/` 里的样稿（`GET /api/stamp/samples`）**或**用文件选择器挑一张图片（走 base64 直传）。
+- **成品命名**：**固定**，按 design-area 规则 = 与**源图同名**（`<源图名>.jpg`）→ `edited/<id>/`，**不可改**。
+- **智能**：🎨 **自动配色**（本地 `ContrastColor`，取互异色）｜📐 **解析排版样稿**（glm-4v，**默认不解析**，点按钮才解析 → 填充字体/位置/对齐/字号/逐词）。
+- 改参后点「🔄 预览」渲染（有未预览改动时提示「● 有改动」）。
+- **💾 保存到成品**：写 `edited/<id>/<文件名>.jpg`，并归档原稿（加字前/后）。
+
+**后端**（`server/serve.js` + `app/Services/StampStudioService.js`；渲染/配色全本地零 API）：
+| 端点 | 说明 |
+|---|---|
+| `GET /api/stamp/config` | 默认值 + 预设 + 字体 + 别名（供页面预填） |
+| `GET /api/stamp/samples` | `type-setting-images/` 里的样稿名列表（去扩展名） |
+| `POST /api/stamp {id,src,lines,block,background,name?,save?}` | 渲染 → 预览图 URL（`/_stamp_preview/<哈希>.jpg`，幂等）；`save:true` 另存 `edited/<id>/` |
+| `POST /api/stamp/colors {src,n}` | 自动配色（本地） |
+| `POST /api/ai/run {type:'stamp.layout',payload:{productId,sample?\|sampleUrl?}}` | 解析排版（glm-4v，走统一 AI 网关）；`sample`=样稿名/auto，`sampleUrl`=指定图片(base64/URL) |
+
+- `src` 支持传 URL（`/input/…`、`/patterns/…`、`/edited/…`、`/<id>/…`）或绝对路径 → 服务端映射成物理文件。
+- `/edited/*` 已加入 serve 的「素材直通」。
+

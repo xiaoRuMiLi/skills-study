@@ -13,10 +13,11 @@ class ZhipuService {
   _auth() { return { 'Authorization': 'Bearer ' + this.key, 'Content-Type': 'application/json' }; }
   _hasKey() { return !!this.key; }
 
-  // 文生图。size: "1024x1024" | "720x1280" | "1280x720" | "768x1344" | "1344x768" 等
+  // 文生图。size 需满足智谱约束：512~2880、32 的整数倍、总像素 ≤ 2^22（见 normalizeSize）。
   async generateImage({ prompt, size = '1024x1024' }) {
     if (!this._hasKey()) throw new Error('未配置 ZHIPU_API_KEY（.env）。');
-    const r = await fetch(BASE + '/images/generations', { method: 'POST', headers: this._auth(), body: JSON.stringify({ model: 'glm-image', prompt, size }) });
+    const safe = ZhipuService.normalizeSize(size) || ZhipuService.pickSize(1024, 1024); // 兜底：发前规整成合法尺寸
+    const r = await fetch(BASE + '/images/generations', { method: 'POST', headers: this._auth(), body: JSON.stringify({ model: 'glm-image', prompt, size: safe }) });
     const j = await r.json();
     if (!r.ok || j.error) throw new Error('智谱文生图失败: ' + (j.error && j.error.message || JSON.stringify(j).slice(0, 200)));
     return j.data && j.data[0] ? j.data[0] : null; // { url / b64_json }
@@ -40,17 +41,34 @@ class ZhipuService {
     return j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content;
   }
 
-  // 智谱支持的尺寸（w/h）。按宽高比挑最接近的一个。
-  static get SIZES() { return ['1024x1024', '1344x768', '768x1344', '1280x720', '720x1280', '1152x896', '896x1152']; }
+  /**
+   * 按「印刷区宽高比」计算**合法**的文生图尺寸。
+   * 智谱约束：宽高各 512~2880、32 的整数倍、总像素 ≤ 2^22。
+   * 做法：长边取 2048（保证 长边² = 2^22 ≤ 上限），短边按比例并规整到 32 的倍数。
+   */
   static pickSize(w, h) {
-    const a = (w || 1) / (h || 1);
-    let best = '1024x1024', bestD = Infinity;
-    for (const s of ZhipuService.SIZES) {
-      const [sw, sh] = s.split('x').map(Number);
-      const d = Math.abs(Math.log(a) - Math.log(sw / sh)); // 比率对数距离
-      if (d < bestD) { bestD = d; best = s; }
-    }
-    return best;
+    const ratio = (Number(w) || 1) / (Number(h) || 1) || 1;
+    const LIMIT = 2048, MIN = 512, STEP = 32;
+    const q = (v) => Math.max(MIN, Math.min(LIMIT, Math.round(v / STEP) * STEP));
+    const long = LIMIT;
+    const short = q(long / (ratio >= 1 ? ratio : 1 / ratio));
+    const W = ratio >= 1 ? long : short;
+    const H = ratio >= 1 ? short : long;
+    return W + 'x' + H;
+  }
+
+  /**
+   * 把任意 size 规整成合法值（512~2880、32 倍数、≤2^22）；非法（非 "WxH"）返回 null。
+   */
+  static normalizeSize(size) {
+    const m = String(size || '').match(/^(\d+)\s*x\s*(\d+)$/i);
+    if (!m) return null;
+    const MAX = (1 << 22);
+    let w = Math.round(Number(m[1]) / 32) * 32, h = Math.round(Number(m[2]) / 32) * 32;
+    w = Math.max(512, Math.min(2880, w)); h = Math.max(512, Math.min(2880, h));
+    while (w * h > MAX && w > 512 && h > 512) { w -= 32; h -= 32; } // 超像素则等比缩
+    if (w < 512 || h < 512 || w * h > MAX) return null;
+    return w + 'x' + h;
   }
 
   // 根据商品信息构造文生图提示词：生成【平面印花图案】本身（非商品实物），并带上商品属性与画布比例

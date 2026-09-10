@@ -79,3 +79,18 @@ node scripts/hi.js listing:generate --product-id 11243 --images "客户图.jpg" 
 ## 依赖
 - 图像处理需 **sharp**，已装入 `scripts/tools/node_modules`（见 `scripts/tools/package.json`）。
 - 其余零第三方依赖（原生 fetch）。
+
+---
+
+## 网页化：`workflow.html` + 异步队列
+
+> 把「跑 Workflow」做成网页：**选成品 → 入队 → 串行执行**（进度/日志/结果），可**排队多个**、可**取消**。
+> 入口：`http://127.0.0.1:8098/workflow.html?id=<id>&image=<成品URL>`（叠字页「▶️ 跑 Workflow」跳来）。
+
+- **编排层** `app/Flows/WorkflowFlow.js`：5 步，带 `onStep(name,status)` / `log(line)`；**命令 `listing:generate` 与网页共用同一套逻辑**。
+- **队列** `app/Support/FlowRunner.js`：进程内 **串行**（1 个在跑、其余排队）；状态存 `JobStore`（`output/jobs/*.json`）；**服务重启**时残留 `queued/running` 自动标「已中断」；`cancel(id)` 仅对「排队中」生效。
+- **端点**：`GET /api/edited/list?id=`（成品，最新在前）｜`POST /api/flow/run {flow:'workflow',params:{productId,images,fit,dryRun}}` → `{jobId}`｜`GET /api/flow/list?flow=workflow`｜`GET /api/flow/status?id=`｜`POST /api/flow/cancel {id}`。
+- **页面** `app/pages/workflow.html`：新建任务（商品ID + **成品缩略图选择器** + `fit` + `☐dry-run` + 开始）、**任务列表**（状态徽标 / 5 步进度 / 日志 / 结果 + 取消排队），每 2s 轮询（可离开页面、回来再看）。
+- **输入图**：`images` = 成品 URL（`/edited/<id>/xxx.jpg`）→ 会**合成/印到产品上**（叠字流程选的是 A：成品即设计图）。单图默认应用到所有可设计面（无 `:view`）。
+- **效果图（重要·勿乱下）**：`design:composite` 返回**所有颜色 × 所有视图**（如 T恤 10 色 × 13 视图 = **130 个 URL**）。本流程**默认只取「主色」`colors[0]` 的全部视图**（约 13 个），并且**只记录 URL、绝不下载到本地**——亚马逊上架用指纹 CDN URL 即可，下载 100+ 张只会压上游/占盘。要全部颜色：参数 `allColors:true`（网页勾「全部颜色」／CLI `--all-colors`）。
+- **结果**：定制产品码 / 效果图数 / 入库规格数 + `product.html` / `manage.html` 链接；`dry-run=true` → 状态 `draft`、跳过上传与合成。

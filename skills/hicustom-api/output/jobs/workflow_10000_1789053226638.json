@@ -1,0 +1,70 @@
+{
+  "id": "workflow_10000_1789053226638",
+  "flow": "workflow",
+  "params": {
+    "productId": "10000",
+    "images": "/edited/10000/%E9%9D%A22.clean_fitspec_add_text.jpg",
+    "fit": "cover",
+    "dryRun": false
+  },
+  "status": "done",
+  "steps": [
+    {
+      "name": "抓产品详情",
+      "status": "done"
+    },
+    {
+      "name": "处理图片",
+      "status": "done"
+    },
+    {
+      "name": "上传图库",
+      "status": "done"
+    },
+    {
+      "name": "合成定制产品",
+      "status": "done"
+    },
+    {
+      "name": "缓存/入库",
+      "status": "done"
+    }
+  ],
+  "log": [
+    "[23:13:46] 已入队（排队中）",
+    "[23:13:56] 产品 10000 男士纯棉圆领T恤",
+    "[23:13:56] ✅ 处理图片 → design-all.jpg (1182x1863, cover)",
+    "[23:13:56] 🗂️ 图案原稿已归档: output\\10000\\原稿 (面2.clean_fitspec_add_text.jpg)",
+    "[23:13:57] ✅ 上传图库 → KPG7D9",
+    "[23:13:58] 合成 cfgs: [{\"view_id\":1,\"gallery_code\":\"KPG7D9\",\"width\":1182,\"height\":1863,\"top_x\":0,\"top_y\":0}]",
+    "[23:14:22] ✅ 合成成功 定制产品: S2BCQFMX | 规格数 10 | 效果图 130 张",
+    "[23:14:51] 📥 黑色: 13 张 → images\\黑色",
+    "[23:15:19] 📥 碳色: 13 张 → images\\碳色",
+    "[23:15:48] 📥 白色: 13 张 → images\\白色",
+    "[23:16:16] 📥 红色: 13 张 → images\\红色",
+    "[23:16:44] 📥 蓝色: 13 张 → images\\蓝色",
+    "[23:17:11] 📥 藏青: 13 张 → images\\藏青",
+    "[23:17:39] 📥 沙色: 13 张 → images\\沙色",
+    "[23:18:21] 📥 军绿: 13 张 → images\\军绿",
+    "[23:18:49] 📥 栗色: 13 张 → images\\栗色",
+    "[23:19:17] 📥 灰色: 13 张 → images\\灰色",
+    "[23:19:18] ✅ 已缓存到 output\\10000",
+    "[23:19:18] 📊 管理后台已刷新",
+    "[23:19:18] ✅ 完成"
+  ],
+  "result": {
+    "productId": "10000",
+    "dryRun": false,
+    "cnName": "男士纯棉圆领T恤",
+    "compositeProductCode": "S2BCQFMX",
+    "effectImageCount": 130,
+    "galleryCodes": [
+      "KPG7D9"
+    ],
+    "specRows": 90,
+    "productUrl": "/product.html?id=10000",
+    "adminUrl": "/manage.html"
+  },
+  "t0": "2026-09-10T15:13:46.638Z",
+  "t1": "2026-09-10T15:19:18.944Z"
+}

@@ -51,11 +51,39 @@
 
   "presets": {
     "sample": {
-      "desc": "示例：主句大字按词换行 + 下方脚本副行",
+      "desc": "示例：主句大字按词堆叠 + 下方脚本副行",
       "block": { "widthRatio": 0.7, "heightRatio": 0.9 },
       "lines": [
-        { "text": "DESIGN YOUR CAR SHADE", "color": "#FF7A2E", "font": "bold", "weight": 800, "posV": "middle", "size": 0.16, "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "DESIGN YOUR CAR SHADE", "color": "#FF7A2E", "font": "bold", "weight": 800, "posV": "middle", "size": "wrap", "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } },
         { "text": "any text color image logo", "color": "#FFFFFF", "font": "script", "weight": 600, "posV": "middle", "size": "auto", "letterSpacing": 0, "outline": { "color": "#000000", "width": 0 } }
+      ]
+    },
+    "门垫": {
+      "desc": "Custom Door Mat 粉黄双行",
+      "lines": [
+        { "text": "Custom Door Mat", "color": "#FF6FB5", "font": "rounded", "weight": 700, "posV": "middle", "size": "auto", "letterSpacing": 0.04, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "Photo/Image/Text/Logo", "color": "#FFE873", "font": "modern", "weight": 700, "posV": "middle", "size": "auto", "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } }
+      ]
+    },
+    "双行居中": {
+      "desc": "主标题 + 副说明，都居中",
+      "lines": [
+        { "text": "CUSTOM DESIGN", "color": "#FFE873", "font": "bold", "weight": 800, "posV": "middle", "size": "auto", "letterSpacing": 0.05, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "Photo · Text · Logo", "color": "#9AD8FF", "font": "modern", "weight": 600, "posV": "middle", "size": "auto", "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } }
+      ]
+    },
+    "上下分布": {
+      "desc": "标题在上、说明在下",
+      "lines": [
+        { "text": "YOUR DESIGN HERE", "color": "#FFE873", "font": "bold", "weight": 800, "posV": "top", "size": "auto", "letterSpacing": 0.05, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "Any Color Text Logo Photo", "color": "#9AD8FF", "font": "modern", "weight": 600, "posV": "bottom", "size": "auto", "letterSpacing": 0.02, "outline": { "color": "#000000", "width": 0 } }
+      ]
+    },
+    "手写副行": {
+      "desc": "粗体主句 + 手写副行",
+      "lines": [
+        { "text": "MADE FOR YOU", "color": "#FFFFFF", "font": "bold", "weight": 800, "posV": "middle", "size": "auto", "letterSpacing": 0.06, "outline": { "color": "#000000", "width": 0 } },
+        { "text": "any color · any text", "color": "#FFD8A8", "font": "script", "weight": 600, "posV": "middle", "size": "auto", "letterSpacing": 0, "outline": { "color": "#000000", "width": 0 } }
       ]
     }
   },
@@ -65,7 +93,18 @@
     "bold": "Arial Black, Impact, sans-serif",
     "elegant": "Georgia, 'Times New Roman', serif",
     "script": "'Segoe Script', 'Brush Script MT', cursive",
-    "comic": "'Comic Sans MS', cursive"
+    "comic": "'Comic Sans MS', cursive",
+    "impact": "Impact, Haettenschweiler, sans-serif",
+    "narrow": "'Arial Narrow', Arial, sans-serif",
+    "serif": "'Times New Roman', Times, serif",
+    "verdana": "Verdana, Geneva, sans-serif",
+    "rounded": "'Trebuchet MS', Tahoma, sans-serif",
+    "century": "'Century Gothic', 'URW Gothic', sans-serif",
+    "garamond": "Garamond, 'Palatino Linotype', serif",
+    "mono": "Consolas, 'Courier New', monospace",
+    "hei": "'Microsoft YaHei', 'SimHei', sans-serif",
+    "song": "SimSun, 'Songti SC', serif",
+    "kai": "KaiTi, 'STKaiti', serif"
   },
 
   "posAlias": {

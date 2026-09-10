@@ -35,6 +35,7 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 | 要按规范算运费+存档到 CSV/detail_json、查易错点、看提取范例 | `references/shipping-pricing-flow.md` |
 | 要生成亚马逊上架文案/关键词/填 xlsm/通用预览模板 | `references/listing-flow.md` |
 | 要搭/改**网页化流程**（首页/design/listing 页面、按钮触发、异步任务、共用 Flows） | `references/flows.md` |
+| 页面要**唤起 AI 协作**（改提示词/出方案/问答…；统一网关 `/api/ai/run`，可升级转 OpenClaw agent） | `references/ai-bridge.md` |
 
 > 核心命令：`listing:generate --product-id <id> --images "图.jpg[:面]" [--dry-run]`
 > 图像步骤需 **sharp**（`scripts/tools/`，已装）；其余零第三方依赖。

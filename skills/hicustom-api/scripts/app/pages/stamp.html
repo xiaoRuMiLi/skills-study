@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stamp · HICUSTOM 工作台</title>
+<style>
+  :root{--bg:#f2f3f5;--card:#fff;--line:#e3e6e6;--ink:#0f1111;--muted:#565959;--brand:#e8590c;--link:#007185}
+  *{box-sizing:border-box}
+  body{font-family:"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);margin:0;color:var(--ink)}
+  header{position:sticky;top:0;background:#131921;color:#fff;padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:5}
+  header h1{font-size:16px;margin:0;font-weight:600}header a{color:#cbd5e1;text-decoration:none;font-size:13px}header a:hover{color:#fff}
+  .wrap{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px;align-items:start}
+  .col{display:flex;flex-direction:column;gap:18px;min-width:0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .card h2{font-size:14px;margin:0 0 10px;color:var(--muted)}
+  .preview{display:flex;align-items:center;justify-content:center;min-height:340px;border:1px dashed var(--line);border-radius:12px;background:#fafafa;overflow:hidden}
+  .preview img{max-width:100%;max-height:64vh;display:block;border-radius:8px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .field{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+  label{font-size:12px;color:var(--muted)}
+  input[type=text],input[type=number],select{font:inherit;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  input[type=number]{width:92px}
+  input[type=color]{width:38px;height:30px;padding:0;border:1px solid var(--line);border-radius:6px;background:#fff;cursor:pointer}
+  input[type=file]{font:inherit;font-size:12px;max-width:190px}
+  input[type=range]{width:150px}
+  button{font:inherit;padding:7px 13px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer}
+  button:hover{border-color:var(--brand)}
+  button.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  button.dirty{box-shadow:0 0 0 3px rgba(232,89,12,.25)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .linecard{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;background:#fcfcfd}
+  .lrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
+  .ltxt{flex:1;min-width:150px}
+  .muted{color:var(--muted);font-size:12px}.err{color:#b91c1c}
+  .dot{color:var(--brand);font-weight:700}
+  .togglefont{font-size:12px;color:var(--link);cursor:pointer;text-decoration:none}
+  .togglefont:hover{text-decoration:underline}
+  code{background:#f4f4f5;padding:1px 5px;border-radius:5px;font-size:12px;word-break:break-all}
+  @media(max-width:900px){ .wrap{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header>
+  <h1>✍️ 叠字工作台 <span id="ver" style="font-size:11px;opacity:.55;font-weight:400">v4</span></h1>
+  <a href="/">首页</a><a href="/manage.html">管理后台</a><a href="/listing-list.html">Listing 列表</a>
+</header>
+<div class="wrap">
+
+  <!-- 左：预览 -->
+  <div class="col">
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:10px">
+        <h2 style="margin:0">预览</h2>
+        <span><button class="primary" id="preview">🔄 预览</button> <span class="muted" id="dirty"></span></span>
+      </div>
+      <div class="preview"><img id="prev" alt="预览" style="display:none"/></div>
+      <div class="muted" id="pinfo" style="margin-top:10px">点「🔄 预览」渲染（改参数不会自动跑，避免频繁执行）。</div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <button class="primary" id="save">💾 保存到成品</button>
+        <button id="toworkflow">▶️ 跑 Workflow</button>
+        <span class="muted" id="savename"></span>
+      </div>
+      <div class="muted" id="sinfo"></div>
+    </div>
+  </div>
+
+  <!-- 右：参数 -->
+  <div class="col">
+    <div class="card">
+      <h2>文字行（默认 2 行，可增删）</h2>
+      <div id="lines"></div>
+      <div class="row"><button id="addline">+ 加一行</button><button id="delline">− 删末行</button></div>
+    </div>
+
+    <div class="card">
+      <h2>文字块 / 底</h2>
+      <div class="row"><span class="field"><label>宽占比</label><input type="range" id="bw" min="0.2" max="1" step="0.02"/><span class="muted" id="bwv"></span></span></div>
+      <div class="row"><span class="field"><label>高占比</label><input type="range" id="bh" min="0.2" max="1" step="0.02"/><span class="muted" id="bhv"></span></span></div>
+      <div class="row"><label><input type="checkbox" id="bg"/> 半透明衬底（默认关）</label></div>
+    </div>
+
+    <div class="card">
+      <h2>智能 / 预设</h2>
+      <div class="row">
+        <span class="field"><label>预设</label><select id="preset"><option value="">— 选择 —</option></select></span>
+        <button id="applypreset">套用预设</button>
+      </div>
+      <div class="row">
+        <span class="field"><label>排版样稿</label><select id="sample"><option value="auto">自动（按商品名挑样稿）</option></select></span>
+        <span class="field"><label>或选文件</label><input type="file" id="samplefile" accept="image/*"/></span>
+        <button id="clearsample">清除文件</button>
+      </div>
+      <div class="row">
+        <button id="autocolor">🎨 自动配色</button>
+        <button id="layout">📐 解析排版样稿</button>
+      </div>
+      <div class="muted" id="status"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/ai-edit.js"></script>
+<script>
+const $=(id)=>document.getElementById(id);
+const Q=new URLSearchParams(location.search);
+const ID=Q.get('id')||'';
+const SRC=Q.get('src')||'';
+const esc=(s)=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toHex=(c)=>/^#[0-9a-f]{6}$/i.test(String(c||''))?String(c):'#FFE873';
+
+const S={ id:ID, src:SRC, cfg:null, sampleFile:null, sampleFileName:'',
+  lines:[], block:{widthRatio:0.7,heightRatio:0.9,safeMargin:0.045}, background:{enabled:false} };
+
+const FONTS=[
+  ['modern','现代(无衬线)'],['bold','粗黑'],['elegant','优雅衬线'],['serif','衬线'],
+  ['impact','Impact 重磅'],['narrow','窄体'],['rounded','圆润'],['verdana','Verdana'],
+  ['century','几何'],['garamond','Garamond'],['script','手写'],['comic','卡通'],
+  ['mono','等宽'],['hei','黑体(中)'],['song','宋体(中)'],['kai','楷体(中)']
+];
+const WEIGHTS=[[300,'细'],[400,'常规'],[500,'中'],[600,'半粗'],[700,'粗'],[800,'特粗'],[900,'超粗']];
+const POSV=[['middle','居中'],['top','偏上'],['bottom','偏下']];
+const ALIGN=[['center','居中'],['left','左'],['right','右']];
+
+const opt=(list,cur)=>list.map(([v,t])=>`<option value="${v}"${String(cur)===String(v)?' selected':''}>${t}</option>`).join('');
+// 行状态：num=字号px(字符串，空=自适应)  wrap=逐词堆叠  fontFamily=自定义字体  font=别名
+function normLine(l){ l=l||{}; const raw=l.size; const wrap=raw==='wrap'; const num=(raw==null||raw==='auto'||raw==='wrap')?'':String(raw);
+  return { text:l.text||'', color:toHex(l.color), font:l.font||'bold', fontFamily:l.fontFamily||'', weight:l.weight||800, num, wrap, posV:l.posV||'middle', align:l.align||'center', letterSpacing:(l.letterSpacing!=null?l.letterSpacing:0.04), outline:l.outline||{color:'#000000',width:0} }; }
+function defLine(text,color){ return normLine({text,color:color||'#FFE873',font:'bold',weight:800,posV:'middle',align:'center',size:'auto',letterSpacing:0.04}); }
+
+function renderLines(){
+  $('lines').innerHTML = S.lines.map((l,i)=>`
+    <div class="linecard">
+      <div class="lrow"><b style="font-size:12px;min-width:40px">第${i+1}行</b>
+        <input class="ltxt" type="text" data-i="${i}" data-k="text" value="${esc(l.text)}" placeholder="文字内容"/></div>
+      <div class="lrow">
+        <span class="field"><label>颜色</label><input type="color" data-i="${i}" data-k="color" value="${toHex(l.color)}"/></span>
+        <span class="field"><label>字体</label><select data-i="${i}" data-k="font">${opt(FONTS,l.font)}</select><a class="togglefont" data-i="${i}" href="javascript:void(0)" title="手输字体族（可选）" style="opacity:${l.fontFamily?'1':'0.45'}">✎</a></span>
+        <span class="field"><label>粗细</label><select data-i="${i}" data-k="weight">${opt(WEIGHTS,l.weight)}</select></span>
+      </div>
+      <div class="lrow">
+        <span class="field"><label>字号(px)</label><input type="number" min="8" max="800" step="1" data-i="${i}" data-k="num" value="${esc(l.num)}" placeholder="自适应"/></span>
+        <span class="field"><label><input type="checkbox" data-i="${i}" data-k="wrap" ${l.wrap?'checked':''}/> 逐词堆叠</label></span>
+      </div>
+      <div class="lrow">
+        <span class="field"><label>位置</label><select data-i="${i}" data-k="posV">${opt(POSV,l.posV)}</select></span>
+        <span class="field"><label>对齐</label><select data-i="${i}" data-k="align">${opt(ALIGN,l.align)}</select></span>
+      </div>
+      <div class="lrow customrow" data-i="${i}" style="display:${l.fontFamily?'flex':'none'}">
+        <span class="field" style="flex:1;min-width:200px"><label>自定义字体族</label><input class="ltxt" type="text" data-i="${i}" data-k="fontFamily" value="${esc(l.fontFamily)}" placeholder="如 Roboto（覆盖上面的字体下拉）"/></span>
+      </div>
+    </div>`).join('');
+}
+
+function payload(save){
+  return { id:S.id, src:S.src, save:!!save,
+    lines:S.lines.map(l=>{ const fam=(l.fontFamily&&String(l.fontFamily).trim())?String(l.fontFamily).trim():(l.font||'bold');
+      const size = l.wrap ? 'wrap' : ((l.num!==''&&l.num!=null&&!isNaN(Number(l.num)))?Number(l.num):'auto');
+      return { text:l.text, color:l.color, font:fam, weight:Number(l.weight)||800, posV:l.posV, align:l.align, size, letterSpacing:Number(l.letterSpacing)||0.04, outline:l.outline||{color:'#000000',width:0} }; }),
+    block:{ widthRatio:Number(S.block.widthRatio), heightRatio:Number(S.block.heightRatio), safeMargin:Number(S.block.safeMargin)||0.045 },
+    background:{ enabled:!!S.background.enabled } };
+}
+
+// —— 改动标记：不再自动渲染 ——
+function markDirty(){ $('dirty').innerHTML='<span class="dot">●</span> 有改动，点「🔄 预览」'; $('preview').classList.add('dirty'); }
+function clearDirty(){ $('dirty').textContent=''; $('preview').classList.remove('dirty'); }
+
+$('lines').addEventListener('input', onChange);
+$('lines').addEventListener('change', onChange);
+function onChange(e){
+  const t=e.target, k=t.getAttribute('data-k'), i=t.getAttribute('data-i'); if(i==null||!k) return;
+  const L=S.lines[i];
+  if(k==='wrap') L.wrap=t.checked;
+  else if(k==='weight') L.weight=Number(t.value);
+  else L[k]=t.value;
+  markDirty();
+}
+// 手输字体：点了才显示（默认隐藏）
+$('lines').addEventListener('click',(e)=>{
+  const a=e.target.closest && e.target.closest('.togglefont'); if(!a) return;
+  const i=a.getAttribute('data-i'); const row=document.querySelector('.customrow[data-i="'+i+'"]'); if(!row) return;
+  const show=row.style.display==='none'; row.style.display=show?'flex':'none';
+  a.style.opacity=show?'1':'0.45';
+  a.title=show?'收起自定义字体族':'手输字体族（可选）';
+});
+
+function syncBlockUI(){ $('bw').value=S.block.widthRatio; $('bwv').textContent=Math.round(S.block.widthRatio*100)+'%'; $('bh').value=S.block.heightRatio; $('bhv').textContent=Math.round(S.block.heightRatio*100)+'%'; $('bg').checked=!!S.background.enabled; }
+$('bw').addEventListener('input',()=>{ S.block.widthRatio=Number($('bw').value); syncBlockUI(); markDirty(); });
+$('bh').addEventListener('input',()=>{ S.block.heightRatio=Number($('bh').value); syncBlockUI(); markDirty(); });
+$('bg').addEventListener('change',()=>{ S.background.enabled=$('bg').checked; markDirty(); });
+
+$('addline').onclick=()=>{ if(S.lines.length>=6) return; S.lines.push(defLine('','#9AD8FF')); renderLines(); markDirty(); };
+$('delline').onclick=()=>{ if(S.lines.length<=1) return; S.lines.pop(); renderLines(); markDirty(); };
+
+async function doRender(){
+  if(!S.src){ $('pinfo').className='err'; $('pinfo').textContent='未收到源图（请从 design 页的「下一步：叠字」进入）'; return; }
+  const b=$('preview'); b.disabled=true; const o=b.textContent; b.textContent='渲染中…';
+  try{
+    const r=await fetch('/api/stamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(false))});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    const img=$('prev'); img.style.display=''; img.src=j.url+'?t='+Date.now();
+    $('pinfo').className='muted';
+    $('pinfo').textContent='尺寸 '+j.meta.W+'×'+j.meta.H+(j.meta.dark?' · 深底':' · 浅底')+' · 字号 '+j.meta.lines.map(x=>x.fontSize).join('/');
+    clearDirty();
+  }catch(e){ $('pinfo').className='err'; $('pinfo').textContent='渲染失败: '+e.message; }
+  finally{ b.disabled=false; b.textContent=o; }
+}
+$('preview').onclick=doRender;
+
+// 🎨 自动配色（本地）
+$('autocolor').onclick=async()=>{
+  if(!S.src) return;
+  const b=$('autocolor'); b.disabled=true; const o=b.textContent; b.textContent='🎨 取色中…';
+  try{
+    const r=await fetch('/api/stamp/colors',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({src:S.src,n:S.lines.length})});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    S.lines=S.lines.map((l,i)=>Object.assign({},l,{color:j.colors[i]||l.color}));
+    renderLines(); doRender(); $('status').textContent='已自动配色: '+j.colors.join(' / ');
+  }catch(e){ $('status').textContent='配色失败: '+e.message; }
+  finally{ b.disabled=false; b.textContent=o; }
+};
+
+// 样稿文件
+$('samplefile').onchange=(e)=>{
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{ S.sampleFile=rd.result; S.sampleFileName=f.name; $('status').textContent='已选文件样稿: '+f.name; };
+  rd.readAsDataURL(f);
+};
+$('clearsample').onclick=()=>{ S.sampleFile=null; S.sampleFileName=''; $('samplefile').value=''; $('status').textContent='已清除文件样稿（将用下拉里的样稿）'; };
+
+// 📐 解析排版样稿（glm-4v，走统一网关；默认不解析，点按钮才解析）
+$('layout').onclick=async()=>{
+  const b=$('layout'); b.disabled=true; const o=b.textContent; b.textContent='📐 解析中…';
+  try{
+    const pay = S.sampleFile ? { productId:S.id, sampleUrl:S.sampleFile } : { productId:S.id, sample:$('sample').value||'auto' };
+    const r=await fetch('/api/ai/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'stamp.layout',payload:pay})});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    const L=j.result.layout||{}; const t=L.title||{}, sb=L.sub||{};
+    if(S.lines[0]) Object.assign(S.lines[0],{ font:t.font||S.lines[0].font, weight:t.weight||S.lines[0].weight, posV:t.posV||S.lines[0].posV, align:t.align||S.lines[0].align, letterSpacing:(t.letterSpacing!=null?t.letterSpacing:S.lines[0].letterSpacing), wrap:((L.titleLines||1)>=2) });
+    if(S.lines[1]) Object.assign(S.lines[1],{ font:sb.font||S.lines[1].font, weight:sb.weight||S.lines[1].weight, posV:sb.posV||S.lines[1].posV, align:sb.align||S.lines[1].align, letterSpacing:(sb.letterSpacing!=null?sb.letterSpacing:S.lines[1].letterSpacing) });
+    if(L.block){ if(L.block.widthRatio) S.block.widthRatio=L.block.widthRatio; if(L.block.heightRatio) S.block.heightRatio=L.block.heightRatio; }
+    if((L.titleLines||1)>=2) for(const l of S.lines) l.posV='middle';
+    renderLines(); syncBlockUI(); doRender();
+    $('status').textContent='已解析排版（'+j.result.source+'）';
+  }catch(e){ $('status').textContent='解析失败: '+e.message; }
+  finally{ b.disabled=false; b.textContent=o; }
+};
+
+// 预设
+$('applypreset').onclick=()=>{
+  const name=$('preset').value; if(!name||!S.cfg) return;
+  const p=(S.cfg.presets||{})[name]; if(!p) return;
+  if(Array.isArray(p.lines)&&p.lines.length) S.lines=p.lines.map(normLine);
+  if(p.block) S.block=Object.assign({},S.block,p.block);
+  if(p.background) S.background=Object.assign({},S.background,p.background);
+  renderLines(); syncBlockUI(); doRender(); $('status').textContent='已套用预设: '+name;
+};
+
+// 保存
+$('save').onclick=async()=>{
+  if(!S.src) return;
+  const b=$('save'); b.disabled=true; const o=b.textContent; b.textContent='💾 保存中…';
+  try{
+    const r=await fetch('/api/stamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(true))});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    $('sinfo').className='muted';
+    $('sinfo').innerHTML='✅ 已保存: <code>'+(j.saved&&j.saved.url||'')+'</code> <a href="'+(j.saved&&j.saved.url||'')+'" target="_blank">查看</a>';
+  }catch(e){ $('sinfo').className='err'; $('sinfo').textContent='保存失败: '+e.message; }
+  finally{ b.disabled=false; b.textContent=o; }
+};
+
+// ▶️ 跑 Workflow：先保存成品，再跳到 workflow 页（带上成品 URL）
+$('toworkflow').onclick=async()=>{
+  if(!S.src){ alert('未收到源图'); return; }
+  const b=$('toworkflow'); b.disabled=true; const o=b.textContent; b.textContent='保存中…';
+  try{
+    const r=await fetch('/api/stamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(true))});
+    const j=await r.json(); if(!j.ok) throw new Error(j.err);
+    location.href='/workflow.html?id='+encodeURIComponent(S.id)+'&image='+encodeURIComponent(j.saved.url);
+  }catch(e){ $('sinfo').className='err'; $('sinfo').textContent='跳转失败: '+e.message; b.disabled=false; b.textContent=o; }
+};
+
+// 初始化
+(async()=>{
+  // 成品命名（design-area 规则：与源图同名，固定不可改）
+  const srcBase=(()=>{ try{ return decodeURIComponent(SRC.split('?')[0].split('/').pop()||'').replace(/\.[^.]+$/,''); }catch(e){ return ''; } })();
+  $('savename').innerHTML='成品名（design-area 规则，固定）：<code>'+esc(srcBase||'(源图名)')+'_add_text.jpg</code> → edited/'+esc(ID||'misc')+'/';
+  // 配置（默认值/预设/字体）
+  try{
+    const c=await (await fetch('/api/stamp/config')).json();
+    if(c.ok){ S.cfg=c.config;
+      S.lines=(c.config.defaults.lines||[]).map(normLine);
+      S.block=Object.assign(S.block,c.config.defaults.block||{});
+      S.background=Object.assign(S.background,c.config.defaults.background||{});
+      const ps=c.config.presets||{};
+      $('preset').innerHTML='<option value="">— 选择 —</option>'+Object.keys(ps).map(k=>`<option value="${esc(k)}">${esc(k)}${ps[k].desc?' · '+esc(ps[k].desc):''}</option>`).join('');
+    }
+  }catch(e){}
+  // 排版样稿列表
+  try{
+    const s=await (await fetch('/api/stamp/samples')).json();
+    if(s.ok && s.samples && s.samples.length){
+      $('sample').innerHTML='<option value="auto">自动（按商品名挑样稿）</option>'+s.samples.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
+    }
+  }catch(e){}
+  if(!S.lines.length) S.lines=[defLine('YOUR DESIGN HERE','#FFE873'),defLine('Any Color Text Photo Logo','#9AD8FF')];
+  renderLines(); syncBlockUI(); doRender();
+})();
+</script>
+</body>
+</html>

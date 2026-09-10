@@ -234,4 +234,4 @@ class DesignAreaCommand {
     }
   }
 }
-module.exports = { DesignAreaCommand };
+module.exports = { DesignAreaCommand, UNDERSTAND_INSTRUCTION, parseLayout, toDataUrl };

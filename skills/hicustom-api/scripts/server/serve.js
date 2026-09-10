@@ -42,7 +42,7 @@ function resolveFile(p) {
   const norm = path.normalize(p || '');
   const isRoot = (p === '/' || p === '');
   const isDir = /\/$/.test(p || '');
-  const wantsPage = isRoot || isDir || /\.html$/i.test(p || '');
+  const wantsPage = isRoot || isDir || /\.(html|js|css)$/i.test(p || '');
   const roots = wantsPage ? [PAGES, ROOT] : [ROOT];
   for (const base of roots) {
     let f = isRoot ? path.join(base, 'index.html') : path.join(base, norm);
@@ -108,8 +108,8 @@ http.createServer((req, res) => {
     return;
   }
 
-  // 指纹「空白商品」列表（上新，**从最新往前翻**）：GET /api/blank-products?page=1&size=60
-  // 上游默认按 id 升序（旧→新），故第 1 页=最旧；这里把 page 映射到**倒数页**，page=1 即最新。
+  // 指纹「空白商品」列表（最新在前，倒序翻页；每页 size 条，默认 60，上限 100）
+  // 上游按 id 升序（旧→新）且无倒序参数，故这里从"最新"往前的窗口换算成上游升序区间，拉 1~2 页后反转。
   if (p === '/api/blank-products') {
     (async () => {
       try {
@@ -119,16 +119,43 @@ http.createServer((req, res) => {
         const first = await product.list({ page: 1, pageSize: size });
         if (first.status >= 400 || first.code !== 200) return json(res, 502, { ok: false, err: '上游失败 HTTP ' + first.status + ' ' + (first.msg || '') });
         const fd = first.data || {};
-        const lastPage = fd.last_page || 1;
-        const apiPage = Math.max(1, lastPage - (page - 1));
-        const r = (apiPage === 1) ? first : await product.list({ page: apiPage, pageSize: size });
-        if (r.status >= 400 || r.code !== 200) return json(res, 502, { ok: false, err: '上游失败 HTTP ' + r.status + ' ' + (r.msg || '') });
-        const list = (r.data && r.data.data) || [];
-        const items = list.map((it) => ({
-          id: it.id, cnName: it.cn_name || '', enName: it.en_name || '',
-          categories: (it.categories || []).map((c) => c.id),
-        })).sort((a, b) => Number(b.id) - Number(a.id));
-        return json(res, 200, { ok: true, page, lastPage, total: fd.total || 0, items });
+        const total = Number(fd.total || 0);
+        const per = Number(fd.per_page || size);
+        const lastPage = Math.max(1, Math.ceil(total / per));
+        let items = [];
+        // 最新在前：第 page 页 = 升序区间 [total-(page-1)*per-per, total-(page-1)*per-1]
+        let endIdx = total - (page - 1) * per - 1;
+        let startIdx = endIdx - per + 1;
+        if (endIdx >= 0 && total > 0) {
+          startIdx = Math.max(0, startIdx); endIdx = Math.min(total - 1, endIdx);
+          const pStart = Math.floor(startIdx / per) + 1;
+          const pEnd = Math.floor(endIdx / per) + 1;
+          let all = [];
+          for (let pg = pStart; pg <= pEnd; pg++) {
+            const r = (pg === 1) ? first : await product.list({ page: pg, pageSize: size });
+            if (r.status >= 400 || r.code !== 200) continue;
+            all = all.concat((r.data && r.data.data) || []);
+          }
+          const baseIdx = (pStart - 1) * per;
+          items = all.slice(startIdx - baseIdx, endIdx - baseIdx + 1).map((it) => ({
+            id: it.id, cnName: it.cn_name || '', enName: it.en_name || '',
+            categories: (it.categories || []).map((c) => c.id),
+          })).sort((a, b) => Number(b.id) - Number(a.id));
+        }
+        // 标注「已设计」：products.csv 里 is_custom=1 或 composite_product_code 非空
+        try {
+          const { ProductRepository } = require('../app/Support/ProductRepository');
+          const repo = new ProductRepository(getApp().make('config'));
+          const dm = {};
+          for (const r of repo.all()) {
+            const isD = String(r.is_custom) === '1' || (r.composite_product_code && String(r.composite_product_code).trim() !== '');
+            if (isD && dm[String(r.id)] == null) dm[String(r.id)] = { status: r.status || 'draft', compositeCode: r.composite_product_code || '' };
+          }
+          items = items.map((it) => dm[String(it.id)]
+            ? Object.assign({}, it, { designed: true, status: dm[String(it.id)].status, compositeCode: dm[String(it.id)].compositeCode })
+            : Object.assign({}, it, { designed: false }));
+        } catch (e) { /* 标注失败不影响列表 */ }
+        return json(res, 200, { ok: true, page, lastPage, total, size, items });
       } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
     })();
     return;
@@ -353,6 +380,153 @@ http.createServer((req, res) => {
     return;
   }
 
+  // 统一「AI 协作」网关：POST /api/ai/run { type, payload } → { ok, type, result }
+  //   页面任何需要「动脑」的地方（改提示词/出方案/问答…）都走这里；
+  //   今天网关用本机 LLM（glm-4），将来可把某些 type 转给 OpenClaw agent，接口不变。
+  if (p === '/api/ai/run' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      const type = body.type; if (!type) return json(res, 400, { ok: false, err: '缺少 type' });
+      try {
+        const assist = getApp().make('aiAssist');
+        const result = await assist.dispatch(type, body.payload || {});
+        return json(res, 200, { ok: true, type, result });
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 叠字工作台：默认配置（供页面预填）GET /api/stamp/config
+  if (p === '/api/stamp/config') {
+    try { return json(res, 200, { ok: true, config: getApp().make('stampStudio').getConfig() }); }
+    catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+  }
+
+  // 排版样稿列表：GET /api/stamp/samples → { samples:[名(去扩展名)] }
+  if (p === '/api/stamp/samples') {
+    try {
+      const { listSamples } = require('../app/Support/TypeSetting');
+      const files = listSamples(getApp().make('config').typeSettingDir);
+      return json(res, 200, { ok: true, samples: files.map((f) => f.replace(/\.[^.]+$/, '')) });
+    } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+  }
+
+  // 叠字渲染（本地，零 API）：POST /api/stamp { id, src, lines, block, background, name?, save? }
+  if (p === '/api/stamp' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try {
+        const out = await getApp().make('stampStudio').render(body || {});
+        return json(res, 200, { ok: true, url: out.url, saved: out.saved, meta: out.meta });
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 自动配色（本地）：POST /api/stamp/colors { src, n }
+  if (p === '/api/stamp/colors' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try {
+        const out = await getApp().make('stampStudio').colors(body || {});
+        return json(res, 200, { ok: true, colors: out.colors });
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 成品列表（edited/<id>/）：GET /api/edited/list?id=<id>
+  if (p === '/api/edited/list') {
+    try {
+      const id = String(q.get('id') || '');
+      const dir = path.join(SKILL_ROOT, 'edited', id);
+      let items = [];
+      if (id && fs.existsSync(dir)) {
+        items = fs.readdirSync(dir).filter((f) => /\.(png|jpe?g|webp)$/i.test(f)).map((f) => {
+          const full = path.join(dir, f);
+          let mtime = 0; try { mtime = fs.statSync(full).mtimeMs; } catch (e) {}
+          return { name: f, url: '/edited/' + encodeURIComponent(id) + '/' + encodeURIComponent(f), mtime };
+        }).sort((a, b) => b.mtime - a.mtime);
+      }
+      return json(res, 200, { ok: true, items });
+    } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+  }
+
+  // 跑流程（入队，异步）：POST /api/flow/run { flow, params } → { jobId }
+  if (p === '/api/flow/run' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try {
+        const jobId = getApp().make('flowRunner').enqueue(body.flow || 'workflow', body.params || {});
+        return json(res, 200, { ok: true, jobId });
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 任务列表：GET /api/flow/list[?flow=workflow] → { jobs:[...] }
+  if (p === '/api/flow/list') {
+    try {
+      const flow = q.get('flow') || '';
+      let jobs = getApp().make('flowRunner').list();
+      if (flow) jobs = jobs.filter((j) => j.flow === flow);
+      return json(res, 200, { ok: true, jobs });
+    } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+  }
+
+  // 取消排队任务：POST /api/flow/cancel { id }
+  if (p === '/api/flow/cancel' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try { const r = getApp().make('flowRunner').cancel(body.id); return json(res, r.ok ? 200 : 400, Object.assign({ ok: r.ok }, r)); }
+      catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 清理已完成/失败任务：POST /api/flow/clear { flow?, statuses? }
+  if (p === '/api/flow/clear' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try { return json(res, 200, getApp().make('flowRunner').clear(body || {})); }
+      catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 图案适配到目标尺寸：POST /api/image/fit { productId, src, targetW, targetH, fit }
+  if (p === '/api/image/fit' && req.method === 'POST') {
+    (async () => {
+      let body; try { body = JSON.parse((await readBody(req)) || '{}'); } catch (e) { return json(res, 400, { ok: false, err: 'body 解析失败' }); }
+      try {
+        const { productId, src, targetW, targetH, fit } = body;
+        const tw = Math.max(1, Math.round(Number(targetW) || 0)), th = Math.max(1, Math.round(Number(targetH) || 0));
+        if (!tw || !th) return json(res, 400, { ok: false, err: '缺少 targetW/targetH' });
+        const image = require('../tools/image');
+        const config = getApp().make('config');
+        // 解析源图（URL 或路径；URL 可能含中文 → 需 decodeURIComponent）
+        let inFile = String(src || '').split('?')[0];
+        if (!(inFile && fs.existsSync(inFile))) {
+          let rel = String(src || '').replace(/^\/+/, '').split('?')[0];
+          try { rel = decodeURIComponent(rel); } catch (e) { /* 用原样 */ }
+          for (const b of [SKILL_ROOT, config.outputDir, config.inputDir, config.editedDir]) {
+            const f = path.join(b, rel); if (fs.existsSync(f)) { inFile = f; break; }
+          }
+        }
+        if (!inFile || !fs.existsSync(inFile)) return json(res, 400, { ok: false, err: '找不到源图: ' + src });
+        const buf = await image.fitImage({ input: inFile, targetW: tw, targetH: th, fit: (fit === 'contain' ? 'contain' : 'cover') });
+        const dir = path.join(config.inputDir, String(productId || 'misc'));
+        fs.mkdirSync(dir, { recursive: true });
+        const base = path.basename(inFile, path.extname(inFile)).replace(/[\\/:*?"<>|]+/g, '_');
+        const outFile = path.join(dir, base + '_fitspec.jpg');
+        image.save(buf, outFile);
+        const meta = await image.dims(outFile);
+        return json(res, 200, { ok: true, url: '/input/' + encodeURIComponent(String(productId || 'misc')) + '/' + encodeURIComponent(path.basename(outFile)), w: meta.width, h: meta.height, file: outFile });
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
   // 异步任务状态：GET /api/flow/status?id=<jobId>
   if (p === '/api/flow/status') {
     try {
@@ -364,8 +538,8 @@ http.createServer((req, res) => {
     } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
   }
 
-  // 素材直通：/patterns/*、/input/*（skill 根下的图源）
-  const mm = p.match(/^\/(patterns|input)\/(.+)$/);
+  // 素材直通：/patterns/*、/input/*、/edited/*（skill 根下的图源/产物）
+  const mm = p.match(/^\/(patterns|input|edited)\/(.+)$/);
   if (mm) {
     const baseDir = path.join(SKILL_ROOT, mm[1]);
     const fp = path.join(baseDir, decodeURIComponent(mm[2]));
@@ -386,7 +560,16 @@ http.createServer((req, res) => {
     const headers = { 'Content-Type': MIME[ext] || 'application/octet-stream' };
     // 静态 HTML/JSON/CSV 禁止缓存，避免数据更新后页面不刷新
     if (ext === '.html' || ext === '.json' || ext === '.csv') headers['Cache-Control'] = 'no-store';
+    let out = buf;
+    if (ext === '.html') {
+      // 自动注入通用顶部导航（页面自带 header 时 _nav.js 会自动跳过）
+      let html = buf.toString('utf8');
+      if (!/\/_nav\.js/.test(html)) {
+        html = html.includes('</body>') ? html.replace('</body>', '<script src="/_nav.js"></script></body>') : (html + '<script src="/_nav.js"></script>');
+      }
+      out = Buffer.from(html, 'utf8');
+    }
     res.writeHead(200, headers);
-    res.end(buf);
+    res.end(out);
   });
 }).listen(PORT, '127.0.0.1', () => console.log('✅ listing 输出服务器: http://127.0.0.1:' + PORT + '/<productId>/ | /open 可打开文件夹'));

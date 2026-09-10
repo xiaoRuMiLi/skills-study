@@ -1,0 +1,61 @@
+{
+  "id": "workflow_12665_1789051637992",
+  "flow": "workflow",
+  "params": {
+    "productId": "12665",
+    "images": "/edited/12665/pattern_fitspec_add_text.jpg",
+    "fit": "cover",
+    "dryRun": false
+  },
+  "status": "done",
+  "steps": [
+    {
+      "name": "抓产品详情",
+      "status": "done"
+    },
+    {
+      "name": "处理图片",
+      "status": "done"
+    },
+    {
+      "name": "上传图库",
+      "status": "done"
+    },
+    {
+      "name": "合成定制产品",
+      "status": "done"
+    },
+    {
+      "name": "缓存/入库",
+      "status": "done"
+    }
+  ],
+  "log": [
+    "[22:47:17] 已入队（排队中）",
+    "[22:47:19] 产品 12665 苹果表带收纳包",
+    "[22:47:19] ✅ 处理图片 → design-all.jpg (2539x762, cover)",
+    "[22:47:19] 🗂️ 图案原稿已归档: output\\12665\\原稿 (pattern_fitspec_add_text.jpg)",
+    "[22:47:21] ✅ 上传图库 → 8E8LUC",
+    "[22:47:21] 合成 cfgs: [{\"view_id\":1,\"gallery_code\":\"8E8LUC\",\"width\":2539,\"height\":762,\"top_x\":0,\"top_y\":0},{\"view_id\":2,\"gallery_code\":\"8E8LUC\",\"width\":2539,\"height\":762,\"top_x\":0,\"top_y\":0},{\"view_id\":3,\"gallery_code\":\"8E8LUC\",\"width\":2539,\"height\":762,\"top_x\":0,\"top_y\":0}]",
+    "[22:47:29] ✅ 合成成功 定制产品: 8VV7MVZB | 规格数 1 | 效果图 7 张",
+    "[22:48:26] 📥 黑色: 7 张 → images\\黑色",
+    "[22:48:26] ✅ 已缓存到 output\\12665",
+    "[22:48:26] 📊 管理后台已刷新",
+    "[22:48:26] ✅ 完成"
+  ],
+  "result": {
+    "productId": "12665",
+    "dryRun": false,
+    "cnName": "苹果表带收纳包",
+    "compositeProductCode": "8VV7MVZB",
+    "effectImageCount": 7,
+    "galleryCodes": [
+      "8E8LUC"
+    ],
+    "specRows": 1,
+    "productUrl": "/product.html?id=12665",
+    "adminUrl": "/manage.html"
+  },
+  "t0": "2026-09-10T14:47:17.992Z",
+  "t1": "2026-09-10T14:48:26.274Z"
+}
