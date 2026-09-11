@@ -117,6 +117,24 @@ class DesignAlignService {
   load(productTypeId, viewId) { const f = this._file(productTypeId, viewId); return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : null; }
   save(c) { fs.writeFileSync(this._file(c.productTypeId, c.viewId), JSON.stringify(c, null, 2), 'utf8'); return c; }
 
+  /** ②级兜底：调 GLM-4v 粗读空白主图的占位文字框（归一化 0~1）。失败返回 null。 */
+  async _glmBox(imageUrl, log) {
+    try {
+      const zhipu = this.app.make('zhipu');
+      const INSTR = '这是 POD 空白商品首页图。找出商品上"占位文字"（通常是 YOUR DESIGN HERE 之类、印在印刷区的示例文字）所在的矩形区域，' +
+        '用归一化坐标（相对整幅图，0~1）输出。只输出 JSON：{"x0":左右上,"y0":上下上,"x1":右, "y1":下,"lines":行数,"color":"颜色"}（x0<x1，y0<y1）。不要多余文字。';
+      const out = await zhipu.understandImage({ imageUrl: imageUrl, instruction: INSTR });
+      const s = typeof out === 'string' ? out : JSON.stringify(out);
+      const m = s.match(/\{[\s\S]*\}/);
+      const o = m ? JSON.parse(m[0]) : null;
+      if (!o) return null;
+      const x0 = +o.x0, y0 = +o.y0, x1 = +o.x1, y1 = +o.y1;
+      if (![x0, y0, x1, y1].every(Number.isFinite)) return null;
+      if (x1 <= x0 || y1 <= y0 || x0 < 0 || y0 < 0 || x1 > 1 || y1 > 1) return null;
+      return { x0: x0, y0: y0, x1: x1, y1: y1, lines: +o.lines || 2, color: o.color };
+    } catch (e) { if (log) log('  ⚠️ GLM 兜底失败: ' + e.message); return null; }
+  }
+
   /** ① 标定（每产品×每面一次；消耗 2 次上传 + 2 次预览） */
   async calibrate({ productTypeId, viewId = 1, force = false, log = () => {} }) {
     const cached = this.load(productTypeId, viewId);
@@ -234,14 +252,24 @@ class DesignAlignService {
     const img = await sharp(blankF).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const dd = img.data, iw = img.info.width, ih = img.info.height, ch = img.info.channels;
     let bands = blueBands(dd, iw, ih, ch);
-    if (!bands.length) throw new Error('未能在空白主图上量到占位文字（bands=0，主图无占位文字）');
-    if (bands.length === 1) {
-      const refined = valleySplitBand(dd, iw, ih, ch, bands[0]);   // ★谷底细分：治紧贴/微斜的多行占位
-      if (refined) { log('  ★占位行紧贴 → 谷底细分为 ' + refined.length + ' 行'); bands = refined; }
-      else log('  占位为单块（bands=1，行紧贴）→ 按整块作目标');
+    let bbox, nLines;
+    if (bands.length) {
+      if (bands.length === 1) {
+        const refined = valleySplitBand(dd, iw, ih, ch, bands[0]);   // ★谷底细分：治紧贴/微斜的多行占位
+        if (refined) { log('  ★占位行紧贴 → 谷底细分为 ' + refined.length + ' 行'); bands = refined; }
+        else log('  占位为单块（bands=1，行紧贴）→ 按整块作目标');
+      }
+      const title = bands.slice(0, 3);
+      bbox = { x0: Math.min.apply(null, title.map((b) => b.minx)), x1: Math.max.apply(null, title.map((b) => b.maxx)), y0: title[0].miny, y1: title[title.length - 1].maxy };
+      nLines = title.length;
+    } else {
+      // ②级兜底：像素量不到 → GLM-4v 粗读版式（"大概位置"即可）
+      const g = await this._glmBox(rinfo[pickIdx], log);
+      if (!g) throw new Error('未能在空白主图上量到占位文字（bands=0 且 GLM 无结果）');
+      bbox = { x0: g.x0 * iw, y0: g.y0 * ih, x1: g.x1 * iw, y1: g.y1 * ih };
+      nLines = g.lines || 2;
+      log('  ★GLM-4v 兜底框: (' + g.x0.toFixed(3) + ',' + g.y0.toFixed(3) + ')-(' + g.x1.toFixed(3) + ',' + g.y1.toFixed(3) + ') lines=' + nLines + ' color=' + (g.color || ''));
     }
-    const title = bands.slice(0, 3);
-    const bbox = { x0: Math.min.apply(null, title.map((b) => b.minx)), x1: Math.max.apply(null, title.map((b) => b.maxx)), y0: title[0].miny, y1: title[title.length - 1].maxy };
 
     // 取景归一化：营销图 与 渲染图 的取景/缩放可能不同 → 先用"商品内容 bbox"对齐
     let norm = { sx: 1, sy: 1, ox: 0, oy: 0, applied: false };
@@ -261,23 +289,35 @@ class DesignAlignService {
     const SCALE = c.imageSize[0] / iw;
     const Hinv = Engine.invert(c.H);
     const toRender = (mx, my) => norm.applied ? [mx * norm.sx + norm.ox, my * norm.sy + norm.oy] : [mx * SCALE, my * SCALE];
-    const q0 = toRender(bbox.x0, bbox.y0), q1 = toRender(bbox.x1, bbox.y1);
-    const p0 = Engine.apply(Hinv, q0[0], q0[1]);
-    const p1 = Engine.apply(Hinv, q1[0], q1[1]);
     const PA = c.printArea;
-    const tn = { w: (p1[0] - p0[0]) / PA.width, h: (p1[1] - p0[1]) / PA.height, cx: (p0[0] + p1[0]) / 2 / PA.width, cy: (p0[1] + p1[1]) / 2 / PA.height };
-    log('  目标(原始归一): 宽 ' + tn.w.toFixed(3) + ' 高 ' + tn.h.toFixed(3) + ' 中心(' + tn.cx.toFixed(3) + ',' + tn.cy.toFixed(3) + ')');
+    const mapBox = (bb) => {
+      const q0 = toRender(bb.x0, bb.y0), q1 = toRender(bb.x1, bb.y1);
+      const p0 = Engine.apply(Hinv, q0[0], q0[1]), p1 = Engine.apply(Hinv, q1[0], q1[1]);
+      return { p0: p0, p1: p1, tn: { w: (p1[0] - p0[0]) / PA.width, h: (p1[1] - p0[1]) / PA.height, cx: (p0[0] + p1[0]) / 2 / PA.width, cy: (p0[1] + p1[1]) / 2 / PA.height } };
+    };
+    const okT = (t) => [t.tn.w, t.tn.h, t.tn.cx, t.tn.cy].every(Number.isFinite) && t.tn.w >= 0.01 && t.tn.h >= 0.01 && t.tn.cx >= -0.15 && t.tn.cx <= 1.15 && t.tn.cy >= -0.15 && t.tn.cy <= 1.15;
+    let mt = mapBox(bbox); mt.glm = false;
+    if (!okT(mt)) {
+      // 像素目标不合常理 → 回退 GLM-4v 粗框（"大概位置"即可）
+      const g = await this._glmBox(rinfo[pickIdx], log);
+      if (g) {
+        const m2 = mapBox({ x0: g.x0 * iw, y0: g.y0 * ih, x1: g.x1 * iw, y1: g.y1 * ih });
+        if (okT(m2)) { mt = m2; mt.glm = true; nLines = g.lines || nLines; log('  ★像素目标不合常理 → 改用 GLM-4v 兜底框'); }
+      }
+    }
+    log('  目标(原始归一): 宽 ' + mt.tn.w.toFixed(3) + ' 高 ' + mt.tn.h.toFixed(3) + ' 中心(' + mt.tn.cx.toFixed(3) + ',' + mt.tn.cy.toFixed(3) + ')');
     // 目标合理性断言：标定/占位异常会算出 NaN/负值/越界目标 → 判「不适用」，绝不产出垃圾设计
-    if (![tn.w, tn.h, tn.cx, tn.cy].every(Number.isFinite) || tn.w < 0.01 || tn.h < 0.01 || tn.cx < -0.15 || tn.cx > 1.15 || tn.cy < -0.15 || tn.cy > 1.15) {
+    if (!okT(mt)) {
       throw new Error('未能在空白主图上量到占位文字（目标不合常理：标定或占位异常，可能非正面平铺）');
     }
+    const p0 = mt.p0, p1 = mt.p1, tn = mt.tn;
     c.target = {
       bboxPrint: { x0: p0[0], y0: p0[1], x1: p1[0], y1: p1[1] },
       norm: tn,
-      lines: title.length, framing: norm,
+      lines: nLines, framing: norm, glm: !!mt.glm,
       bands: bands.map((b) => ({ miny: b.miny, maxy: b.maxy, minx: b.minx, maxx: b.maxx })),
     };
-    log('  目标(归一化): 宽 ' + c.target.norm.w.toFixed(3) + ' 高 ' + c.target.norm.h.toFixed(3) + ' 中心(' + c.target.norm.cx.toFixed(3) + ',' + c.target.norm.cy.toFixed(3) + ') 行数 ' + title.length);
+    log('  目标(归一化): 宽 ' + c.target.norm.w.toFixed(3) + ' 高 ' + c.target.norm.h.toFixed(3) + ' 中心(' + c.target.norm.cx.toFixed(3) + ',' + c.target.norm.cy.toFixed(3) + ') 行数 ' + nLines);
     return this.save(c);
   }
 
