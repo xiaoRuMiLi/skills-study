@@ -54,10 +54,18 @@ class TokenManager {
   }
 
   // 统一的取 token：优先缓存有效 -> refresh -> fetch
-  async accessToken() {
-    if (this._fresh(this.cache)) return this.cache.access_token;
+  // force=true 时忽略缓存（用于"服务端提前作废 token"的兜底重试）
+  async accessToken(force) {
+    if (!force && this._fresh(this.cache)) return this.cache.access_token;
     try { return await this.refresh(); }
     catch (e) { return await this.fetch(); }
+  }
+
+  /** 作废当前缓存（服务端返回"不合理/失效 token"时调用，触发下次强制重取） */
+  invalidate() {
+    this.cache.access_token = null;
+    this.cache.expires_at = 0;
+    this._writeCache();
   }
 
   _absorb(r) {

@@ -13,12 +13,15 @@ const { DesignService } = require('../Services/DesignService');
 const { OrderService } = require('../Services/OrderService');
 const { TradeService } = require('../Services/TradeService');
 const { ShippingService } = require('../Services/ShippingService');
+const { CustomerGalleryService } = require('../Services/CustomerGalleryService');
 const { ProductRepository } = require('../Support/ProductRepository');
+const { PendingCleanup } = require('../Support/PendingCleanup');
 const { ZhipuService } = require('../Services/ZhipuService');
 const { ZhipuClient } = require('../Services/ZhipuClient');
 const { PatternService } = require('../Services/PatternService');
 const { AiAssistService } = require('../Services/AiAssistService');
 const { StampStudioService } = require('../Services/StampStudioService');
+const { DesignAlignService } = require('../Services/DesignAlignService');
 const { FlowRunner } = require('../Support/FlowRunner');
 
 class AppServiceProvider extends ServiceProvider {
@@ -38,6 +41,10 @@ class AppServiceProvider extends ServiceProvider {
     app.singleton('order', (a) => new OrderService(a.make('http')));
     app.singleton('trade', (a) => new TradeService(a.make('http')));
     app.singleton('shipping', (a) => new ShippingService(a.make('config')));
+    // 商家后台「图库/图库收藏」（cookie 鉴权，原图走导出 ZIP）
+    app.singleton('customerGallery', (a) => new CustomerGalleryService(a.make('config')));
+    // 待清理图库清单（测试上传的图库码，等 cookie 有效时一键清理）
+    app.singleton('pendingCleanup', (a) => new PendingCleanup(a.make('config')));
     // CSV 类数据库仓储
     app.singleton('productRepo', (a) => new ProductRepository(a.make('config')));
     // 智谱 AI（文生图 + 图片理解）
@@ -48,6 +55,8 @@ class AppServiceProvider extends ServiceProvider {
     app.singleton('aiAssist', (a) => new AiAssistService(a));
     // 叠字工作台（本地渲染 + 自动配色 + 源图解析）
     app.singleton('stampStudio', (a) => new StampStudioService(a.make('config')));
+    // 叠字/图案排版对齐（标定 + 本地 mockup 迭代 + 出图 + 线上复核）
+    app.singleton('designAlign', (a) => new DesignAlignService(a));
     // 流程队列（异步跑 workflow：串行、排队、可取消）
     app.singleton('flowRunner', (a) => new FlowRunner(a));
     // 智谱统一客户端（文本/视觉/图像；模型名统一从 config.zhipu 读）—— 所有 LLM 调用的唯一入口

@@ -1,0 +1,115 @@
+{
+  "productTypeId": "12659",
+  "viewId": 1,
+  "printArea": {
+    "width": 2773,
+    "height": 3234
+  },
+  "imageSize": [
+    1200,
+    1200
+  ],
+  "H": [
+    [
+      0.2424122973366602,
+      0.010600448240220382,
+      246.0923382716074
+    ],
+    [
+      -0.03304980529600384,
+      0.27724587453855015,
+      45.62357095548157
+    ],
+    [
+      -0.00004537198440390055,
+      0.00000760255510154909,
+      1.045471845573132
+    ]
+  ],
+  "baseFile": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\base-12659-v1.png",
+  "maskFile": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\mask-12659-v1.png",
+  "coverage": 0.1912,
+  "maxResidual": 3.7927334004079998,
+  "markers": 8,
+  "target": {
+    "bboxPrint": {
+      "x0": 964.610888430154,
+      "y0": 1175.2449190294735,
+      "x1": 1817.2281311249571,
+      "y1": 1776.5568944717463
+    },
+    "norm": {
+      "w": 0.30747105758918253,
+      "h": 0.1859344389122674,
+      "cx": 0.501593764795368,
+      "cy": 0.45637010103605746
+    },
+    "lines": 3,
+    "bands": [
+      {
+        "miny": 140,
+        "maxy": 155,
+        "minx": 203,
+        "maxx": 268
+      },
+      {
+        "miny": 161,
+        "maxy": 181,
+        "minx": 206,
+        "maxx": 301
+      },
+      {
+        "miny": 188,
+        "maxy": 204,
+        "minx": 209,
+        "maxx": 261
+      },
+      {
+        "miny": 211,
+        "maxy": 215,
+        "minx": 210,
+        "maxx": 298
+      },
+      {
+        "miny": 219,
+        "maxy": 231,
+        "minx": 210,
+        "maxx": 317
+      },
+      {
+        "miny": 245,
+        "maxy": 266,
+        "minx": 211,
+        "maxx": 231
+      }
+    ]
+  },
+  "params": {
+    "w": 0.288,
+    "g": 0.52,
+    "n": -0.044
+  },
+  "correction": {
+    "sx": 0.915,
+    "sy": 1.034
+  },
+  "uploads": [
+    "DJMUC4",
+    "4L8SPY",
+    "MCJ6MO",
+    "FJDGN2"
+  ],
+  "updatedAt": "2026-09-11T08:59:39.044Z",
+  "sweepIou": 0.9802683504340963,
+  "verify": {
+    "iou": 0.9725573257206004,
+    "code": "FJDGN2",
+    "at": "2026-09-11T09:05:28.894Z"
+  },
+  "lastParams": {
+    "w": 0.288,
+    "g": 0.52,
+    "n": -0.044,
+    "text": "YOUR DESIGN HERE"
+  }
+}

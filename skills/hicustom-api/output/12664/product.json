@@ -1,0 +1,1573 @@
+{
+  "raw": {
+    "id": 12664,
+    "cn_name": "男士仿真丝短袖短裤睡衣套装",
+    "en_name": "Men's short-sleeved pajama set",
+    "cn_desc": "",
+    "en_desc": "",
+    "default_values": {
+      "color": 29,
+      "view": 1
+    },
+    "colors": [
+      {
+        "id": 29,
+        "name": "黑色",
+        "cn_name": "黑色",
+        "en_name": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 29,
+        "name": "S"
+      },
+      {
+        "id": 30,
+        "name": "M"
+      },
+      {
+        "id": 31,
+        "name": "L"
+      },
+      {
+        "id": 32,
+        "name": "XL"
+      },
+      {
+        "id": 33,
+        "name": "XXL"
+      },
+      {
+        "id": 34,
+        "name": "3XL"
+      },
+      {
+        "id": 35,
+        "name": "4XL"
+      },
+      {
+        "id": 36,
+        "name": "5XL"
+      }
+    ],
+    "stock_info": [
+      {
+        "id": 18711,
+        "code": "4FEHQL",
+        "color_id": 29,
+        "size_id": 29,
+        "length": 21.5,
+        "width": 19.5,
+        "height": 3.5,
+        "volume": 1467.38,
+        "weight": 244
+      },
+      {
+        "id": 18712,
+        "code": "36RSCA",
+        "color_id": 29,
+        "size_id": 30,
+        "length": 24,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1764,
+        "weight": 257
+      },
+      {
+        "id": 18713,
+        "code": "UQY2J5",
+        "color_id": 29,
+        "size_id": 31,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 271
+      },
+      {
+        "id": 18714,
+        "code": "HO7SZB",
+        "color_id": 29,
+        "size_id": 32,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 287
+      },
+      {
+        "id": 18715,
+        "code": "VYT6EF",
+        "color_id": 29,
+        "size_id": 33,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 303
+      },
+      {
+        "id": 18716,
+        "code": "NKFOS2",
+        "color_id": 29,
+        "size_id": 34,
+        "length": 22,
+        "width": 21,
+        "height": 4,
+        "volume": 1848,
+        "weight": 321
+      },
+      {
+        "id": 18717,
+        "code": "IAYI8J",
+        "color_id": 29,
+        "size_id": 35,
+        "length": 23,
+        "width": 21,
+        "height": 4,
+        "volume": 1932,
+        "weight": 339
+      },
+      {
+        "id": 18718,
+        "code": "CVOMW4",
+        "color_id": 29,
+        "size_id": 36,
+        "length": 23.5,
+        "width": 21,
+        "height": 4,
+        "volume": 1974,
+        "weight": 360
+      }
+    ],
+    "hot_stars": 3.5,
+    "factory_name": "鑫铭鸿",
+    "spu_code": "MTX1672",
+    "alias_name": "男士仿真丝短袖短裤睡衣套装",
+    "release_time": "2026-09-03 16:35:24",
+    "size_attr_map": [
+      {
+        "id": 16,
+        "name": "肩宽",
+        "cn_name": "肩宽",
+        "en_name": "Shoulder Width",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 21,
+        "name": "衣长",
+        "cn_name": "衣长",
+        "en_name": "Cloth's Length",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 17,
+        "name": "1/2胸围",
+        "cn_name": "1/2胸围",
+        "en_name": "1/2 Bust",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 27,
+        "name": "裤长",
+        "cn_name": "裤长",
+        "en_name": "1",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 28,
+        "name": "1/2臀围",
+        "cn_name": "1/2臀围",
+        "en_name": "2",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 39,
+        "name": "袖长",
+        "cn_name": "袖长",
+        "en_name": "Sleeve Length",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      },
+      {
+        "id": 46,
+        "name": "1/2腰围",
+        "cn_name": "1/2腰围",
+        "en_name": "1/2 Waist Circumference",
+        "field_unit": 1,
+        "field_unit_name": "cm"
+      }
+    ],
+    "size_attr_info": [
+      {
+        "size_id": 29,
+        "attr_id": 16,
+        "attr_value": "46"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 21,
+        "attr_value": "68"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 17,
+        "attr_value": "54"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 27,
+        "attr_value": "47"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 28,
+        "attr_value": "53"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 39,
+        "attr_value": "24"
+      },
+      {
+        "size_id": 29,
+        "attr_id": 46,
+        "attr_value": "33"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 16,
+        "attr_value": "47"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 21,
+        "attr_value": "70"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 17,
+        "attr_value": "56.5"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 27,
+        "attr_value": "49"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 28,
+        "attr_value": "55.5"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 39,
+        "attr_value": "25"
+      },
+      {
+        "size_id": 30,
+        "attr_id": 46,
+        "attr_value": "35"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 16,
+        "attr_value": "48"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 21,
+        "attr_value": "72"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 17,
+        "attr_value": "59"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 27,
+        "attr_value": "51"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 28,
+        "attr_value": "58"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 39,
+        "attr_value": "25.5"
+      },
+      {
+        "size_id": 31,
+        "attr_id": 46,
+        "attr_value": "37"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 16,
+        "attr_value": "49"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 21,
+        "attr_value": "74"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 17,
+        "attr_value": "61.5"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 27,
+        "attr_value": "53"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 28,
+        "attr_value": "60.5"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 39,
+        "attr_value": "26"
+      },
+      {
+        "size_id": 32,
+        "attr_id": 46,
+        "attr_value": "39"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 16,
+        "attr_value": "50"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 21,
+        "attr_value": "76"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 17,
+        "attr_value": "64"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 27,
+        "attr_value": "55"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 28,
+        "attr_value": "63"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 39,
+        "attr_value": "26.5"
+      },
+      {
+        "size_id": 33,
+        "attr_id": 46,
+        "attr_value": "41"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 16,
+        "attr_value": "51.5"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 21,
+        "attr_value": "78"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 17,
+        "attr_value": "67"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 27,
+        "attr_value": "57"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 28,
+        "attr_value": "66"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 39,
+        "attr_value": "27"
+      },
+      {
+        "size_id": 34,
+        "attr_id": 46,
+        "attr_value": "44"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 16,
+        "attr_value": "53"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 21,
+        "attr_value": "80"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 17,
+        "attr_value": "70"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 27,
+        "attr_value": "58"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 28,
+        "attr_value": "69"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 39,
+        "attr_value": "28"
+      },
+      {
+        "size_id": 35,
+        "attr_id": 46,
+        "attr_value": "47"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 16,
+        "attr_value": "54.5"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 21,
+        "attr_value": "82"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 17,
+        "attr_value": "73"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 27,
+        "attr_value": "59"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 28,
+        "attr_value": "72"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 39,
+        "attr_value": "29"
+      },
+      {
+        "size_id": 36,
+        "attr_id": 46,
+        "attr_value": "50"
+      }
+    ],
+    "product_attr": [],
+    "product_timeliness": {
+      "eighty_percent_avg_time": 87,
+      "seven_days_avg_time": 87,
+      "estimated_shipment_time": 96
+    },
+    "product_description": {
+      "detail_info_desc": "【设计说明】全幅印花\n【材质说明】缎面色丁（96%涤纶4%氨纶）\n【产品性能】睡衣套装采用优质的色丁面料制成，丝滑柔软、亲肤舒适，透气轻盈，让您无论是日常居家穿着还是夜间睡眠都保持长时间舒适。上衣是经典开衫翻领设计，睡裤有松紧腰部和两个侧袋，配有腰头绳，易于穿脱。\n【适用场景】宽松的睡衣非常适合您回家时或不想去任何地方的慵懒周末。无论你想躺在床上，还是躺在沙发上看你喜欢的电视，或者捧着一本书，泡一杯热咖啡，度过舒适的下午。\n【配件构造】一件上衣+一件短裤，上衣开衫、短袖，短裤是松紧腰头（配腰头绳），两侧各有一个插袋。\n【洗涤说明】建议手洗或洗衣袋单独机洗，低温烘干，低温熨烫，悬挂晾干，请勿漂白。\n【特别说明】此尺码数据因测量方法不同，误差在2-4cm内的属于正常现象。",
+      "product_material": {
+        "cn_name": "涤纶",
+        "en_name": "Polyester"
+      },
+      "print_areas": [
+        {
+          "id": 1,
+          "name": "前片",
+          "width": 2755,
+          "height": 3385,
+          "code": "TWRG9C"
+        },
+        {
+          "id": 2,
+          "name": "后片",
+          "width": 2755,
+          "height": 3385,
+          "code": "5UXCRT"
+        },
+        {
+          "id": 3,
+          "name": "领子",
+          "width": 2755,
+          "height": 3385,
+          "code": "ZWBNPO"
+        },
+        {
+          "id": 4,
+          "name": "左袖",
+          "width": 2755,
+          "height": 3385,
+          "code": "PP454I"
+        },
+        {
+          "id": 5,
+          "name": "右袖",
+          "width": 2755,
+          "height": 3385,
+          "code": "FOJX5J"
+        },
+        {
+          "id": 6,
+          "name": "前面",
+          "width": 2755,
+          "height": 3385,
+          "code": "N5C3JP"
+        },
+        {
+          "id": 7,
+          "name": "背面",
+          "width": 2755,
+          "height": 3385,
+          "code": "WWV4PS"
+        }
+      ],
+      "product_technology": "转移印花",
+      "design_style": {
+        "recommend_style": "现代、古典、欧美风、ins风",
+        "theme_element": "花草枝叶、动物、文字符号、底纹背景"
+      },
+      "material_explain": [
+        {
+          "title": "弹力指数",
+          "value": "微弹"
+        },
+        {
+          "title": "柔软指数",
+          "value": "软"
+        }
+      ],
+      "product_features": [
+        {
+          "title": "【产品性能】",
+          "value": "丝滑柔软、亲肤舒适，透气轻盈"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "非常适合睡衣或家居服，让夜间睡眠舒适。"
+        }
+      ]
+    },
+    "prices": {
+      "price": 58.98,
+      "default_color_id": 29,
+      "default_size_id": 29,
+      "default_color_name": "黑色",
+      "default_size_name": "S",
+      "accumulated_quarter_price": "gold",
+      "membership_price": "normal",
+      "wholesale_price": [
+        {
+          "stock_info": [
+            {
+              "id": 18711,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 29,
+              "size_name": "S"
+            },
+            {
+              "id": 18712,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 30,
+              "size_name": "M"
+            },
+            {
+              "id": 18713,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 31,
+              "size_name": "L"
+            },
+            {
+              "id": 18714,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 32,
+              "size_name": "XL"
+            },
+            {
+              "id": 18715,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 33,
+              "size_name": "XXL"
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        },
+        {
+          "stock_info": [
+            {
+              "id": 18716,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 34,
+              "size_name": "3XL"
+            },
+            {
+              "id": 18717,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 35,
+              "size_name": "4XL"
+            },
+            {
+              "id": 18718,
+              "color_id": 29,
+              "color_name": "黑色",
+              "size_id": 36,
+              "size_name": "5XL"
+            }
+          ],
+          "retail_price": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "64.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "63.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "62.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "61.98"
+          },
+          "black_diamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "60.98"
+          },
+          "star_diamond": {
+            "qty_from": 300,
+            "price": "59.98"
+          }
+        }
+      ]
+    },
+    "renderings_info": [
+      {
+        "colors": {
+          "id": 29,
+          "color_name": "黑色"
+        },
+        "renderings": [
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-1-29-1-500-dba6e8b725170ecf6772f166be8a9e36-1438b29c62aee860bf3e3155bc962214.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-2-29-1-500-bafdcaa555eef069fe7830cb72f63503-8fe3a35ab4d69be0271632cda4e6c81c.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-8-29-1-500-d37ace5ac2356a657fc1cc27a5fbbd36-4a0b847deb830e1fb17c50f676556cb3.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-7-29-1-500-0d9f397a6ab405fc88fba849f5be031f-6fde3c4ee6bcea9ed405489924898a68.jpg",
+          "https://nimg5.hicustom.com/static/productDet/FXZLW79S-5-29-1-500-c28c45955e042627d1b66de5eeb086c6-18137b76984a0eff0afc044e2160aab1.jpg",
+          "https://nimg5.hicustom.com/static/productDet/FXZLW79S-6-29-1-500-3d74606548725b8a3a9cc8b2c3925a06-2a2fd4d3e7c75f9293b822a07492daf5.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-3-29-1-500-010af3cb607fc65ece7f47c9f7b2003f-3ac349d7e32bd3482b947b516c36e4e4.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-4-29-1-500-35c4bd83598fbe078d76e2d23f8565d1-bfde663360c1d957a0372f747f79942c.jpg"
+        ]
+      }
+    ],
+    "detail_img": []
+  },
+  "profile": {
+    "meta": {
+      "parsedAt": "2026-09-11T03:24:15.324Z",
+      "hotStars": 3.5,
+      "timeliness": {
+        "eighty_percent_avg_time": 87,
+        "seven_days_avg_time": 87,
+        "estimated_shipment_time": 96
+      }
+    },
+    "identity": {
+      "id": 12664,
+      "spuCode": "MTX1672",
+      "cnName": "男士仿真丝短袖短裤睡衣套装",
+      "enName": "Men's short-sleeved pajama set",
+      "alias": "男士仿真丝短袖短裤睡衣套装",
+      "factory": "鑫铭鸿",
+      "releaseTime": "2026-09-03 16:35:24"
+    },
+    "attributes": {
+      "materialCn": "涤纶",
+      "materialEn": "Polyester",
+      "description": "【设计说明】全幅印花\n【材质说明】缎面色丁（96%涤纶4%氨纶）\n【产品性能】睡衣套装采用优质的色丁面料制成，丝滑柔软、亲肤舒适，透气轻盈，让您无论是日常居家穿着还是夜间睡眠都保持长时间舒适。上衣是经典开衫翻领设计，睡裤有松紧腰部和两个侧袋，配有腰头绳，易于穿脱。\n【适用场景】宽松的睡衣非常适合您回家时或不想去任何地方的慵懒周末。无论你想躺在床上，还是躺在沙发上看你喜欢的电视，或者捧着一本书，泡一杯热咖啡，度过舒适的下午。\n【配件构造】一件上衣+一件短裤，上衣开衫、短袖，短裤是松紧腰头（配腰头绳），两侧各有一个插袋。\n【洗涤说明】建议手洗或洗衣袋单独机洗，低温烘干，低温熨烫，悬挂晾干，请勿漂白。\n【特别说明】此尺码数据因测量方法不同，误差在2-4cm内的属于正常现象。",
+      "designStyle": {
+        "recommendStyle": "现代、古典、欧美风、ins风",
+        "themeElement": "花草枝叶、动物、文字符号、底纹背景"
+      },
+      "materialExplain": [
+        {
+          "title": "弹力指数",
+          "value": "微弹"
+        },
+        {
+          "title": "柔软指数",
+          "value": "软"
+        }
+      ],
+      "productFeatures": [
+        {
+          "title": "【产品性能】",
+          "value": "丝滑柔软、亲肤舒适，透气轻盈"
+        },
+        {
+          "title": "【适用场景】",
+          "value": "非常适合睡衣或家居服，让夜间睡眠舒适。"
+        }
+      ]
+    },
+    "designFaces": [
+      {
+        "id": 1,
+        "name": "前片",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 2,
+        "name": "后片",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 3,
+        "name": "领子",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 4,
+        "name": "左袖",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 5,
+        "name": "右袖",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 6,
+        "name": "前面",
+        "width": 2755,
+        "height": 3385
+      },
+      {
+        "id": 7,
+        "name": "背面",
+        "width": 2755,
+        "height": 3385
+      }
+    ],
+    "colors": [
+      {
+        "id": 29,
+        "cnName": "黑色",
+        "enName": "Black",
+        "tone1": "#000000",
+        "tone2": ""
+      }
+    ],
+    "sizes": [
+      {
+        "id": 29,
+        "name": "S",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 30,
+        "name": "M",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 31,
+        "name": "L",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 32,
+        "name": "XL",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 33,
+        "name": "XXL",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 34,
+        "name": "3XL",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 35,
+        "name": "4XL",
+        "width": null,
+        "height": null
+      },
+      {
+        "id": 36,
+        "name": "5XL",
+        "width": null,
+        "height": null
+      }
+    ],
+    "variants": [
+      {
+        "id": 18711,
+        "code": "4FEHQL",
+        "colorId": 29,
+        "sizeId": 29,
+        "length": 21.5,
+        "width": 19.5,
+        "height": 3.5,
+        "volume": 1467.38,
+        "weight": 244
+      },
+      {
+        "id": 18712,
+        "code": "36RSCA",
+        "colorId": 29,
+        "sizeId": 30,
+        "length": 24,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1764,
+        "weight": 257
+      },
+      {
+        "id": 18713,
+        "code": "UQY2J5",
+        "colorId": 29,
+        "sizeId": 31,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 271
+      },
+      {
+        "id": 18714,
+        "code": "HO7SZB",
+        "colorId": 29,
+        "sizeId": 32,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 287
+      },
+      {
+        "id": 18715,
+        "code": "VYT6EF",
+        "colorId": 29,
+        "sizeId": 33,
+        "length": 22,
+        "width": 21,
+        "height": 3.5,
+        "volume": 1617,
+        "weight": 303
+      },
+      {
+        "id": 18716,
+        "code": "NKFOS2",
+        "colorId": 29,
+        "sizeId": 34,
+        "length": 22,
+        "width": 21,
+        "height": 4,
+        "volume": 1848,
+        "weight": 321
+      },
+      {
+        "id": 18717,
+        "code": "IAYI8J",
+        "colorId": 29,
+        "sizeId": 35,
+        "length": 23,
+        "width": 21,
+        "height": 4,
+        "volume": 1932,
+        "weight": 339
+      },
+      {
+        "id": 18718,
+        "code": "CVOMW4",
+        "colorId": 29,
+        "sizeId": 36,
+        "length": 23.5,
+        "width": 21,
+        "height": 4,
+        "volume": 1974,
+        "weight": 360
+      }
+    ],
+    "pricing": {
+      "minPrice": 58.98,
+      "defaultColorId": 29,
+      "defaultColorName": "黑色",
+      "defaultSizeId": 29,
+      "defaultSizeName": "S",
+      "accumulatedQuarter": "gold",
+      "membership": "normal",
+      "tiers": [
+        {
+          "stockInfo": [
+            {
+              "id": 18711,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 29,
+              "sizeName": "S"
+            },
+            {
+              "id": 18712,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 30,
+              "sizeName": "M"
+            },
+            {
+              "id": 18713,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 31,
+              "sizeName": "L"
+            },
+            {
+              "id": 18714,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 32,
+              "sizeName": "XL"
+            },
+            {
+              "id": 18715,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 33,
+              "sizeName": "XXL"
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        },
+        {
+          "stockInfo": [
+            {
+              "id": 18716,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 34,
+              "sizeName": "3XL"
+            },
+            {
+              "id": 18717,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 35,
+              "sizeName": "4XL"
+            },
+            {
+              "id": 18718,
+              "colorId": 29,
+              "colorName": "黑色",
+              "sizeId": 36,
+              "sizeName": "5XL"
+            }
+          ],
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "64.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "63.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "62.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "61.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "60.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "59.98"
+          }
+        }
+      ]
+    },
+    "images": {
+      "renderings": [
+        {
+          "colorId": 29,
+          "colorName": "黑色",
+          "renderings": [
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-1-29-1-500-dba6e8b725170ecf6772f166be8a9e36-1438b29c62aee860bf3e3155bc962214.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-2-29-1-500-bafdcaa555eef069fe7830cb72f63503-8fe3a35ab4d69be0271632cda4e6c81c.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-8-29-1-500-d37ace5ac2356a657fc1cc27a5fbbd36-4a0b847deb830e1fb17c50f676556cb3.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-7-29-1-500-0d9f397a6ab405fc88fba849f5be031f-6fde3c4ee6bcea9ed405489924898a68.jpg",
+            "https://nimg5.hicustom.com/static/productDet/FXZLW79S-5-29-1-500-c28c45955e042627d1b66de5eeb086c6-18137b76984a0eff0afc044e2160aab1.jpg",
+            "https://nimg5.hicustom.com/static/productDet/FXZLW79S-6-29-1-500-3d74606548725b8a3a9cc8b2c3925a06-2a2fd4d3e7c75f9293b822a07492daf5.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-3-29-1-500-010af3cb607fc65ece7f47c9f7b2003f-3ac349d7e32bd3482b947b516c36e4e4.jpg",
+            "https://nimg5.hicustom.com/static/productDet2/FXZLW79S-4-29-1-500-35c4bd83598fbe078d76e2d23f8565d1-bfde663360c1d957a0372f747f79942c.jpg"
+          ]
+        }
+      ],
+      "detailImg": []
+    },
+    "specs": [
+      {
+        "variantId": 18711,
+        "code": "4FEHQL",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 29,
+        "sizeName": "S",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 21.5,
+          "W": 19.5,
+          "H": 3.5,
+          "volume": 1467.38
+        },
+        "weight": 244,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        }
+      },
+      {
+        "variantId": 18712,
+        "code": "36RSCA",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 30,
+        "sizeName": "M",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 24,
+          "W": 21,
+          "H": 3.5,
+          "volume": 1764
+        },
+        "weight": 257,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        }
+      },
+      {
+        "variantId": 18713,
+        "code": "UQY2J5",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 31,
+        "sizeName": "L",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 22,
+          "W": 21,
+          "H": 3.5,
+          "volume": 1617
+        },
+        "weight": 271,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        }
+      },
+      {
+        "variantId": 18714,
+        "code": "HO7SZB",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 32,
+        "sizeName": "XL",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 22,
+          "W": 21,
+          "H": 3.5,
+          "volume": 1617
+        },
+        "weight": 287,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        }
+      },
+      {
+        "variantId": 18715,
+        "code": "VYT6EF",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 33,
+        "sizeName": "XXL",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 22,
+          "W": 21,
+          "H": 3.5,
+          "volume": 1617
+        },
+        "weight": 303,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "59.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "58.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "57.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "56.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "55.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "54.98"
+          }
+        }
+      },
+      {
+        "variantId": 18716,
+        "code": "NKFOS2",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 34,
+        "sizeName": "3XL",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 22,
+          "W": 21,
+          "H": 4,
+          "volume": 1848
+        },
+        "weight": 321,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "64.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "63.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "62.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "61.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "60.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "59.98"
+          }
+        }
+      },
+      {
+        "variantId": 18717,
+        "code": "IAYI8J",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 35,
+        "sizeName": "4XL",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 23,
+          "W": 21,
+          "H": 4,
+          "volume": 1932
+        },
+        "weight": 339,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "64.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "63.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "62.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "61.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "60.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "59.98"
+          }
+        }
+      },
+      {
+        "variantId": 18718,
+        "code": "CVOMW4",
+        "colorId": 29,
+        "colorName": "黑色",
+        "sizeId": 36,
+        "sizeName": "5XL",
+        "dims": {
+          "width": null,
+          "height": null
+        },
+        "package": {
+          "L": 23.5,
+          "W": 21,
+          "H": 4,
+          "volume": 1974
+        },
+        "weight": 360,
+        "prices": {
+          "retail": {
+            "qty_from": 1,
+            "qty_to": 4,
+            "price": "64.98"
+          },
+          "gold": {
+            "qty_from": 5,
+            "qty_to": 14,
+            "price": "63.98"
+          },
+          "platinum": {
+            "qty_from": 15,
+            "qty_to": 49,
+            "price": "62.98"
+          },
+          "diamond": {
+            "qty_from": 50,
+            "qty_to": 99,
+            "price": "61.98"
+          },
+          "blackDiamond": {
+            "qty_from": 100,
+            "qty_to": 299,
+            "price": "60.98"
+          },
+          "starDiamond": {
+            "qty_from": 300,
+            "price": "59.98"
+          }
+        }
+      }
+    ]
+  },
+  "customization": {
+    "galleryCodes": {
+      "all": "T6IABX"
+    },
+    "compositeProductCode": "MHZI74AL",
+    "effectImages": [
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-1-29-1-1600-dba6e8b725170ecf6772f166be8a9e36-efcbe8aa56295997586743c4aea32ec2.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-2-29-1-1600-bafdcaa555eef069fe7830cb72f63503-a72abf3f8b683eb2be847defdb6123c4.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-8-29-1-1600-d37ace5ac2356a657fc1cc27a5fbbd36-13d945ccfec9edd458ea8bba5c64731e.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-7-29-1-1600-0d9f397a6ab405fc88fba849f5be031f-84d3c4da79a2465ef1ec475b1755c52a.jpg",
+      "https://nimg5.hicustom.com/static/productDet/MHZI74AL-5-29-1-1600-c28c45955e042627d1b66de5eeb086c6-095bd09a5d9ae15f0dd99c362a6fdbd2.jpg",
+      "https://nimg5.hicustom.com/static/productDet/MHZI74AL-6-29-1-1600-3d74606548725b8a3a9cc8b2c3925a06-537ebd0874b00050593bf6af0bedc448.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-3-29-1-1600-010af3cb607fc65ece7f47c9f7b2003f-00a08e745c7b5495b3fd8b5b7b162984.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-4-29-1-1600-35c4bd83598fbe078d76e2d23f8565d1-2b3ed2a93297b28afbdfeb72b9496d6e.jpg"
+    ],
+    "effectImageCount": 8,
+    "dry": false,
+    "colorsTotal": 1,
+    "effectGroups": [
+      {
+        "name": "黑色",
+        "images": [
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-1-29-1-1600-dba6e8b725170ecf6772f166be8a9e36-efcbe8aa56295997586743c4aea32ec2.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-2-29-1-1600-bafdcaa555eef069fe7830cb72f63503-a72abf3f8b683eb2be847defdb6123c4.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-8-29-1-1600-d37ace5ac2356a657fc1cc27a5fbbd36-13d945ccfec9edd458ea8bba5c64731e.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-7-29-1-1600-0d9f397a6ab405fc88fba849f5be031f-84d3c4da79a2465ef1ec475b1755c52a.jpg",
+          "https://nimg5.hicustom.com/static/productDet/MHZI74AL-5-29-1-1600-c28c45955e042627d1b66de5eeb086c6-095bd09a5d9ae15f0dd99c362a6fdbd2.jpg",
+          "https://nimg5.hicustom.com/static/productDet/MHZI74AL-6-29-1-1600-3d74606548725b8a3a9cc8b2c3925a06-537ebd0874b00050593bf6af0bedc448.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-3-29-1-1600-010af3cb607fc65ece7f47c9f7b2003f-00a08e745c7b5495b3fd8b5b7b162984.jpg",
+          "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-4-29-1-1600-35c4bd83598fbe078d76e2d23f8565d1-2b3ed2a93297b28afbdfeb72b9496d6e.jpg"
+        ]
+      }
+    ],
+    "mainImage": "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-1-29-1-1600-dba6e8b725170ecf6772f166be8a9e36-efcbe8aa56295997586743c4aea32ec2.jpg",
+    "otherImages": [
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-2-29-1-1600-bafdcaa555eef069fe7830cb72f63503-a72abf3f8b683eb2be847defdb6123c4.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-8-29-1-1600-d37ace5ac2356a657fc1cc27a5fbbd36-13d945ccfec9edd458ea8bba5c64731e.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-7-29-1-1600-0d9f397a6ab405fc88fba849f5be031f-84d3c4da79a2465ef1ec475b1755c52a.jpg",
+      "https://nimg5.hicustom.com/static/productDet/MHZI74AL-5-29-1-1600-c28c45955e042627d1b66de5eeb086c6-095bd09a5d9ae15f0dd99c362a6fdbd2.jpg",
+      "https://nimg5.hicustom.com/static/productDet/MHZI74AL-6-29-1-1600-3d74606548725b8a3a9cc8b2c3925a06-537ebd0874b00050593bf6af0bedc448.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-3-29-1-1600-010af3cb607fc65ece7f47c9f7b2003f-00a08e745c7b5495b3fd8b5b7b162984.jpg",
+      "https://nimg5.hicustom.com/static/productDet2/MHZI74AL-4-29-1-1600-35c4bd83598fbe078d76e2d23f8565d1-2b3ed2a93297b28afbdfeb72b9496d6e.jpg"
+    ]
+  }
+}

@@ -97,6 +97,19 @@ node scripts/hi.js design-area:generate --product-id 12583 --image "图案.jpg" 
 node scripts/hi.js design-area:generate --product-id 12583 --image "图案.jpg" --sample auto
 ```
 
+### ★ 尺寸适配：**先裁切、后加字**（关键顺序，别搞反）
+用户指定源图时，必须先把它**适配到空白产品印刷区的尺寸**，**再**叠字。顺序反了（先加字后裁切）文字会被切掉——这正是"加字后的图案文字显示不全"的主因。
+
+- 目标尺寸 = 所选印刷面 `print_areas[].width × height`（默认第 1 面）。
+- 适配方式 = **cover 居中裁切**（`tools/image.js fitImage`，`position:'centre'`）。
+- 命令行：
+  - `--face <印刷面id>` 指定适配哪一面（默认第一面）；`node scripts/hi.js sample:list` 式的面列表见 `product:detail`。
+  - `--no-fit` 关闭适配（少数"最终展示图、不再进印刷区"的场景才用）。
+- 产物：先出 `<原图名>.print.jpg`（= 裁切后画布），再叠字 → `<原图名>.jpg`；归档进 `output/<id>/原稿/`（`设计原稿.jpg` = 加字前 / `设计原稿_加文字.jpg` = 加字后）。
+- **为什么这样最稳**：画布比例已等于印刷区比例 → 下游 `listing:generate` 的默认 `fit=cover` 裁切变成 no-op → 文字绝不会被切。
+
+> ⚠️ 若源图比例 ≠ 印刷区比例，cover 会**裁掉**溢出的一边（偏长的一侧两端被裁）。想让内容完整不裁，请换 `contain`（会留边）——目前 CLI 只做 cover。
+
 ### 图片来源（两种，优先级）
 1. **用户指定**：`--image 路径`。
 2. **智谱文生图**（未指定图且配了 `ZHIPU_API_KEY`）：`glm-image` 生成，提示词紧扣**商品名/材质/推荐风格**，尺寸按**印刷区宽高比**挑选；明确**禁止文字/水印/logo、禁止版权图案**。
@@ -216,10 +229,13 @@ node scripts/stamp.js output/11485/images/effect_1.jpg \
    - ⚠️ 解析对象是**主图**，**不是**要叠字的图案图；优先 agent 自带图片理解，不支持再调 `glm-4v`。
    - `titleLines≥2` → 主标题用 `size:"wrap"` **逐词堆叠**复刻同款；宽度取 `title.widthRatio`。
 3. 读取源图：`--image` 指定，或 `config.inputDir`（默认 `input/`）下所有图片；无图且配了 `ZHIPU_API_KEY` → 用文生图生成**商品图案**（非实物效果图），紧扣商品信息/属性/印刷面数/描述、禁侵权；尺寸按印刷区 + 底部留白（便于裁水印）。可按面生成多张。
+3.5 **★ 适配印刷区（先裁后加字）**：每张源图先 `fitImage(fit:'cover', position:'centre')` 到所选印刷面 `w×h` → 出 `<原名>.print.jpg` 作为叠字画布（`--no-fit` 可关）。
 4. **配色**：用本地工具 `ContrastColor`（`pickDistinctColors`）算「与底图反差大的浅色系」，多行取互异色；**不喂模型**。
 5. **叠加文字**：统一走 **`stamp`（`TextStampService`）引擎** —— 默认 **纯透明底、无描边**；支持 N 行 / 颜色 / 字体 / 粗细 / 位置 / 字号自适应 / **按词换行**。
 6. 保存到 `edited/<商品ID>/`（**商品 ID 命名的文件夹**），文件名同源图；归档到 `output/<id>/原稿/`（加字前后各一份）。
 7. 用 HTML 渲染「加文字前 / 加文字后」交用户定夺，并一并返回前后图片路径。
+   - **对比页带规格行**（`CompareRenderer`）：每张图下方显示 `宽 × 高 px · 文件大小`；有原图时再显示 `原图 W×H → 裁切后 W×H`，尺寸不同打「**已裁切**」黄标、相同打绿色「（未裁切）」——用来核对适配是否裁到了内容。
+   - 页面：`<pagesDir>/design-area-compare.html` → http://127.0.0.1:8098/design-area-compare.html（`stamp` 的 `stamp-compare.html` 同一渲染器，也有规格行）。
 
 ## 常见错误（避坑清单）⚠️
 | ❌ 错误做法 | ✅ 正确做法 |
@@ -230,6 +246,8 @@ node scripts/stamp.js output/11485/images/effect_1.jpg \
 | 多词主标题排成一行、与主图不符 | `titleLines≥2` 时用 `size:"wrap"` **逐词堆叠** |
 | 标题用整块宽度 → 顶边 / 过大 | 宽度取**主标题自身** `title.widthRatio` |
 | 直接拿空白产品 `renderings_info` 当成品底图 | 先 `design:composite` 合成**干净效果图**再叠字 |
+| **先加字、后适配/裁切**（字被裁掉 → 显示不全） | **先按印刷区 cover 居中裁切，再叠字**（`design-area:generate` 已默认这么做） |
+| 中文/超长串当普通"空格词"换行 → 单行溢出画布被裁 | `TextStampService` 已对超宽 token **按字符断行**兜底（无需手动处理） |
 | 想用自定义样稿却仍让模型读空白主图 | 用 `--sample <名字\|auto>` 从 `type-setting-images/` 选样稿 |
 
 ## 原稿归档规范（必做✅）

@@ -1,0 +1,139 @@
+{
+  "productTypeId": "12453",
+  "viewId": 1,
+  "renderA": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\calibA0-12453-v1-render.jpg",
+  "renderB": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\calibB-12453-v1-render.jpg",
+  "printArea": {
+    "width": 2264,
+    "height": 1783
+  },
+  "imageSize": [
+    1200,
+    1200
+  ],
+  "H": [
+    [
+      0.4009394938417061,
+      -0.006908163550161964,
+      156.1350496937382
+    ],
+    [
+      0.0009723487606969436,
+      0.38660459892548865,
+      515.7049902939495
+    ],
+    [
+      -0.0000017595257696517133,
+      -0.000010258491638498181,
+      1.0104970472962664
+    ]
+  ],
+  "baseFile": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\base-12453-v1.png",
+  "maskFile": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\.hicustom\\align\\mask-12453-v1.png",
+  "coverage": 0.21978333333333333,
+  "maxResidual": 1.9139237599747356,
+  "markers": 18,
+  "outliers": 0,
+  "target": {
+    "bboxPrint": {
+      "x0": 555.308083848108,
+      "y0": 91.32313969270727,
+      "x1": 1449.9270953916357,
+      "y1": 608.1953733706309
+    },
+    "norm": {
+      "w": 0.39514974008106346,
+      "h": 0.2898890822646796,
+      "cx": 0.4428522922349257,
+      "cy": 0.19616335195270282
+    },
+    "lines": 3,
+    "framing": {
+      "sx": 2.396551724137931,
+      "sy": 2.4012605042016806,
+      "ox": -1.3275862068965552,
+      "oy": -0.6302521008403374,
+      "applied": true
+    },
+    "bands": [
+      {
+        "miny": 228,
+        "maxy": 228,
+        "minx": 157,
+        "maxx": 232
+      },
+      {
+        "miny": 255,
+        "maxy": 276,
+        "minx": 177,
+        "maxx": 261
+      },
+      {
+        "miny": 289,
+        "maxy": 313,
+        "minx": 180,
+        "maxx": 306
+      },
+      {
+        "miny": 325,
+        "maxy": 346,
+        "minx": 179,
+        "maxx": 252
+      },
+      {
+        "miny": 360,
+        "maxy": 361,
+        "minx": 178,
+        "maxx": 304
+      },
+      {
+        "miny": 368,
+        "maxy": 381,
+        "minx": 178,
+        "maxx": 307
+      },
+      {
+        "miny": 403,
+        "maxy": 435,
+        "minx": 178,
+        "maxx": 209
+      }
+    ]
+  },
+  "params": {
+    "mode": "box",
+    "w": 0.395,
+    "h": 0.29,
+    "n": -0.304,
+    "x": -0.057,
+    "g": 0.12
+  },
+  "correction": {
+    "sx": 0.9971910112359551,
+    "sy": 0.9889807162534435
+  },
+  "uploads": [
+    "FK2KNP",
+    "OUH4FJ",
+    "WWTLC7",
+    "Q9XCST",
+    "WY3944",
+    "S54FVI"
+  ],
+  "updatedAt": "2026-09-11T11:01:25.994Z",
+  "sweepIou": 0.8174871073605251,
+  "lastParams": {
+    "mode": "box",
+    "w": 0.395,
+    "g": 0.12,
+    "n": -0.304,
+    "x": -0.057,
+    "text": "Custom Yoga Bag"
+  },
+  "verify": {
+    "mode": "box",
+    "iou": 0.5578649945812045,
+    "code": "S54FVI",
+    "at": "2026-09-11T11:05:17.910Z"
+  }
+}

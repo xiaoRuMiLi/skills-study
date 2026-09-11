@@ -1,0 +1,75 @@
+{
+  "productTypeId": "12659",
+  "viewId": "1",
+  "printArea": {
+    "width": 2773,
+    "height": 3234
+  },
+  "galleryCode": "N3MGUK",
+  "marker": "magenta",
+  "renderings": [
+    {
+      "i": 0,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-1-29-1-1200-81215bba9cbe42f335dc68eebd37fb36.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r0.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 1,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-2-29-1-1200-df473fe17e7ad00b24c73e469ea56fae.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r1.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 2,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-3-29-1-1200-943419f331dc0f6beeb46beff9122f1b.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r2.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 3,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-4-29-1-1200-57aa47d9c9dfd3cf802fd4bdf2c2e2ff.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r3.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 4,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-5-29-1-1200-c5e9bde34bef8a625409ef60993024d3.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r4.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 5,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-9-29-1-1200-4093a6b540994a12185d8dd86d2d3349.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r5.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 6,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-8-29-1-1200-0414bf43b2e1276b50748009daccfffe.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r6.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 7,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-6-29-1-1200-91378ce52b62ed03f8fbe71ac905e1b4.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r7.jpg",
+      "w": 1200,
+      "h": 1200
+    },
+    {
+      "i": 8,
+      "url": "https://nimg5.hicustom.com/static/preproduct2/42c1a5dc0a75be6f5c0d20cf0cbb11cd-7-29-1-1200-8f9568e80f1819326c1544872253f89d.jpg",
+      "file": "C:\\Users\\Administrator\\.openclaw\\workspace-dev\\skills\\hicustom-api\\scripts\\dev\\lab\\out\\calib-12659-v1-r8.jpg",
+      "w": 1200,
+      "h": 1200
+    }
+  ]
+}

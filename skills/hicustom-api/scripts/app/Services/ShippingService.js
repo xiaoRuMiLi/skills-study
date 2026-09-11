@@ -14,6 +14,8 @@ class ShippingService {
     this.merchantBase = config.merchantBaseUrl || 'https://www.hicustom.com';
     this.quotePath = (config.merchant && config.merchant.shippingQuote) || '/merchant/shippingRule/calculateNew';
     this.cookie = config.merchantCookie || '';
+    // 商家后台专用 HTTP：串行 + 节流 + 退避 + 留痕
+    this.mhttp = require('../Support/MerchantHttp').getMerchantHttp(config);
   }
 
   _hasCookie() { return !!this.cookie; }
@@ -56,7 +58,7 @@ class ShippingService {
     const url = this.merchantBase + this.quotePath + '?' + this._qs(p);
     let resp;
     try {
-      resp = await fetch(url, { headers: { Cookie: this.cookie } });
+      resp = await this.mhttp.get(url, { headers: { Cookie: this.cookie } });
     } catch (e) {
       const err = new Error('请求运费试算失败(网络): ' + e.message); err.code = 'NETWORK'; throw err;
     }

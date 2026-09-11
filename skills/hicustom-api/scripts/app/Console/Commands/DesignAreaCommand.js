@@ -75,7 +75,7 @@ class DesignAreaCommand {
     this.app = app;
     this.signature = 'design-area:generate';
     this.description = '给商品图加定制区文字标记(主图解析排版 + 文生图 → stamp 叠字)';
-    this.usage = '--product-id <id> [--image 源图] [--sample 样稿名|auto] [--text "主|副"] [--posV/--boxW/--scale/--text-color/--font]';
+    this.usage = '--product-id <id> [--image 源图] [--sample 样稿名|auto] [--face <印刷面id>] [--no-fit] [--text "主|副"] [--posV/--boxW/--scale/--text-color/--font]';
   }
 
   async handle(opts) {
@@ -94,8 +94,19 @@ class DesignAreaCommand {
     if (r.status >= 400 || r.code !== 200) { console.log('❌ 详情失败: HTTP ' + r.status + ' msg=' + (r.msg || '')); return; }
     const d = r.data || {};
     const name = d.cn_name || '';
-    const faces = (d.product_description && d.product_description.print_areas) || [];
+    const pdsc = d.product_description || {};
+    const faces = (pdsc.print_areas || d.print_areas || []) || [];
     const [mainText, subText] = String(opts.text || 'YOUR DESIGN HERE|Any Color Text Logo Photo').split('|');
+
+    // ★ 印刷区（适配目标）：--face <id> 选面；默认第一面；--no-fit 可关闭适配
+    //   顺序很重要：**先按印刷区 cover 居中裁切，再叠字** → 下游 listing:generate 的 cover 变成 no-op，字不会被切。
+    const faceList = (Array.isArray(faces) ? faces : []).filter((f) => f && f.width && f.height);
+    let face = faceList[0] || null;
+    if (opts.face != null && String(opts.face) !== '' && String(opts.face) !== 'true') {
+      const fid = Number(opts.face);
+      face = faceList.find((f) => Number(f.id) === fid) || face;
+    }
+    const doFit = !opts.noFit && !!face;
 
     // ①.5 排版来源：优先「样稿」（type-setting-images/）；未指定才用「空白产品主图」
     const { pickSample } = require('../../Support/TypeSetting');
@@ -161,6 +172,7 @@ class DesignAreaCommand {
     console.log('========== design-area:generate ==========');
     console.log('商品 ' + id + ' ' + (name || '') + ' | 印刷面 ' + faces.length + ' | 源图 ' + sources.length + ' 张');
     console.log('文字: "' + mainText + '"' + (subText ? '  /  "' + subText + '"' : '') + '   [排版来源: ' + (layoutSource || '空白产品主图') + ']');
+    console.log('印刷区适配: ' + (doFit ? ('面' + (face.id != null ? face.id : '?') + ' ' + face.width + 'x' + face.height + ' ← cover 居中裁切【先裁后加字】') : '关闭（原图直接叠字）'));
     console.log('合成引擎: stamp（本地，默认无描边 / 纯透明底）');
 
     // ③ 组装 stamp 的 lines（模型出排版 + 工具出色 + 手动参数最高优先）
@@ -197,19 +209,35 @@ class DesignAreaCommand {
     if (opts.boxW) block.widthRatio = Number(opts.boxW);
     if (opts.scale && titleLines < 2) block.heightRatio = Number(opts.scale);
 
+    const imageTool = require('../../../tools/image');
+    const preFiles = [];
     for (const src of sources) {
-      // 配色：本地工具（不用模型）——两行取互异色
+      const base = path.basename(src.path, path.extname(src.path));
+      // ★ 先适配印刷区（cover 居中裁切）→ 拿到「成品尺寸画布」，再叠字。
+      //   下游 listing:generate 默认 fit=cover，若画布比例已等于印刷区比例，它就不再裁 → 文字安全。
+      let stampSrc = src.path;
+      if (doFit) {
+        try {
+          const buf = await imageTool.fitImage({ input: src.path, targetW: face.width, targetH: face.height, fit: 'cover' });
+          const workFile = path.join(outDir, base + '.print.jpg');
+          imageTool.save(buf, workFile);
+          stampSrc = workFile;
+          console.log('  ✂️ 适配印刷区(面' + (face.id != null ? face.id : '?') + ' ' + face.width + 'x' + face.height + ', cover 居中裁切) → ' + path.basename(workFile));
+        } catch (e) { console.log('  ⚠️ 适配印刷区失败(用原图): ' + e.message); }
+      }
+      preFiles.push(stampSrc);
+
+      // 配色：本地工具（不用模型）——两行取互异色（基于「裁切后」画布）
       let colors = [];
-      try { colors = (await pickDistinctColors(src.path, 2, {})).colors; } catch (e) { colors = []; }
+      try { colors = (await pickDistinctColors(stampSrc, 2, {})).colors; } catch (e) { colors = []; }
       const useLines = lines.map((l, i) => Object.assign({}, l, { color: opts.textColor || colors[i] || ['#FFE873', '#9AD8FF'][i] || '#FFE873' }));
       console.log('  🎨 配色(本地工具): ' + useLines.map((l) => l.color).join(' / '));
 
-      const base = path.basename(src.path, path.extname(src.path));
       const outFile = path.join(outDir, base + '.jpg');
-      console.log('  ↳ 等价 stamp: ' + stampCmd(src.path, useLines, block));
+      console.log('  ↳ 等价 stamp: ' + stampCmd(stampSrc, useLines, block));
       try {
-        const res = await stamp(src.path, { lines: useLines, block, background: { enabled: false }, outFile, format: 'jpeg', quality: 92 });
-        entries.push({ before: src.path, after: res.file, label: base + ' · ' + (res.dark ? '深底' : '浅底') });
+        const res = await stamp(stampSrc, { lines: useLines, block, background: { enabled: false }, outFile, format: 'jpeg', quality: 92 });
+        entries.push({ before: stampSrc, after: res.file, orig: (src.path && src.path !== stampSrc) ? src.path : null, label: base + ' · ' + (res.dark ? '深底' : '浅底') });
         console.log('  ✅ ' + base + ' → ' + res.file + '  (字号 ' + res.lines.map((x) => x.fontSize).join('/') + ')');
       } catch (e) { console.log('  ❌ ' + base + ': ' + e.message); }
     }
@@ -218,7 +246,7 @@ class DesignAreaCommand {
     try {
       const { archiveOriginal } = require('../../Support/OriginalArchive');
       const items = [];
-      for (const src of sources) if (src.path && fs.existsSync(src.path)) items.push({ src: src.path, name: '设计原稿' });
+      for (const f of preFiles) if (f && fs.existsSync(f)) items.push({ src: f, name: '设计原稿' });
       for (const e of entries) if (e.after && fs.existsSync(e.after)) items.push({ src: e.after, name: '设计原稿', suffix: '_加文字' });
       if (items.length) {
         const arch = archiveOriginal({ productId: id, outputDir: config.outputDir, items });

@@ -1,0 +1,61 @@
+{
+  "cn_name": "d072da8bb5e848e8106d0d82d1892e5f 女士仿真丝短袖短裤睡衣套装",
+  "en_name": "listing-12664 Women's short-sleeved pajama set",
+  "image": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-1-29-1-1600-14208cc42b525a6e43bc543b766045c4.jpg",
+  "product_type_id": "12659",
+  "colors": [
+    {
+      "id": 29,
+      "cn_name": "黑色",
+      "en_name": "Black",
+      "tone1": "000000",
+      "tone2": "",
+      "renderings": [
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-1-29-1-500-4062943820bde2c48725198592f4a06f.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-1-29-1-1200-66b33de24d1a89623007e7b73868597b.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-2-29-1-500-6cb9e034a852b5db4e3235b7579d3334.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-2-29-1-1200-247bb8922966123c952024fe2102fbdf.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-3-29-1-500-0a31376c29fcf8bf6edd317f41d4a1f5.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-3-29-1-1200-83ae58f415f90974eb60dfa3fb2960ef.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-4-29-1-500-74e1c4c360341c7ba4a8b407868f64b4.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-4-29-1-1200-0b56392a6949b843513d766e84a9f671.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-5-29-1-500-1cf3c814225c052636360655ea509368.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-5-29-1-1200-08e0bf1c1f3f52a7c894009b5b4392ae.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-9-29-1-500-0ab98c333dfef279326fdeb14e4d7084.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-9-29-1-1200-6444815b382cdb2c866782a9bbf44c0f.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-8-29-1-500-f732b1835e3ca2600e633f91c987367f.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-8-29-1-1200-fd159583f905f1daa4386ebc06d35b6a.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-6-29-1-500-8fe22e342b18c8d3667dca344a983197.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-6-29-1-1200-ee0617940ce5ebe0511c62c50d28f45c.jpg"
+        },
+        {
+          "small_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-7-29-1-500-fd24a0b6faf14833fdece63de5b1e7a1.jpg",
+          "big_img": "https://nimg5.hicustom.com/static/preproduct2/28b2fec17de3dee09a6569cc4100ad31-7-29-1-1200-3b6a14dcf1f38e4b7f3889498ef1e385.jpg"
+        }
+      ]
+    }
+  ],
+  "default_color_id": "29",
+  "default_view_id": "1",
+  "default_gallery_code": "8F4JEN",
+  "view_cnt": 1,
+  "design_zh_name": "d072da8bb5e848e8106d0d82d1892e5f",
+  "design_zh_tags": "",
+  "design_en_name": "listing-12664",
+  "design_en_tags": ""
+}

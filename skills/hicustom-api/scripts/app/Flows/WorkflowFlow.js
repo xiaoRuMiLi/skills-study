@@ -162,7 +162,10 @@ class WorkflowFlow {
           log('✅ 合成成功 定制产品: ' + d.code + ' | 颜色 ' + allGroups.length + (allColors ? '（全部）' : '（只取主色）') + ' | 效果图 URL ' + customization.effectImageCount + ' 个（不下载本地）');
         }
       } catch (e) { log('❌ 合成异常: ' + e.message); }
-    } else if (dry) { log('[dry-run] 跳过自动合成。'); }
+    } else if (dry) {
+      const plan = processed.map((p) => (p.views.includes('all') ? '全部面' : '面' + p.views.join(',')) + ' ← ' + path.basename(p.file));
+      log('[dry-run] 跳过自动合成。投放计划: ' + (plan.join('  |  ') || '（无图）'));
+    }
     onStep('合成定制产品', 'done');
 
     // 效果图**只记 URL、不下载本地**（亚马逊上架用指纹 CDN URL 即可；下载 100+ 张会压上游/占盘）

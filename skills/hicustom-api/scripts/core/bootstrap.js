@@ -42,6 +42,9 @@ const COMMANDS = [
   require('../app/Console/Commands/ListingTableCommand').ListingTableCommand,
   require('../app/Console/Commands/StampCommand').StampCommand,
   require('../app/Console/Commands/SampleListCommand').SampleListCommand,
+  require('../app/Console/Commands/GalleryPullCommand').GalleryPullCommand,
+  require('../app/Console/Commands/DesignAlignCommand').DesignAlignCommand,
+  require('../app/Console/Commands/GalleryCleanCommand').GalleryCleanCommand,
 ];
 
 function bootstrap() {
