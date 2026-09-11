@@ -53,6 +53,29 @@ function contentBbox(data, iw, ih, ch, thr = 245) {
   return n > 100 ? { x0: minx, x1: maxx, y0: miny, y1: maxy, n: n } : null;
 }
 
+/** 蓝色占位文字的行带（与 measureTarget 同判据）；供候选主图筛选复用 */
+function blueBands(data, iw, ih, ch) {
+  const rowCnt = new Int32Array(ih), rowMinX = new Int32Array(ih).fill(1e9), rowMaxX = new Int32Array(ih).fill(-1);
+  for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) {
+    const i = (y * iw + x) * ch, rr = data[i], gg = data[i + 1], bb = data[i + 2];
+    if (!(bb - rr > 45 && bb > 95 && rr < 140 && gg < 150)) continue;
+    rowCnt[y]++; if (x < rowMinX[y]) rowMinX[y] = x; if (x > rowMaxX[y]) rowMaxX[y] = x;
+  }
+  const bands = [];
+  for (let y = 0; y < ih; y++) {
+    if (rowCnt[y] < 2) continue;
+    const last = bands[bands.length - 1];
+    if (last && y - last.maxy <= 3) { last.maxy = y; last.n += rowCnt[y]; last.minx = Math.min(last.minx, rowMinX[y]); last.maxx = Math.max(last.maxx, rowMaxX[y]); }
+    else bands.push({ miny: y, maxy: y, n: rowCnt[y], minx: rowMinX[y], maxx: rowMaxX[y] });
+  }
+  return bands;
+}
+
+/** 把 --text 拆成多行：支持 `|` 或换行符作分隔（如 "YOUR DESIGN HERE | Any Color Text Logo Photo"） */
+function textLines(text) {
+  return String(text == null ? '' : text).split(/\s*\|\s*|\r?\n/).map((s) => s.trim()).filter(Boolean);
+}
+
 class DesignAlignService {
   constructor(app) {
     this.app = app;
@@ -137,32 +160,47 @@ class DesignAlignService {
   }
 
   /** ② 量目标：空白营销图上占位文字（蓝色）的标题块 → 印刷区坐标 */
-  async measureTarget({ productTypeId, viewId = 1, log = () => {} }) {
+  async measureTarget({ productTypeId, viewId = 1, pickMain = false, log = () => {} }) {
     const c = this.load(productTypeId, viewId);
     if (!c) throw new Error('请先 calibrate');
     const product = this.app.make('product');
     const r = await product.detail(productTypeId);
     const d = r.data || {};
     const rinfo = ((d.renderings_info || [])[0] || {}).renderings || [];
-    const url = rinfo[0] || '';
-    if (!url) throw new Error('该产品无主图 renderings');
+    if (!rinfo.length) throw new Error('该产品无主图 renderings');
+    // 默认用第 1 张主图（经实测：多数产品仅在首图叠了「占位文字」）。
+    // ★B（实验性，默认关，--pick-main 开启）：在候选主图里挑「蓝字可量 且 取景与标定渲染最接近」的一张。
+    //   ⚠️ 实测易误选到「蓝色元素/生活场景」非占位图 → 目标发散（中心跑出画面），故默认不用。
+    let pickIdx = 0;
+    if (pickMain) {
+      let bb2 = null;
+      if (c.renderB && fs.existsSync(c.renderB)) {
+        const b2 = await sharp(c.renderB).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+        bb2 = contentBbox(b2.data, b2.info.width, b2.info.height, b2.info.channels);
+      }
+      const candN = Math.min(rinfo.length, 8);
+      let bestSc = Infinity;
+      for (let i = 0; i < candN; i++) {
+        const u = rinfo[i]; if (!u) continue;
+        let im;
+        try {
+          const bf = path.join(this.dir, 'blank-cand-' + productTypeId + '-v' + viewId + '-' + i + '.jpg');
+          fs.writeFileSync(bf, Buffer.from(await (await fetch(u)).arrayBuffer()));
+          im = await sharp(bf).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+        } catch (e) { continue; }
+        if (blueBands(im.data, im.info.width, im.info.height, im.info.channels).length < 2) continue;
+        let sc = 9;
+        const bb1 = contentBbox(im.data, im.info.width, im.info.height, im.info.channels);
+        if (bb1 && bb2) { const sx = (bb2.x1 - bb2.x0 + 1) / (bb1.x1 - bb1.x0 + 1), sy = (bb2.y1 - bb2.y0 + 1) / (bb1.y1 - bb1.y0 + 1); sc = Math.abs(sx - 1) + Math.abs(sy - 1); }
+        if (sc < bestSc) { bestSc = sc; pickIdx = i; }
+      }
+      log('  (B) 主图扫描: 选中第 ' + (pickIdx + 1) + '/' + candN + ' 张（取景偏差 ' + (bestSc === Infinity ? 'n/a' : bestSc.toFixed(3)) + '）');
+    }
     const blankF = path.join(this.dir, 'blank-' + productTypeId + '-v' + viewId + '.jpg');
-    fs.writeFileSync(blankF, Buffer.from(await (await fetch(url)).arrayBuffer()));
+    fs.writeFileSync(blankF, Buffer.from(await (await fetch(rinfo[pickIdx])).arrayBuffer()));
     const img = await sharp(blankF).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const dd = img.data, iw = img.info.width, ih = img.info.height, ch = img.info.channels;
-    const rowCnt = new Int32Array(ih), rowMinX = new Int32Array(ih).fill(1e9), rowMaxX = new Int32Array(ih).fill(-1);
-    for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) {
-      const i = (y * iw + x) * ch, rr = dd[i], gg = dd[i + 1], bb = dd[i + 2];
-      if (!(bb - rr > 45 && bb > 95 && rr < 140 && gg < 150)) continue;
-      rowCnt[y]++; if (x < rowMinX[y]) rowMinX[y] = x; if (x > rowMaxX[y]) rowMaxX[y] = x;
-    }
-    const bands = [];
-    for (let y = 0; y < ih; y++) {
-      if (rowCnt[y] < 2) continue;
-      const last = bands[bands.length - 1];
-      if (last && y - last.maxy <= 3) { last.maxy = y; last.n += rowCnt[y]; last.minx = Math.min(last.minx, rowMinX[y]); last.maxx = Math.max(last.maxx, rowMaxX[y]); }
-      else bands.push({ miny: y, maxy: y, n: rowCnt[y], minx: rowMinX[y], maxx: rowMaxX[y] });
-    }
+    const bands = blueBands(dd, iw, ih, ch);
     if (bands.length < 2) throw new Error('未能在空白主图上量到占位文字（bands=' + bands.length + '）');
     const title = bands.slice(0, 3);
     const bbox = { x0: Math.min.apply(null, title.map((b) => b.minx)), x1: Math.max.apply(null, title.map((b) => b.maxx)), y0: title[0].miny, y1: title[title.length - 1].maxy };
@@ -217,6 +255,25 @@ class DesignAlignService {
     };
   }
 
+  /**
+   * 行结构惩罚：给「中段断词」和「行数不符」扣分，供 auto 选模式时使用。
+   * 目的：占位是「逐词堆叠」时，让 wrap（每词一行）胜出；包/袋类整块排版（无断词、行数相符）则不受影响。
+   *   断词：某行里的 token 不是完整单词、而是某个原词的片段（如 "DESIG"/"N" 之于 "DESIGN"）→ 每个 +0.05
+   *   行数：渲染行数与目标 band 行数之差 → 每行 +0.03
+   */
+  _structurePenalty(rows, targetLines, text) {
+    const words = String(text == null ? '' : text).replace(/[|\r\n]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+    let split = 0;
+    (rows || []).forEach((rowText) => {
+      String(rowText).split(/\s+/).filter(Boolean).forEach((tok) => {
+        if (words.indexOf(tok) !== -1) return;                          // 完整单词 → 正常
+        if (words.some((w) => w !== tok && w.indexOf(tok) !== -1)) split++;   // 片段 → 断词
+      });
+    });
+    const rowDiff = Math.abs((rows || []).length - (targetLines || 0));
+    return 0.05 * split + 0.03 * rowDiff;
+  }
+
   /** 单个候选参数的本地评估（红字 + 半尺寸快渲）→ { iou, bbox, target, params } */
   /** 预处理：解码 base/mask 一次 + 建各分辨率白底画布（供 evalCandidate 复用） */
   async prepare({ productTypeId, viewId = 1, q = 0.5 }) {
@@ -242,8 +299,9 @@ class DesignAlignService {
     const tgt = tgtFull;
     if (fast) {
       // 快速路径：只算布局 bbox（dryRun），再经 H 映射 → 完全不做图像运算
+      const _ph = textLines(text), _multi = _ph.length >= 2;
       const r = await stamp(session && session.canvas ? session.canvas : path.join(this.dir, 'canvas-sweep-' + productTypeId + '-v' + viewId + '.jpg'), {
-        lines: [{ text: text, color: color, font: 'bold', weight: 800, posV: 'middle', size: params.mode === 'box' ? 'box' : 'wrap', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }],
+        lines: _ph.map((t) => ({ text: t, color: color, font: 'bold', weight: 800, posV: 'middle', size: _multi ? 'auto' : (params.mode === 'box' ? 'box' : 'wrap'), letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })),
         block: params.mode === 'box'
           ? { widthRatio: params.w, heightRatio: params.h, vAlign: 'middle', nudgeUp: params.n, nudgeX: params.x || 0, rowGap: params.g }
           : { widthRatio: params.w, heightRatio: 0.95, vAlign: 'middle', nudgeUp: params.n, rowGap: params.g },
@@ -257,15 +315,16 @@ class DesignAlignService {
         minx: Math.round(Math.min.apply(null, cs.map((p) => p[0]))), maxx: Math.round(Math.max.apply(null, cs.map((p) => p[0]))),
         miny: Math.round(Math.min.apply(null, cs.map((p) => p[1]))), maxy: Math.round(Math.max.apply(null, cs.map((p) => p[1]))),
       };
-      return { iou: Engine.iou(bbox, tgt), bbox: bbox, target: tgt, params: params, mode: 'fast' };
+      return { iou: Engine.iou(bbox, tgt), bbox: bbox, target: tgt, params: params, mode: 'fast', rows: r.lines.map((l) => l.text) };
     }
     const SW = Math.max(120, Math.round(PA.width * q)), SH = Math.max(120, Math.round(PA.height * q));
     const canvas = (session && session.canvas) || path.join(this.dir, 'canvas-sweep-' + productTypeId + '-v' + viewId + '-q' + String(q).replace('.', '') + '.jpg');
     if (!fs.existsSync(canvas)) await sharp({ create: { width: SW, height: SH, channels: 3, background: '#FFFFFF' } }).jpeg({ quality: 92 }).toFile(canvas);
     const isBox = params.mode === 'box';
+    const _ph2 = textLines(text), _multi2 = _ph2.length >= 2;
     // 设计图：只回 buffer（不落盘）
     const res = await stamp(canvas, {
-      lines: [{ text: text, color: color, font: 'bold', weight: 800, posV: 'middle', size: isBox ? 'box' : 'wrap', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }],
+      lines: _ph2.map((t) => ({ text: t, color: color, font: 'bold', weight: 800, posV: 'middle', size: _multi2 ? 'auto' : (isBox ? 'box' : 'wrap'), letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })),
       block: isBox
         ? { widthRatio: params.w, heightRatio: params.h, vAlign: 'middle', nudgeUp: params.n, nudgeX: params.x || 0, rowGap: params.g }
         : { widthRatio: params.w, heightRatio: 0.95, vAlign: 'middle', nudgeUp: params.n, rowGap: params.g },
@@ -277,11 +336,11 @@ class DesignAlignService {
     });
     const o0 = Engine.measureBboxRaw(mock.buffer, mock.info.width, mock.info.height, mock.info.channels, (r, g, b) => r > 190 && g < 70 && b < 70, Math.max(6, Math.round(12 * SC / 0.5)));
     const o = o0 ? { minx: Math.round(o0.minx / SC), maxx: Math.round(o0.maxx / SC), miny: Math.round(o0.miny / SC), maxy: Math.round(o0.maxy / SC), n: o0.n } : null;
-    return { iou: o ? Engine.iou(o, tgt) : 0, bbox: o, target: tgt, params: params, mode: 'render' };
+    return { iou: o ? Engine.iou(o, tgt) : 0, bbox: o, target: tgt, params: params, mode: 'render', rows: res.lines.map((l) => l.text) };
   }
 
-  /** 生成设计图（素材 cover 适配 + 按参数叠字） */
-  async buildDesign({ productTypeId, viewId = 1, image, text = 'YOUR DESIGN HERE', color, widthRatio, rowGap, nudgeUp, outFile, log = () => {} }) {
+  /** 生成设计图（素材 cover 适配 + 按参数叠字；支持多行 + 每行独立颜色/字号倍率） */
+  async buildDesign({ productTypeId, viewId = 1, image, text = 'YOUR DESIGN HERE', color, widthRatio, rowGap, nudgeUp, lineColors, lineScales, font, outFile, log = () => {} }) {
     const c = this.load(productTypeId, viewId);
     if (!c) throw new Error('请先 calibrate');
     const PA = c.printArea;
@@ -293,19 +352,50 @@ class DesignAlignService {
     const canvas = path.join(this.dir, 'canvas-' + productTypeId + '-v' + viewId + '.jpg');
     const buf = await imageTool.fitImage({ input: image, targetW: PA.width, targetH: PA.height, fit: 'cover', quality: 94 });
     imageTool.save(buf, canvas);
-    let col = color;
-    if (!col) { try { const cc = await pickDistinctColors(canvas, 1, {}); col = (cc.colors && cc.colors[0]) || '#FFFFFF'; } catch (e) { col = '#FFFFFF'; } }
     const out = outFile || path.join(this.dir, 'design-' + productTypeId + '-v' + viewId + '.jpg');
-    const res = await stamp(canvas, {
-      lines: [{ text: text, color: col, font: 'bold', weight: 800, posV: 'middle', size: isBox ? 'box' : 'wrap', letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }],
-      block: isBox
-        ? { widthRatio: p.w, heightRatio: p.h, vAlign: 'middle', nudgeUp: p.n, nudgeX: p.x || 0, rowGap: p.g }
-        : { widthRatio: wr, heightRatio: 0.95, vAlign: 'middle', nudgeUp: nu, rowGap: rg },
-      background: { enabled: false }, outFile: out, format: 'jpeg', quality: 94,
-    });
-    c.lastParams = { mode: isBox ? 'box' : 'wrap', w: wr, g: rg, n: nu, x: p.x || 0, text: text };
+    const phrases = textLines(text), multi = phrases.length >= 2;   // 显式多行 → 每段一整行
+    const toList = (v) => (Array.isArray(v) ? v : String(v == null ? '' : v).split(',')).map((s) => String(s).trim()).filter(Boolean);
+    const fnt = font || 'bold';
+    const block = isBox
+      ? { widthRatio: p.w, heightRatio: multi ? 0.95 : p.h, vAlign: 'middle', nudgeUp: p.n, nudgeX: p.x || 0, rowGap: p.g }
+      : { widthRatio: wr, heightRatio: 0.95, vAlign: 'middle', nudgeUp: nu, rowGap: rg };
+    // 颜色：--line-colors 指定；否则自动配色（多行 → pickDistinctColors 挑 N 个「彼此区分」的反差色；单行 → 挑 1 个）
+    const lc = toList(lineColors);
+    let autoCol = [];
+    if (lc.length) autoCol = lc;
+    else if (color) autoCol = [color];
+    else { try { const cc = await pickDistinctColors(canvas, Math.max(1, phrases.length), {}); autoCol = cc.colors || []; } catch (e) { autoCol = []; } }
+    const lineCol = phrases.map((t, i) => autoCol[i] || autoCol[0] || color || '#FFFFFF');
+    const col = lineCol[0];
+    if (multi) log('  多行配色: ' + lineCol.join(' / '));
+    // 行组装：多行 → 第 1 段**逐词堆叠**成大字标题（统一字号，宽词撑满块宽，酷似占位）；
+    //          其余段各作**一整行小字**（副标题，默认 0.5×T，可用 --line-scales 覆盖）
+    const lsv = toList(lineScales).map((s) => parseFloat(s)).filter((n) => !isNaN(n));
+    let finalLines;
+    if (multi) {
+      // B：占位给「位置/大小基准」。第 1 段 → **逐词一行堆叠**成大标题（最宽词撑满块宽，似占位 YOUR/DESIGN/HERE）；
+      //    其余段 → 各作**一整行小字**（似空白图里 "1182 * 1863 px" 那行；单行、不超自身 fit 宽，不溢出/不断词）。
+      const titleWords = phrases[0].split(/\s+/).filter(Boolean);
+      const subPhrases = phrases.slice(1);
+      const draft = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fnt, weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }))
+        .concat(subPhrases.map((t, k) => ({ text: t, color: lineCol[k + 1] || lineCol[0], font: fnt, weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })));
+      const dry = await stamp(canvas, { lines: draft, block: block, background: { enabled: false }, dryRun: true });
+      const fits = dry.lines.map((l) => l.fontSize);
+      const T = Math.max(6, Math.min.apply(null, fits.slice(0, titleWords.length)));   // 标题统一字号（最宽词 fit 块宽）
+      const subFit = fits.slice(titleWords.length);
+      const sc = (j) => (lsv[j] != null ? lsv[j] : (j === 0 ? 1 : 0.5));
+      const subSize = (k) => Math.max(6, Math.min(Math.round(T * sc(k + 1)), Math.round(subFit[k] || T)));
+      finalLines = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fnt, weight: 800, posV: 'middle', size: T, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+      subPhrases.forEach((t, k) => finalLines.push({ text: t, color: lineCol[k + 1] || lineCol[0], font: fnt, weight: 800, posV: 'middle', size: subSize(k), letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+      log('  标题 ' + titleWords.length + ' 词（字号 ' + T + '，逐词似占位）+ 副标题 ' + subPhrases.length + ' 行（字号 ' + subPhrases.map((t, k) => subSize(k)).join('/') + '，单行似 "1182 * 1863 px"）');
+    } else {
+      const sz = isBox ? 'box' : 'wrap';
+      finalLines = phrases.map((t, i) => ({ text: t, color: lineCol[i], font: fnt, weight: 800, posV: 'middle', size: sz, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+    }
+    const res = await stamp(canvas, { lines: finalLines, block: block, background: { enabled: false }, outFile: out, format: 'jpeg', quality: 94 });
+    c.lastParams = { mode: multi ? 'lines' : (isBox ? 'box' : 'wrap'), w: wr, g: rg, n: nu, x: p.x || 0, text: text, colors: lineCol, scales: lsv, font: fnt };
     this.save(c);
-    return { file: out, canvas, color: col, mode: isBox ? 'box' : 'wrap', params: c.lastParams, fontSize: res.lines.map((l) => l.fontSize) };
+    return { file: out, canvas, color: col, colors: lineCol, font: fnt, mode: multi ? 'lines' : (isBox ? 'box' : 'wrap'), params: c.lastParams, fontSize: res.lines.map((l) => l.fontSize) };
   }
 
   /** 本地渲染 mockup */
@@ -320,7 +410,9 @@ class DesignAlignService {
     const c = this.load(productTypeId, viewId);
     if (!c) throw new Error('请先 calibrate');
     if (!c.target) throw new Error('请先 measureTarget');
-    let bestParams = null, bestIou = -1;
+    const tLines = (c.target && c.target.lines) || 0;
+    const scoreOf = (res) => res.iou - this._structurePenalty(res.rows, tLines, text);   // 结构感知评分
+    let best = null;
 
     if (mode !== 'box') {
       const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -352,23 +444,25 @@ class DesignAlignService {
         }
         steps.w *= 0.6; steps.g *= 0.6; steps.n *= 0.6;
       }
-      bestParams = { mode: 'wrap', w: bw, g: bg, n: bn, x: 0 }; bestIou = bi;
-      const conf = await this.evalCandidate({ productTypeId: productTypeId, viewId: viewId, text: text, color: color, params: bestParams, session: sess, fast: false });
-      log('  wrap 最优: w=' + bw + ' rowGap=' + bg + ' nudgeUp=' + bn + '  IoU(布局)=' + bi.toFixed(3) + '  IoU(实渲)=' + conf.iou.toFixed(3) + '  (共 ' + nEval + ' 次评估)');
-      bestIou = conf.iou;
+      const wrapParams = { mode: 'wrap', w: bw, g: bg, n: bn, x: 0 };
+      const conf = await this.evalCandidate({ productTypeId: productTypeId, viewId: viewId, text: text, color: color, params: wrapParams, session: sess, fast: false });
+      const wrapScore = scoreOf(conf);
+      best = { params: wrapParams, iou: conf.iou, score: wrapScore, rows: conf.rows };
+      log('  wrap 最优: w=' + bw + ' rowGap=' + bg + ' nudgeUp=' + bn + '  IoU(布局)=' + bi.toFixed(3) + '  IoU(实渲)=' + conf.iou.toFixed(3) + '  结构分=' + wrapScore.toFixed(3) + '  (共 ' + nEval + ' 次评估)');
     }
 
     if (mode !== 'wrap') {
       const bp = this.boxParams(c);
       const sessB = await this.prepare({ productTypeId: productTypeId, viewId: viewId, q: 0.5 });
       const r = await this.evalCandidate({ productTypeId: productTypeId, viewId: viewId, text: text, color: color, params: bp, q: 0.5, session: sessB, log: log });
-      log('  box  评估: w=' + bp.w + ' h=' + bp.h + ' nudgeUp=' + bp.n + ' nudgeX=' + bp.x + '  IoU(等效目标)=' + r.iou.toFixed(3));
-      if (mode === 'box' || r.iou > bestIou) { bestParams = bp; bestIou = r.iou; }
+      const bScore = scoreOf(r);
+      log('  box  评估: w=' + bp.w + ' h=' + bp.h + ' nudgeUp=' + bp.n + ' nudgeX=' + bp.x + '  IoU(等效目标)=' + r.iou.toFixed(3) + '  结构分=' + bScore.toFixed(3) + '  行=' + r.rows.length);
+      if (mode === 'box' || !best || bScore > best.score) best = { params: bp, iou: r.iou, score: bScore, rows: r.rows };
     }
 
-    log('  → 采用模式: ' + bestParams.mode + '  IoU=' + bestIou.toFixed(3));
-    c.params = bestParams;
-    c.sweepIou = bestIou;
+    log('  → 采用模式: ' + best.params.mode + '  IoU=' + best.iou.toFixed(3) + '  结构分=' + best.score.toFixed(3) + '  行=' + best.rows.length);
+    c.params = best.params;
+    c.sweepIou = best.iou;
     return this.save(c);
   }
 
@@ -388,8 +482,9 @@ class DesignAlignService {
     {
       const twin = path.join(this.dir, 'verify-twin-' + productTypeId + '-v' + viewId + '.jpg');
       const isBox = lp.mode === 'box';
+      const _tp = textLines(lp.text || 'YOUR DESIGN HERE'), _tmulti = _tp.length >= 2;
       await stamp(canvas, {
-        lines: [{ text: lp.text || 'YOUR DESIGN HERE', color: '#FF0000', font: 'bold', weight: 800, posV: 'middle', size: isBox ? 'box' : 'wrap', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }],
+        lines: _tp.map((t) => ({ text: t, color: '#FF0000', font: 'bold', weight: 800, posV: 'middle', size: _tmulti ? 'auto' : (isBox ? 'box' : 'wrap'), letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })),
         block: isBox
           ? { widthRatio: lp.w, heightRatio: lp.h, vAlign: 'middle', nudgeUp: lp.n, nudgeX: lp.x || 0, rowGap: lp.g }
           : { widthRatio: lp.w, heightRatio: 0.95, vAlign: 'middle', nudgeUp: lp.n, rowGap: lp.g },
@@ -409,16 +504,20 @@ class DesignAlignService {
     const mockF = path.join(this.dir, 'verify-mock-' + productTypeId + '-v' + viewId + '.jpg');
     await Engine.renderMockup({ H: c.H, printArea: c.printArea, baseFile: c.baseFile, maskFile: c.maskFile, designFile: designFile, outFile: mockF });
     const mockBox = await Engine.measureBbox(mockF, (r, g, b) => r > 190 && g < 70 && b < 70, 50);
-    const result = {
-      productTypeId: productTypeId, viewId: Number(viewId), code: up.data.code, url: u, realFile: realF,
-      iou: ours ? Engine.iou(ours, tgt) : 0, ours: ours, target: tgt, mockup: mockBox,
-    };
+    const oldCorr = c.correction || DEFAULT_CORRECTION;
+    let corrChanged = false;
     if (mockBox && ours) {
       const sx = (ours.maxx - ours.minx + 1) / (mockBox.maxx - mockBox.minx + 1);
       const sy = (ours.maxy - ours.miny + 1) / (mockBox.maxy - mockBox.miny + 1);
       c.correction = { sx: sx, sy: sy };
-      log('  correction 更新为 x' + sx.toFixed(3) + ' / x' + sy.toFixed(3));
+      corrChanged = Math.abs(sx - oldCorr.sx) > 0.02 || Math.abs(sy - oldCorr.sy) > 0.02;
+      log('  correction 更新为 x' + sx.toFixed(3) + ' / x' + sy.toFixed(3) + (corrChanged ? '（已变化）' : '（与上次接近）'));
     }
+    const result = {
+      productTypeId: productTypeId, viewId: Number(viewId), code: up.data.code, url: u, realFile: realF,
+      iou: ours ? Engine.iou(ours, tgt) : 0, ours: ours, target: tgt, mockup: mockBox,
+      correction: c.correction, correctionChanged: corrChanged,
+    };
     try { this.app.make('pendingCleanup').add([{ code: up.data.code, note: 'verify ' + productTypeId + ' v' + viewId }]); } catch (e) { /* ignore */ }
     c.verify = { mode: (lp.mode || 'wrap'), iou: result.iou, code: up.data.code, at: new Date().toISOString() };
     c.uploads = (c.uploads || []).concat([up.data.code]);
