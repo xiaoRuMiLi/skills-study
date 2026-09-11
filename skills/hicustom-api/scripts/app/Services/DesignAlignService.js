@@ -72,6 +72,34 @@ function blueBands(data, iw, ih, ch, gap) {
   return bands;
 }
 
+/**
+ * 单带「谷底」细分：把并成 1 条带的紧贴多行占位，按行投影的显著低谷切成多行。
+ * 返回细分后的 bands 数组；不宜细分（行数不合理）返回 null。
+ */
+function valleySplitBand(data, iw, ih, ch, band) {
+  const y0 = band.miny, y1 = band.maxy, n = y1 - y0 + 1;
+  if (n < 8) return null;
+  const isBlue = (p) => { const r = data[p], g = data[p + 1], b = data[p + 2]; return (b - r > 45 && b > 95 && r < 140 && g < 150); };
+  const rowCnt = new Float64Array(n);
+  for (let i = 0; i < n; i++) { const y = y0 + i; let c = 0; for (let x = 0; x < iw; x++) if (isBlue((y * iw + x) * ch)) c++; rowCnt[i] = c; }
+  const sm = new Float64Array(n);
+  for (let i = 0; i < n; i++) { let s = 0, c = 0; for (let d = -2; d <= 2; d++) { const k = i + d; if (k >= 0 && k < n) { s += rowCnt[k]; c++; } } sm[i] = s / c; }
+  const maxv = Math.max.apply(null, Array.from(sm)) || 1;
+  const thr = maxv * 0.5;                                  // 低于峰值 50% 视为"行间低谷"
+  const segs = []; let inRun = false, st = 0;
+  for (let i = 0; i < n; i++) {
+    if (sm[i] >= thr) { if (!inRun) { inRun = true; st = i; } }
+    else if (inRun) { segs.push([st, i - 1]); inRun = false; }
+  }
+  if (inRun) segs.push([st, n - 1]);
+  if (segs.length < 2 || segs.length > 4) return null;     // 只接受 2~4 行（合理文本行数）
+  return segs.map(([a, b]) => {
+    let minx = 1e9, maxx = -1, cnt = 0;
+    for (let y = y0 + a; y <= y0 + b; y++) for (let x = 0; x < iw; x++) { const p = (y * iw + x) * ch; if (!isBlue(p)) continue; cnt++; if (x < minx) minx = x; if (x > maxx) maxx = x; }
+    return { miny: y0 + a, maxy: y0 + b, n: cnt, minx: minx, maxx: maxx };
+  });
+}
+
 /** 把 --text 拆成多行：支持 `|` 或换行符作分隔（如 "YOUR DESIGN HERE | Any Color Text Logo Photo"） */
 function textLines(text) {
   return String(text == null ? '' : text).split(/\s*\|\s*|\r?\n/).map((s) => s.trim()).filter(Boolean);
@@ -205,9 +233,13 @@ class DesignAlignService {
     fs.writeFileSync(blankF, Buffer.from(await (await fetch(rinfo[pickIdx])).arrayBuffer()));
     const img = await sharp(blankF).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const dd = img.data, iw = img.info.width, ih = img.info.height, ch = img.info.channels;
-    const bands = blueBands(dd, iw, ih, ch);
+    let bands = blueBands(dd, iw, ih, ch);
     if (!bands.length) throw new Error('未能在空白主图上量到占位文字（bands=0，主图无占位文字）');
-    if (bands.length === 1) log('  占位为单块（bands=1，行紧贴）→ 按整块作目标');
+    if (bands.length === 1) {
+      const refined = valleySplitBand(dd, iw, ih, ch, bands[0]);   // ★谷底细分：治紧贴/微斜的多行占位
+      if (refined) { log('  ★占位行紧贴 → 谷底细分为 ' + refined.length + ' 行'); bands = refined; }
+      else log('  占位为单块（bands=1，行紧贴）→ 按整块作目标');
+    }
     const title = bands.slice(0, 3);
     const bbox = { x0: Math.min.apply(null, title.map((b) => b.minx)), x1: Math.max.apply(null, title.map((b) => b.maxx)), y0: title[0].miny, y1: title[title.length - 1].maxy };
 
@@ -234,6 +266,7 @@ class DesignAlignService {
     const p1 = Engine.apply(Hinv, q1[0], q1[1]);
     const PA = c.printArea;
     const tn = { w: (p1[0] - p0[0]) / PA.width, h: (p1[1] - p0[1]) / PA.height, cx: (p0[0] + p1[0]) / 2 / PA.width, cy: (p0[1] + p1[1]) / 2 / PA.height };
+    log('  目标(原始归一): 宽 ' + tn.w.toFixed(3) + ' 高 ' + tn.h.toFixed(3) + ' 中心(' + tn.cx.toFixed(3) + ',' + tn.cy.toFixed(3) + ')');
     // 目标合理性断言：标定/占位异常会算出 NaN/负值/越界目标 → 判「不适用」，绝不产出垃圾设计
     if (![tn.w, tn.h, tn.cx, tn.cy].every(Number.isFinite) || tn.w < 0.01 || tn.h < 0.01 || tn.cx < -0.15 || tn.cx > 1.15 || tn.cy < -0.15 || tn.cy > 1.15) {
       throw new Error('未能在空白主图上量到占位文字（目标不合常理：标定或占位异常，可能非正面平铺）');
