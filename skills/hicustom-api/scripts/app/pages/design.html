@@ -58,6 +58,7 @@
       <div id="specinfo" class="muted" style="margin-top:6px;line-height:1.7"></div>
       <div class="row" style="margin:10px 0 0">
         <button id="fitbtn" disabled title="裁切/适配到印刷区尺寸">✂️ 适配到印刷区</button>
+        <button id="next-align" class="primary" disabled title="贴字首选：对齐空白商品占位">🎯 下一步：贴字对齐 ★</button>
         <button id="next-stamp" disabled>下一步：叠字</button>
         <button id="next-wf" disabled>下一步：跑 Workflow</button>
       </div>
@@ -175,7 +176,7 @@ function setCur(url, from, alsoRefreshList){
   CUR=url;
   $('cur').style.display=''; $('cur').src=url; $('cur').onload=updateSpec;
   $('curinfo').innerHTML='当前图案：<code>'+esc(url)+'</code> <span class="muted">（'+esc(from)+'）</span>';
-  $('next-stamp').disabled=false; $('next-wf').disabled=false;
+  $('next-stamp').disabled=false; $('next-wf').disabled=false; $('next-align').disabled=false;
   if(alsoRefreshList) loadPatterns();
   updateSpec();
 }
@@ -261,6 +262,7 @@ async function pollJob(id){
     await new Promise(r=>setTimeout(r,1500));
   }
 }
+$('next-align').onclick=()=>{ if(!CUR){ alert('请先在左侧选择或生成图案'); return; } location.href='/align.html?id='+encodeURIComponent(ID)+'&pattern='+encodeURIComponent(CUR); };
 $('next-stamp').onclick=()=>{ if(!CUR){ alert('请先在左侧选择或生成图案'); return; } location.href='/stamp.html?id='+encodeURIComponent(ID)+'&src='+encodeURIComponent(CUR); };
 $('next-wf').onclick=()=>alert('Workflow 按钮将在下一阶段接上。\n当前图案: '+CUR);
 loadProduct(); loadPrompt(); loadPatterns();

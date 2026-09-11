@@ -155,7 +155,8 @@ async function refresh(){
           +'<a href="'+esc(R.design||'#')+'" target="_blank"><img src="'+esc(R.design||'')+'" onerror="this.style.opacity=.2"/></a>'
           +'</div>'
           +'<div class="muted" style="margin-top:6px">效果图 <a href="'+esc(R.mockup||'#')+'" target="_blank">mockup</a> · <a href="'+esc(R.design||'#')+'" target="_blank">design</a> · <a href="'+esc(R.plain||'#')+'" target="_blank">plain</a> · 字号 '+esc((R.fontSize||[]).join('/'))+' · 色 '+esc((R.colors||[]).join('/'))+(R.verifyIou!=null?(' · 真实IoU '+esc(R.verifyIou)):'')+'</div>'
-          +'<div class="muted">下一步：<code>'+esc(R.next||'')+'</code></div>'; }
+          +'<div class="muted">下一步：<code>'+esc(R.next||'')+'</code></div>'
+          +'<div class="row" style="margin-top:8px"><button class="primary" data-wf="'+esc(R.productId)+'" data-images="'+esc((R.design||'')+':'+(R.face||1)+','+(R.plain||'')+':all')+'">▶️ 接着跑 Workflow（一条龙）</button></div>'; }
       if(job.status==='error'){ res='<div class="err" style="margin-top:6px">'+esc((job.result&&job.result.err)||'出错')+'</div>'; }
       const cancel = job.status==='queued' ? '<button data-cancel="'+esc(job.id)+'">✖ 取消</button>' : '';
       const lg=(job.log||[]).slice(-8).join('\n');
@@ -168,8 +169,19 @@ async function refresh(){
     }).join('') : '<span class="muted">暂无进行中任务（勾选「显示已完成/失败」可看历史）。</span>';
   }catch(e){}
 }
-$('jobs').addEventListener('click',(e)=>{ const b=e.target.closest&&e.target.closest('[data-cancel]'); if(!b) return;
-  fetch('/api/flow/cancel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.getAttribute('data-cancel')})}).then(()=>refresh()); });
+$('jobs').addEventListener('click',(e)=>{
+  const c=e.target.closest&&e.target.closest('[data-cancel]');
+  if(c){ fetch('/api/flow/cancel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:c.getAttribute('data-cancel')})}).then(()=>refresh()); return; }
+  const w=e.target.closest&&e.target.closest('[data-wf]');
+  if(w){
+    const pid=w.getAttribute('data-wf'), images=w.getAttribute('data-images');
+    w.disabled=true; const o=w.textContent; w.textContent='入队 workflow…';
+    fetch('/api/flow/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({flow:'workflow',params:{productId:pid,images:images,fit:'cover'}})})
+      .then(r=>r.json()).then(j=>{ if(!j.ok) throw new Error(j.err||'失败'); alert('已入队 Workflow（'+j.jobId+'）。'); location.href='/workflow.html?id='+encodeURIComponent(pid); })
+      .catch(err=>{ alert('入队失败: '+err.message); w.disabled=false; w.textContent=o; });
+    return;
+  }
+});
 $('showdone').addEventListener('change', refresh);
 $('clear').onclick=async()=>{
   if(!confirm('清理所有「已完成/失败」的 align 任务？')) return;
