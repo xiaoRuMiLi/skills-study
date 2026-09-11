@@ -54,7 +54,8 @@ function contentBbox(data, iw, ih, ch, thr = 245) {
 }
 
 /** 蓝色占位文字的行带（与 measureTarget 同判据）；供候选主图筛选复用 */
-function blueBands(data, iw, ih, ch) {
+function blueBands(data, iw, ih, ch, gap) {
+  const G = (gap == null ? 3 : gap);
   const rowCnt = new Int32Array(ih), rowMinX = new Int32Array(ih).fill(1e9), rowMaxX = new Int32Array(ih).fill(-1);
   for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) {
     const i = (y * iw + x) * ch, rr = data[i], gg = data[i + 1], bb = data[i + 2];
@@ -65,7 +66,7 @@ function blueBands(data, iw, ih, ch) {
   for (let y = 0; y < ih; y++) {
     if (rowCnt[y] < 2) continue;
     const last = bands[bands.length - 1];
-    if (last && y - last.maxy <= 3) { last.maxy = y; last.n += rowCnt[y]; last.minx = Math.min(last.minx, rowMinX[y]); last.maxx = Math.max(last.maxx, rowMaxX[y]); }
+    if (last && y - last.maxy <= G) { last.maxy = y; last.n += rowCnt[y]; last.minx = Math.min(last.minx, rowMinX[y]); last.maxx = Math.max(last.maxx, rowMaxX[y]); }
     else bands.push({ miny: y, maxy: y, n: rowCnt[y], minx: rowMinX[y], maxx: rowMaxX[y] });
   }
   return bands;
@@ -205,7 +206,8 @@ class DesignAlignService {
     const img = await sharp(blankF).removeAlpha().raw().toBuffer({ resolveWithObject: true });
     const dd = img.data, iw = img.info.width, ih = img.info.height, ch = img.info.channels;
     const bands = blueBands(dd, iw, ih, ch);
-    if (bands.length < 2) throw new Error('未能在空白主图上量到占位文字（bands=' + bands.length + '）');
+    if (!bands.length) throw new Error('未能在空白主图上量到占位文字（bands=0，主图无占位文字）');
+    if (bands.length === 1) log('  占位为单块（bands=1，行紧贴）→ 按整块作目标');
     const title = bands.slice(0, 3);
     const bbox = { x0: Math.min.apply(null, title.map((b) => b.minx)), x1: Math.max.apply(null, title.map((b) => b.maxx)), y0: title[0].miny, y1: title[title.length - 1].maxy };
 
@@ -231,9 +233,14 @@ class DesignAlignService {
     const p0 = Engine.apply(Hinv, q0[0], q0[1]);
     const p1 = Engine.apply(Hinv, q1[0], q1[1]);
     const PA = c.printArea;
+    const tn = { w: (p1[0] - p0[0]) / PA.width, h: (p1[1] - p0[1]) / PA.height, cx: (p0[0] + p1[0]) / 2 / PA.width, cy: (p0[1] + p1[1]) / 2 / PA.height };
+    // 目标合理性断言：标定/占位异常会算出 NaN/负值/越界目标 → 判「不适用」，绝不产出垃圾设计
+    if (![tn.w, tn.h, tn.cx, tn.cy].every(Number.isFinite) || tn.w < 0.01 || tn.h < 0.01 || tn.cx < -0.15 || tn.cx > 1.15 || tn.cy < -0.15 || tn.cy > 1.15) {
+      throw new Error('未能在空白主图上量到占位文字（目标不合常理：标定或占位异常，可能非正面平铺）');
+    }
     c.target = {
       bboxPrint: { x0: p0[0], y0: p0[1], x1: p1[0], y1: p1[1] },
-      norm: { w: (p1[0] - p0[0]) / PA.width, h: (p1[1] - p0[1]) / PA.height, cx: (p0[0] + p1[0]) / 2 / PA.width, cy: (p0[1] + p1[1]) / 2 / PA.height },
+      norm: tn,
       lines: title.length, framing: norm,
       bands: bands.map((b) => ({ miny: b.miny, maxy: b.maxy, minx: b.minx, maxx: b.maxx })),
     };
