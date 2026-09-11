@@ -145,6 +145,10 @@ class DesignAlignService {
     const H = rb.H;
     const maxr = rb.maxInlier;
     log('  标记 ' + rb.inliers.length + '/' + pairsAll.length + ' 参与拟合（剔除离群 ' + rb.outliers.length + '），最大残差 ' + maxr.toFixed(2) + 'px (' + (maxr / bm.imageSize[0] * 100).toFixed(2) + '%)');
+    // 退化防护：有效点过少或残差非有限（共线/遮挡）→ 判「不适用」，不再继续（NaN 不再流向下游）
+    if (!Number.isFinite(maxr) || rb.inliers.length < 4) {
+      throw new Error('标定退化：有效标记不足或残差非有限（inliers=' + rb.inliers.length + '，maxResidual=' + maxr + '）');
+    }
 
     try {
       const pc = this.app.make('pendingCleanup');

@@ -85,8 +85,9 @@ class FlowRunner {
           this.store.update(id, { steps });
         };
         const result = await flow.run(Object.assign({}, params, { onStep, log: (m) => this.store.log(id, m) }));
-        this.store.update(id, { status: 'done', result });
-        this.store.log(id, '✅ 完成');
+        const skipped = !!(result && result.skipped);              // 档1：不适用 → skipped（非错误）
+        this.store.update(id, { status: skipped ? 'skipped' : 'done', result: result });
+        this.store.log(id, skipped ? ('⏭ 跳过（不适用）：' + (result.reason || '')) : '✅ 完成');
       } else {
         throw new Error('未知流程: ' + (job && job.flow));
       }

@@ -30,6 +30,7 @@
   .b-running{background:#e6f4ff;border-color:#91caff;color:#0958d9}
   .b-done{background:#e8fff3;border-color:#b7eb8f;color:#128a3f}
   .b-error{background:#fff1f0;border-color:#ffa39e;color:#b91c1c}
+  .b-skip{background:#f2f3f5;border-color:#d9d9d9;color:#8c8c8c}
   .steps{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
   .step{font-size:11px;padding:2px 8px;border-radius:6px;border:1px solid var(--line);color:var(--muted);background:#fff}
   .step.running{border-color:#91caff;color:#0958d9;background:#e6f4ff}
@@ -135,13 +136,13 @@ $('start').onclick=async()=>{
   finally{ b.disabled=false; b.textContent=o; }
 };
 
-const STA={queued:['排队中','b-queued'],running:['运行中','b-running'],done:['完成','b-done'],error:['失败','b-error']};
+const STA={queued:['排队中','b-queued'],running:['运行中','b-running'],done:['完成','b-done'],error:['失败','b-error'],skipped:['跳过·不适用','b-skip']};
 async function refresh(){
   try{
     const j=await (await fetch('/api/flow/list?flow=align')).json(); if(!j.ok) return;
     const all=j.jobs||[];
     const cnt=(st)=>all.filter(x=>x.status===st).length;
-    $('jobstat').textContent = all.length? ('运行 '+cnt('running')+' · 排队 '+cnt('queued')+' · 完成 '+cnt('done')+' · 失败 '+cnt('error')) : '';
+    $('jobstat').textContent = all.length? ('运行 '+cnt('running')+' · 排队 '+cnt('queued')+' · 完成 '+cnt('done')+' · 跳过 '+cnt('skipped')+' · 失败 '+cnt('error')) : '';
     const vis = $('showdone').checked ? all : all.filter(x=>x.status==='queued'||x.status==='running');
     $('jobs').innerHTML = vis.length? vis.map(job=>{
       const st=STA[job.status]||[job.status,''];
@@ -158,6 +159,7 @@ async function refresh(){
           +'<div class="muted">下一步：<code>'+esc(R.next||'')+'</code></div>'
           +'<div class="row" style="margin-top:8px"><button class="primary" data-wf="'+esc(R.productId)+'" data-images="'+esc((R.design||'')+':'+(R.face||1)+','+(R.plain||'')+':all')+'">▶️ 接着跑 Workflow（一条龙）</button></div>'; }
       if(job.status==='error'){ res='<div class="err" style="margin-top:6px">'+esc((job.result&&job.result.err)||'出错')+'</div>'; }
+      if(job.status==='skipped'){ res='<div class="muted" style="margin-top:6px">⏭ <b>不适用</b>：'+esc((job.result&&job.result.reason)||'（原因未知）')+'<br/><span style="opacity:.75">该产品为曲面/遮挡/占位单行等，贴字对齐不适用；可改用「叠字(stamp)」手动处理。</span></div>'; }
       const cancel = job.status==='queued' ? '<button data-cancel="'+esc(job.id)+'">✖ 取消</button>' : '';
       const lg=(job.log||[]).slice(-8).join('\n');
       return '<div class="job"><div class="row" style="justify-content:space-between;margin-bottom:6px">'
