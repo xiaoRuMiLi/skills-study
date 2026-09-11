@@ -70,6 +70,7 @@
       <h2>① 选择图案（patterns/ 图案库 + input/）</h2>
       <div class="row"><button id="rpat">↻ 刷新图案库</button><span id="patcnt" class="muted"></span></div>
       <div class="grid" id="patgrid"></div>
+      <div class="row" id="pager" style="margin:10px 0 0;justify-content:center;gap:12px"></div>
     </div>
 
     <div class="card">
@@ -147,13 +148,27 @@ $('rewrite').onclick=async()=>{
 };
 $('resetp').onclick=()=>{ $('prompt').value=DEFAULT_PROMPT; $('gsize').textContent='生成尺寸: '+SIZE; autoGrow(); };
 
-async function loadPatterns(){
-  try{ const j=await (await fetch('/api/patterns')).json(); if(!j.ok) throw new Error(j.err);
-    $('patcnt').textContent='共 '+(j.items||[]).length+' 张';
-    $('patgrid').innerHTML=(j.items||[]).slice().reverse().map(x=>`<div><div class="pitem" data-url="${esc(x.url)}" onclick="pick(this)"><img src="${esc(x.url)}" loading="lazy" onerror="this.style.opacity=.2"/></div><div class="pname">${esc(x.name)}</div></div>`).join('') || '<span class="muted">图案库为空（放图到 patterns/，或 AI 生成）</span>';
+let PPAGE=1, PSIZE=48, PPAGES=1, PTOTAL=0;
+async function loadPatterns(page){
+  if(page) PPAGE=page;
+  try{
+    const j=await (await fetch('/api/patterns?page='+PPAGE+'&size='+PSIZE)).json(); if(!j.ok) throw new Error(j.err);
+    PPAGE=j.page||1; PPAGES=j.pages||1; PTOTAL=j.total||0;
+    $('patcnt').textContent='共 '+PTOTAL+' 张 · 第 '+PPAGE+'/'+PPAGES+' 页';
+    // 网格只加载缩略图（thumb）；点选后用原图（data-url）
+    $('patgrid').innerHTML=(j.items||[]).map(x=>`<div><div class="pitem" data-url="${esc(x.url)}" onclick="pick(this)"><img src="${esc(x.thumb||x.url)}" loading="lazy" onerror="this.style.opacity=.2"/></div><div class="pname">${esc(x.name)}</div></div>`).join('') || '<span class="muted">图案库为空（放图到 patterns/，或 AI 生成）</span>';
+    renderPager();
   }catch(e){ $('patcnt').textContent='加载失败: '+e.message; }
 }
-$('rpat').onclick=loadPatterns;
+function renderPager(){
+  const el=$('pager'); if(!el) return;
+  if(PPAGES<=1){ el.innerHTML=''; return; }
+  el.innerHTML='<button '+(PPAGE<=1?'disabled':'')+' onclick="gotoPage('+(PPAGE-1)+')">‹ 上一页</button>'
+    +'<span class="muted">第 '+PPAGE+' / '+PPAGES+' 页</span>'
+    +'<button '+(PPAGE>=PPAGES?'disabled':'')+' onclick="gotoPage('+(PPAGE+1)+')">下一页 ›</button>';
+}
+window.gotoPage=(n)=>{ if(n>=1&&n<=PPAGES){ loadPatterns(n); const g=$('patgrid'); if(g) g.scrollIntoView({block:'nearest'}); } };
+$('rpat').onclick=()=>loadPatterns(1);
 window.pick=(el)=>{ document.querySelectorAll('.pitem.sel').forEach(n=>n.classList.remove('sel')); el.classList.add('sel'); setCur(el.getAttribute('data-url'),'选自图案库', false); };
 
 function setCur(url, from, alsoRefreshList){

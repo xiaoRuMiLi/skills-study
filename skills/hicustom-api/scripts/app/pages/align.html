@@ -58,6 +58,7 @@
       <button id="loadpat">🔄 加载图案候选</button>
     </div>
     <div class="grid" id="items"></div>
+    <div class="row" id="pager" style="margin:10px 0 0;justify-content:center;gap:12px"></div>
     <div class="row" style="margin-top:10px">
       <label>文案（多行用 | 分隔）</label>
       <input type="text" id="text" value="YOUR DESIGN HERE | Any Color Text Logo Photo" style="flex:1;min-width:320px"/>
@@ -93,11 +94,14 @@ const S={ id:Q.get('id')||'', sel:Q.get('pattern')||'', items:[] };
 $('pid').value=S.id; if(S.sel) $('pattern').value=S.sel;
 if(S.id) setTimeout(()=>loadPatterns(), 100);
 
-async function loadPatterns(){
+let PPAGE=1, PSIZE=48, PPAGES=1, PTOTAL=0;
+async function loadPatterns(page){
+  if(page) PPAGE=page;
   $('selinfo').textContent='加载图案中…';
   try{
-    const j=await (await fetch('/api/patterns')).json(); if(!j.ok) throw new Error(j.err||'no /api/patterns');
-    S.items=(j.items||[]).slice(0,60);
+    const j=await (await fetch('/api/patterns?page='+PPAGE+'&size='+PSIZE)).json(); if(!j.ok) throw new Error(j.err||'no /api/patterns');
+    PPAGE=j.page||1; PPAGES=j.pages||1; PTOTAL=j.total||0;
+    S.items=j.items||[];
     if(!S.sel && S.items.length){ S.sel=S.items[0].url; $('pattern').value=S.sel; }
     renderItems();
   }catch(e){ $('selinfo').className='err'; $('selinfo').textContent='加载图案失败（可直接在输入框填 URL/路径）：'+e.message; }
@@ -105,13 +109,16 @@ async function loadPatterns(){
 function renderItems(){
   $('items').innerHTML=S.items.length? S.items.map(x=>`
     <div class="pitem ${x.url===S.sel?'sel':''}" data-url="${esc(x.url)}" onclick="pick(this)">
-      <img src="${esc(x.url)}" loading="lazy" onerror="this.style.opacity=.2"/><div class="nm">${esc(x.name||x.url)}</div>
+      <img src="${esc(x.thumb||x.url)}" loading="lazy" onerror="this.style.opacity=.2"/><div class="nm">${esc(x.name||x.url)}</div>
     </div>`).join('') : '<span class="muted">无候选（可直接填图案URL/路径）。</span>';
+  const pg=$('pager');
+  if(pg) pg.innerHTML = PPAGES<=1 ? '' : ('<button '+(PPAGE<=1?'disabled':'')+' onclick="gotoPage('+(PPAGE-1)+')">‹ 上一页</button><span class="muted">第 '+PPAGE+' / '+PPAGES+' 页 · 共 '+PTOTAL+' 张</span><button '+(PPAGE>=PPAGES?'disabled':'')+' onclick="gotoPage('+(PPAGE+1)+')">下一页 ›</button>');
   $('selinfo').className='muted';
-  $('selinfo').innerHTML = S.sel ? ('已选图案：<code>'+esc(S.sel)+'</code>') : '';
+  $('selinfo').innerHTML = S.sel ? ('已选图案：<code>'+esc(S.sel)+'</code>'+(PPAGES>1?(' · 共 '+PTOTAL+' 张'):'')) : '';
 }
+window.gotoPage=(n)=>{ if(n>=1&&n<=PPAGES) loadPatterns(n); };
 window.pick=(el)=>{ document.querySelectorAll('.pitem.sel').forEach(n=>n.classList.remove('sel')); el.classList.add('sel'); S.sel=el.getAttribute('data-url'); $('pattern').value=S.sel; renderItems(); };
-$('loadpat').onclick=loadPatterns;
+$('loadpat').onclick=()=>loadPatterns(1);
 
 $('start').onclick=async()=>{
   const id=$('pid').value.trim(); const pattern=$('pattern').value.trim();

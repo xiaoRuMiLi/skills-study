@@ -54,6 +54,19 @@ function resolveFile(p) {
   return null;
 }
 
+// 缩略图缓存目录（放 output/ 下，已被 .gitignore 忽略）+ URL→物理文件
+const THUMB_DIR = path.join(ROOT, '.thumbs');
+try { fs.mkdirSync(THUMB_DIR, { recursive: true }); } catch (e) { /* ignore */ }
+function resolveAssetUrl(u) {
+  const s = decodeURIComponent(String(u || '')).replace(/^\/+/, '').split('?')[0];
+  if (!s) return null;
+  for (const b of [SKILL_ROOT, ROOT, PAGES]) {
+    const f = path.join(b, s);
+    try { if (fs.existsSync(f) && fs.statSync(f).isFile()) return f; } catch (e) { /* ignore */ }
+  }
+  return null;
+}
+
 const json = (res, code, obj) => { res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(obj)); };
 const readBody = (req) => new Promise((resolve) => { let b = ''; req.on('data', (c) => { b += c; }); req.on('end', () => resolve(b || '')); });
 
@@ -319,12 +332,45 @@ http.createServer((req, res) => {
     return;
   }
 
-  // 图案图源候选：GET /api/patterns  → { items:[{name,url}] }（patterns/ 库 + input/<id>/）
+  // 缩略图：GET /api/thumb?src=<url>&w=160  → 生成并缓存小图（sharp），网格只加载小图
+  if (p === '/api/thumb') {
+    (async () => {
+      try {
+        const src = q.get('src'); const w = Math.max(32, Math.min(640, Number(q.get('w')) || 160));
+        if (!src) return json(res, 400, { ok: false, err: '缺少 src' });
+        const fp = resolveAssetUrl(src);
+        if (!fp) return json(res, 404, { ok: false, err: '源图不存在: ' + src });
+        const crypto = require('crypto');
+        let mt = 0; try { mt = fs.statSync(fp).mtimeMs; } catch (e) { /* ignore */ }
+        const h = crypto.createHash('md5').update(fp + '|' + w + '|' + mt).digest('hex');
+        const out = path.join(THUMB_DIR, h + '.jpg');
+        if (!fs.existsSync(out)) {
+          const sharp = require('../tools/node_modules/sharp');
+          await sharp(fp, { limitInputPixels: false }).resize(w, w, { fit: 'inside' }).jpeg({ quality: 78 }).toFile(out);
+        }
+        res.writeHead(200, { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=86400' });
+        fs.createReadStream(out).pipe(res);
+      } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
+    })();
+    return;
+  }
+
+  // 图案图源候选：GET /api/patterns?page=&size=  → { items:[{name,url,thumb}], page, size, total, pages }
+  // 服务端分页（默认 48/页）+ 每项带缩略图（网格只加载小图，点选后才用原图）
   if (p === '/api/patterns') {
     try {
-      const items = [];
+      const page = Math.max(1, Number(q.get('page')) || 1);
+      const size = Math.max(1, Math.min(200, Number(q.get('size')) || 48));
+      const all = [];
       const addDir = (dir, namePrefix, urlPrefix) => {
-        try { for (const f of fs.readdirSync(dir)) if (/\.(png|jpe?g|webp)$/i.test(f)) items.push({ name: namePrefix + f, url: urlPrefix + encodeURIComponent(f) }); } catch (e) { /* skip */ }
+        try {
+          for (const f of fs.readdirSync(dir)) {
+            if (!/\.(png|jpe?g|webp)$/i.test(f)) continue;
+            let mt = 0; try { mt = fs.statSync(path.join(dir, f)).mtimeMs; } catch (e) { /* ignore */ }
+            const url = urlPrefix + encodeURIComponent(f);
+            all.push({ name: namePrefix + f, url: url, thumb: '/api/thumb?src=' + encodeURIComponent(url) + '&w=160', _mt: mt });
+          }
+        } catch (e) { /* skip */ }
       };
       addDir(path.join(SKILL_ROOT, 'patterns'), '', '/patterns/');
       try {
@@ -333,7 +379,11 @@ http.createServer((req, res) => {
           if (fs.statSync(d).isDirectory()) addDir(d, sub + '/', '/input/' + encodeURIComponent(sub) + '/');
         }
       } catch (e) { /* no input */ }
-      return json(res, 200, { ok: true, items });
+      all.sort((a, b) => b._mt - a._mt);                     // 新图在前
+      const total = all.length, pages = Math.max(1, Math.ceil(total / size));
+      const pg = Math.min(page, pages), start = (pg - 1) * size;
+      const items = all.slice(start, start + size).map((x) => ({ name: x.name, url: x.url, thumb: x.thumb }));
+      return json(res, 200, { ok: true, items: items, page: pg, size: size, total: total, pages: pages });
     } catch (e) { return json(res, 500, { ok: false, err: e.message }); }
   }
 
