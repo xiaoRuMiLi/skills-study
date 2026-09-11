@@ -1,5 +1,8 @@
 # 叠字排版对齐（design:align）—— 让字"长"得和空白商品一样
 
+> ## ★★ 加字（贴字）首选方案
+> **凡涉及给图案/商品加文字，优先用本流程**（优于 `design-area:generate`）。位置/大小对齐空白商品占位文字、**不产生刊登记录**；支持多行（标题逐词堆叠 + 副标题单行/逐词换行）、逐段字体/颜色/字号、自动配色。
+
 > **要解决的问题**：图案适配印刷区 + 叠字后，字在商品上的**位置/大小**往往和空白商品自带的占位文字对不上
 > （过去只能走 `listing:generate` 真合成去"碰运气"，而且每试一次上游就多一条刊登记录）。
 > **本流程**：一次性标定 → 本地 mockup 无限次免费迭代 → 达标后才用 1 次线上预览复核。
@@ -29,7 +32,8 @@ node scripts/hi.js design:align --product-id 12659 --sweep
 | `--color #RRGGBB` | 字色；缺省用本地 `pickDistinctColors` 按底图自动选 |
 | `--line-colors "c1,c2"` | **多行**每行颜色（逗号分隔）；**缺省自动配色**——多行会挑 N 个「彼此区分」的反差色（`ContrastColor.pickDistinctColors`） |
 | `--line-scales "1,0.5"` | **多行**每段字号倍率（`[标题段, 副标题段2, …]`，相对标题字号 T）。默认 `[1, 0.5, 0.5…]`；副标题恒为**单行**（超宽会被压回自身 fit 宽）。可覆盖（如 `"1,0.35"`） |
-| `--font bold\|modern\|elegant\|script\|comic` | 字体别名（或直接给 CSS 字体族字符串）；缺省 `bold` |
+| `--font bold\|modern\|elegant\|script\|comic` | 全局字体别名（或直接给 CSS 字体族字符串）；缺省 `bold`。别名：`bold`=Arial Black/Impact、`modern`=Arial、`elegant`=Georgia、`script`=Segoe Script、`comic`=Comic Sans |
+| `--line-fonts "f1,f2"` | **多行每段独立字体**（逗号分隔，如 `"Franklin Gothic Medium,Segoe Script"`）；缺省用 `--font`。**本机实测可渲染**：`Arial Black`/`Impact`/`Georgia`/`Segoe Script`/`Franklin Gothic Medium`/`Bahnschrift`/`Trebuchet MS`/`Candara`/`Corbel`/`Cambria`/`Constantia`/`Palatino Linotype`/`Tahoma`/`Comic Sans MS`（`Ink Free` 等会回退，慎用） |
 | `--faces main\|all` | **多面策略**：`main`（默认）只主面加字、其余面用无字版；`all` 所有面都加字 | 
 | `--no-plain` | `--faces main` 时**不**另出无字版（只出带字图） |
 | `--mode wrap\|box` | **排版模式**：`wrap`=逐词堆叠（每词一行，如 `YOUR`/`DESIGN`/`HERE`）；`box`=整块贴合（字距拉伸，适合包/袋类占位）。缺省 `auto`：按「IoU − **结构惩罚**」自动择优——**中段断词**（每个片段 −0.05）和**行数不符**（每行 −0.03）会被扣分，从而让「逐词堆叠」在占位是逐词排布时胜出 |

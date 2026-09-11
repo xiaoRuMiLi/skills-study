@@ -28,7 +28,7 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 | 要改/扩展产品浏览 HTML 模板（加 section） | `references/html-template.md` |
 | 要在前端嵌 hicustom 设计器（iframe + 事件） | `references/designer-sdk.md` |
 | 要管理/增删改查商品、看管理后台、扩数据库字段 | `references/database.md` |
-| 给商品图加"定制区"文字标记（独立流程） | `references/design-area.md` |
+| 给商品图加"定制区"文字标记（独立流程·**加字备选**） | `references/design-area.md` |
 | 要把设计**合成到空白产品**、拿**干净效果图**再叠宣传文字（成品展示图） | `references/design-area.md`（「变体流程」节） |
 | 给任意图案叠加**可配置文字**（N 行/颜色/字体/粗细/位置，config 驱动，本地零 API） | `references/stamp.md` |
 | 要算/回填物流运费（含 cookie 抓取、8 国口径、推荐渠道、写回 shipping_* 列） | `references/shipping-quote.md` |
@@ -37,7 +37,7 @@ description: 指纹科技（HICUSTOM）按需定制开放平台 API 客户端。
 | 要搭/改**网页化流程**（首页/design/listing 页面、按钮触发、异步任务、共用 Flows） | `references/flows.md` |
 | 页面要**唤起 AI 协作**（改提示词/出方案/问答…；统一网关 `/api/ai/run`，可升级转 OpenClaw agent） | `references/ai-bridge.md` |
 | 要从商家后台**拉「我的图库 / 图库收藏」图片原图**（花瓣素材等，导出 ZIP 取件） | `references/gallery-pull.md` |
-| 要让**叠字的位置/大小与空白商品占位文字一致**（标定+本地mockup迭代+出图，不靠碰运气） | `references/design-align.md` |
+| ★**给图案/商品加文字（贴字首选方案）**：位置/大小与空白商品占位一致（标定+本地mockup迭代+出图，不靠碰运气；**优于 design-area**） | `references/design-align.md` |
 
 > 核心命令：`listing:generate --product-id <id> --images "图.jpg[:面]" [--dry-run]`
 > 图像步骤需 **sharp**（`scripts/tools/`，已装）；其余零第三方依赖。

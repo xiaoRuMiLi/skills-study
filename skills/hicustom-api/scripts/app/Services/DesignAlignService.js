@@ -340,7 +340,7 @@ class DesignAlignService {
   }
 
   /** 生成设计图（素材 cover 适配 + 按参数叠字；支持多行 + 每行独立颜色/字号倍率） */
-  async buildDesign({ productTypeId, viewId = 1, image, text = 'YOUR DESIGN HERE', color, widthRatio, rowGap, nudgeUp, lineColors, lineScales, font, outFile, log = () => {} }) {
+  async buildDesign({ productTypeId, viewId = 1, image, text = 'YOUR DESIGN HERE', color, widthRatio, rowGap, nudgeUp, lineColors, lineScales, font, lineFonts, outFile, log = () => {} }) {
     const c = this.load(productTypeId, viewId);
     if (!c) throw new Error('请先 calibrate');
     const PA = c.printArea;
@@ -356,6 +356,8 @@ class DesignAlignService {
     const phrases = textLines(text), multi = phrases.length >= 2;   // 显式多行 → 每段一整行
     const toList = (v) => (Array.isArray(v) ? v : String(v == null ? '' : v).split(',')).map((s) => String(s).trim()).filter(Boolean);
     const fnt = font || 'bold';
+    const lf = toList(lineFonts);
+    const fntOf = phrases.map((t, i) => lf[i] || fnt);   // 每段独立字体（--line-fonts "f1,f2"）
     const block = isBox
       ? { widthRatio: p.w, heightRatio: multi ? 0.95 : p.h, vAlign: 'middle', nudgeUp: p.n, nudgeX: p.x || 0, rowGap: p.g }
       : { widthRatio: wr, heightRatio: 0.95, vAlign: 'middle', nudgeUp: nu, rowGap: rg };
@@ -377,23 +379,23 @@ class DesignAlignService {
       //    其余段 → 各作**一整行小字**（似空白图里 "1182 * 1863 px" 那行；单行、不超自身 fit 宽，不溢出/不断词）。
       const titleWords = phrases[0].split(/\s+/).filter(Boolean);
       const subPhrases = phrases.slice(1);
-      const draft = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fnt, weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }))
-        .concat(subPhrases.map((t, k) => ({ text: t, color: lineCol[k + 1] || lineCol[0], font: fnt, weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })));
+      const draft = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fntOf[0], weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } }))
+        .concat(subPhrases.map((t, k) => ({ text: t, color: lineCol[k + 1] || lineCol[0], font: fntOf[k + 1] || fntOf[0], weight: 800, posV: 'middle', size: 'auto', letterSpacing: 0.02, outline: { color: '#000000', width: 0 } })));
       const dry = await stamp(canvas, { lines: draft, block: block, background: { enabled: false }, dryRun: true });
       const fits = dry.lines.map((l) => l.fontSize);
       const T = Math.max(6, Math.min.apply(null, fits.slice(0, titleWords.length)));   // 标题统一字号（最宽词 fit 块宽）
       const subFit = fits.slice(titleWords.length);
       const sc = (j) => (lsv[j] != null ? lsv[j] : (j === 0 ? 1 : 0.5));
-      const subSize = (k) => Math.max(6, Math.min(Math.round(T * sc(k + 1)), Math.round(subFit[k] || T)));
-      finalLines = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fnt, weight: 800, posV: 'middle', size: T, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
-      subPhrases.forEach((t, k) => finalLines.push({ text: t, color: lineCol[k + 1] || lineCol[0], font: fnt, weight: 800, posV: 'middle', size: subSize(k), letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+      const subSize = (k) => Math.max(6, Math.round(T * sc(k + 1)));   // 不设单行上限：超出块宽时由 stamp **逐词换行**
+      finalLines = titleWords.map((t) => ({ text: t, color: lineCol[0], font: fntOf[0], weight: 800, posV: 'middle', size: T, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+      subPhrases.forEach((t, k) => finalLines.push({ text: t, color: lineCol[k + 1] || lineCol[0], font: fntOf[k + 1] || fntOf[0], weight: 800, posV: 'middle', size: subSize(k), letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
       log('  标题 ' + titleWords.length + ' 词（字号 ' + T + '，逐词似占位）+ 副标题 ' + subPhrases.length + ' 行（字号 ' + subPhrases.map((t, k) => subSize(k)).join('/') + '，单行似 "1182 * 1863 px"）');
     } else {
       const sz = isBox ? 'box' : 'wrap';
-      finalLines = phrases.map((t, i) => ({ text: t, color: lineCol[i], font: fnt, weight: 800, posV: 'middle', size: sz, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
+      finalLines = phrases.map((t, i) => ({ text: t, color: lineCol[i], font: fntOf[i], weight: 800, posV: 'middle', size: sz, letterSpacing: 0.02, outline: { color: '#000000', width: 0.035 } }));
     }
     const res = await stamp(canvas, { lines: finalLines, block: block, background: { enabled: false }, outFile: out, format: 'jpeg', quality: 94 });
-    c.lastParams = { mode: multi ? 'lines' : (isBox ? 'box' : 'wrap'), w: wr, g: rg, n: nu, x: p.x || 0, text: text, colors: lineCol, scales: lsv, font: fnt };
+    c.lastParams = { mode: multi ? 'lines' : (isBox ? 'box' : 'wrap'), w: wr, g: rg, n: nu, x: p.x || 0, text: text, colors: lineCol, scales: lsv, font: fnt, fonts: fntOf };
     this.save(c);
     return { file: out, canvas, color: col, colors: lineCol, font: fnt, mode: multi ? 'lines' : (isBox ? 'box' : 'wrap'), params: c.lastParams, fontSize: res.lines.map((l) => l.fontSize) };
   }

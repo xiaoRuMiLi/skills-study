@@ -11,6 +11,7 @@
 | design | `app/pages/design.html?id=<id>` | 选图案 / **AI 生成**（提示词可改）→ 产出图案 → 继续叠字/workflow |
 | 叠字 | `app/pages/stamp.html?id=<id>&src=<图URL>` | **可视化叠字**：左实时预览 + 右参数（N 行/颜色/字体/粗细/位置/字号/对齐 + 块占比 + 衬底）；🎨自动配色、📐解析排版样稿、💾保存（见 `stamp.md`）|
 | Workflow | `app/pages/workflow.html?id=<id>&image=<成品URL>` | **异步跑 workflow**：选成品(缩略图) → 入队 → **串行执行**（5 步进度/日志/结果），可**排队多个**、可**取消排队**；dry-run 开关（见 `workflow.md`「网页化」）|
+| ★**贴字对齐** | `app/pages/align.html?id=<id>` | **★贴字首选**：给图案**加字并对齐空白商品占位**（`design:align`）——标定→量目标→定参数→出图→(可选)复核；异步队列（`flow:'align'`），参数 `{productId,face,pattern,text,lineFonts,lineScales,lineColors,verify}`；产出 `/<id>/align/{design,mockup,design-plain}.jpg` |
 | listing 列表 | `app/pages/listing-list.html` | 跑过 listing 流程的商品列表（ID/商品/标题/图/时间/状态/预览）|
 | listing 预览 | `app/pages/listing.html?id=<id>` | （已有）上架预览，复用 |
 | 管理后台 | `app/pages/manage.html` | （已有）CSV 数据库后台 |
@@ -47,6 +48,7 @@ serve 路由：`.html` → `pages/` 优先，数据 → `output/`；URL 不变�
 
 ## 编排层（共用）
 - `app/Flows/WorkflowFlow.js`（= `listing:generate` 的编排，五步 + 进度回调）
+- `app/Flows/AlignFlow.js`（= `design:align` 的编排，★贴字首选；`flow:'align'`）
 - `app/Flows/DesignFlow.js`（选图/AI 生成 → 图案 → 可选叠字）
 - 命令壳 `app/Console/Commands/FlowCommand.js`（`flow:workflow` / `flow:design`）；
   页面按钮走 `POST /api/flow/run` → **同一 Flows**。

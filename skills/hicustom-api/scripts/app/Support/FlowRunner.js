@@ -72,9 +72,11 @@ class FlowRunner {
     try {
       const job = this.store.get(id);
       const params = (job && job.params) || {};
-      if (job && job.flow === 'workflow') {
-        const { WorkflowFlow } = require('../Flows/WorkflowFlow');
-        const flow = new WorkflowFlow(this.app);
+      const FLOWS = { workflow: '../Flows/WorkflowFlow', align: '../Flows/AlignFlow' };
+      if (job && FLOWS[job.flow]) {
+        const mod = require(FLOWS[job.flow]);
+        const Ctor = mod.WorkflowFlow || mod.AlignFlow;
+        const flow = new Ctor(this.app);
         const onStep = (name, status) => {
           const j = this.store.get(id) || { steps: [] };
           const steps = j.steps || [];

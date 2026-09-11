@@ -19,7 +19,7 @@ class DesignAlignCommand {
     this.app = app;
     this.signature = 'design:align';
     this.description = '叠字/图案排版对齐(标定+本地mockup迭代+出图, 可选线上复核)';
-    this.usage = '--product-id <id> [--face 1] [--image 素材] [--text "文案"] [--faces main|all] [--no-plain] [--color #RRGGBB] [--line-colors "c1,c2"] [--line-scales "1,0.5"] [--font bold|modern|elegant|script|comic] [--mode wrap|box] [--calibrate] [--sweep] [--verify] [--iterate N] [--no-iterate] [--retarget] [--pick-main]';
+    this.usage = '--product-id <id> [--face 1] [--image 素材] [--text "文案"] [--faces main|all] [--no-plain] [--color #RRGGBB] [--line-colors "c1,c2"] [--line-scales "1,0.5"] [--font bold|modern|elegant|script|comic] [--line-fonts "f1,f2"] [--mode wrap|box] [--calibrate] [--sweep] [--verify] [--iterate N] [--no-iterate] [--retarget] [--pick-main]';
   }
 
   async handle(opts) {
@@ -68,7 +68,7 @@ class DesignAlignCommand {
       built = await svc.buildDesign({
         productTypeId: id, viewId: face, image: opts.image, text: text,
         color: opts.color, widthRatio: opts.widthRatio, rowGap: opts.rowGap, nudgeUp: opts.nudgeUp,
-        lineColors: opts.lineColors, lineScales: opts.lineScales, font: opts.font,
+        lineColors: opts.lineColors, lineScales: opts.lineScales, font: opts.font, lineFonts: opts.lineFonts,
         outFile: path.join(outDir, 'design.jpg'), log: log,
       });
       const mock = await svc.mockup({ productTypeId: id, viewId: face, designFile: built.file, outFile: path.join(outDir, 'mockup.jpg') });

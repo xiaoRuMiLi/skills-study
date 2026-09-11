@@ -10,6 +10,10 @@
 > 本技能核心场景：把「空白产品 + 自定义设计图」一键变成「定制产品 + 上架展示图 + 文案 + 报表」。
 > 触发词：获取商品详情、抓取商品、处理图片上传、自动合成、上架素材、listing 生成。
 
+> ## ★★ 加字（贴字）首选：`design:align`
+> **凡涉及给图案/商品「加文字」，一律优先用 `design:align`**（见 `design-align.md`）——标定 → 量占位目标 → 本地 mockup 迭代 → 出图，字的**位置/大小与空白商品占位文字一致**，且**不产生刊登记录**；支持多行（标题逐词堆叠 + 副标题单行）、逐段字体/颜色/字号。
+> `design-area:generate`（见 `design-area.md`）**降为备选**（仅在做"排版样稿解析 / AI 文生图 / 定制区标记"时才用）。
+
 ## 何时使用
 当用户需要以下任一需求时，**加载本工作流**（`references/workflow.md`）：
 - 给了链接 `https://www.hicustom.com/productType/item/<id>` 或商品 id；
@@ -20,7 +24,7 @@
 ```
 ① 抓空白产品详情        GET  /api/v1/product-type/{id}          → product:detail
 ② 解析产品画像          把原始 JSON 解析成结构化画像            → ProductProfile.js
-③ 处理客户图→填充尺寸    从上下文获取图片源，如果客户没有提供，询问客户使用的图片来源，是否需要做定制款（定制款需要加文字，参照design-area.md处理图片来源和加工），sharp fit(cover/contain) 到印刷区尺寸   → tools/image.js
+③ 处理客户图→填充尺寸    从上下文获取图片源，如果客户没有提供，询问客户使用的图片来源，是否需要做定制款（**定制款加文字首选 `design:align`，见 design-align.md**；design-area 为备选），sharp fit(cover/contain) 到印刷区尺寸   → tools/image.js
 ④ 上传图库 + 自动合成    gallery:upload → design:composite
 ⑤ 缓存 + CSV + HTML     product.json / product.csv / index.html  → 可扩展模板
 
