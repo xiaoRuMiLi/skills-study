@@ -135,6 +135,25 @@ class DesignAlignService {
     } catch (e) { if (log) log('  ⚠️ GLM 兜底失败: ' + e.message); return null; }
   }
 
+  /** ★B 粗标定：标记测不到时，用「纯色渲染的可见区(品红) bbox」↔ 印刷区矩形 → 粗略 H + 底图/遮罩（够"大概位置"） */
+  async _coarseCalib(renderB, W, Hh, baseFile, maskFile, log) {
+    const b = await sharp(renderB).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    const data = b.data, iw = b.info.width, ih = b.info.height, ch = b.info.channels;
+    const mask = Buffer.alloc(iw * ih);
+    let x0 = 1e9, y0 = 1e9, x1 = -1, y1 = -1, n = 0;
+    for (let y = 0; y < ih; y++) for (let x = 0; x < iw; x++) {
+      const i = (y * iw + x) * ch, r = data[i], g = data[i + 1], bb = data[i + 2];
+      if (r > 170 && bb > 170 && g < 90) { n++; mask[y * iw + x] = 255; if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    if (n < 200 || x1 <= x0 || y1 <= y0) return null;
+    const H = Engine.homography([[0, 0], [W, 0], [W, Hh], [0, Hh]], [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]);
+    fs.mkdirSync(path.dirname(baseFile), { recursive: true });
+    await sharp(renderB).png().toFile(baseFile);
+    await sharp(mask, { raw: { width: iw, height: ih, channels: 1 } }).png().toFile(maskFile);
+    log('  粗标定：可见区 bbox=(' + x0 + ',' + y0 + ')-(' + x1 + ',' + y1 + ') 覆盖 ' + (n / (iw * ih) * 100).toFixed(1) + '%');
+    return { imageSize: [iw, ih], H: H, baseFile: baseFile, maskFile: maskFile, coverage: n / (iw * ih), maxResidual: null, markers: 0, outliers: 0, renderB: renderB };
+  }
+
   /** ① 标定（每产品×每面一次；消耗 2 次上传 + 2 次预览） */
   async calibrate({ productTypeId, viewId = 1, force = false, log = () => {} }) {
     const cached = this.load(productTypeId, viewId);
@@ -185,7 +204,19 @@ class DesignAlignService {
     const bm = await Engine.buildBaseAndMask({ renderA: A.file, renderB: B.file, outBase: baseFile, outMask: maskFile });
     log('  遮罩覆盖 ' + (bm.coverage * 100).toFixed(2) + '%');
 
-    if (pairsAll.length < 4) throw new Error('标记检出不足（' + pairsAll.length + '/18），请检查设计是否已渲染或标记被遮挡');
+    if (pairsAll.length < 4) {
+      // ★B：标记测不到 → 改用「可见区粗标定」（够"大概位置"即可）
+      log('  标记检出不足（' + pairsAll.length + '/18）→ 改用「可见区粗标定」');
+      const cb = await this._coarseCalib(B.file, W, Hh, baseFile, maskFile, log);
+      if (!cb) throw new Error('标记检出不足（' + pairsAll.length + '/18），请检查设计是否已渲染或标记被遮挡');
+      try { this.app.make('pendingCleanup').add(codes.concat([B.code]).map((x) => ({ code: x, note: 'coarse-calib ' + productTypeId + ' v' + viewId }))); } catch (e) { /* ignore */ }
+      return this.save(Object.assign(cb, {
+        productTypeId: productTypeId, viewId: Number(viewId), renderA: null,
+        printArea: { width: W, height: Hh }, target: null, params: null,
+        correction: Object.assign({}, DEFAULT_CORRECTION), coarse: true,
+        uploads: codes.concat([B.code]), updatedAt: new Date().toISOString(),
+      }));
+    }
     const dst = pairsAll.map((p) => [W * p.fx, Hh * p.fy]);
     const src = pairsAll.map((p) => [p.px, p.py]);
     const rb = Engine.robustHomography(dst, src);          // 稳健拟合：自动剔除离群点
